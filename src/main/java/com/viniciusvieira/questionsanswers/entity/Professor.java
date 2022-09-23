@@ -17,9 +17,9 @@ public class Professor {
     private Long idProfessor;
 
     @NotEmpty(message = "The field name cannot be empty")
+    @Column
     private String name;
 
-    // Todo testar dps se valida com o campo sendo vazio/null
     @Email(message = "The email is not valid")
     @Column(unique = true)
     private String email;

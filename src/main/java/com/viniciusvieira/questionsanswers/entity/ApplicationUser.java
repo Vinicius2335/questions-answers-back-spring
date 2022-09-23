@@ -13,16 +13,23 @@ import javax.validation.constraints.NotEmpty;
 public class ApplicationUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idUser;
 
     @NotEmpty(message = "The field username cannot be empty")
     @Column(unique = true)
-    private String userName;
+    private String username;
 
     @NotEmpty(message = "The field password cannot be empty")
+    @Column
     private String password;
 
     @OneToOne
     @JoinColumn(name = "professor_id")
     private Professor professor;
+
+    public ApplicationUser(ApplicationUser applicationUser){
+        this.username = applicationUser.getUsername();
+        this.password = applicationUser.getPassword();
+        this.professor = applicationUser.getProfessor();
+    }
 }
