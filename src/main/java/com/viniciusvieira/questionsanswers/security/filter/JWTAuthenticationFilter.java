@@ -1,7 +1,8 @@
 package com.viniciusvieira.questionsanswers.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.viniciusvieira.questionsanswers.entity.ApplicationUser;
+import com.viniciusvieira.questionsanswers.models.ApplicationUserModel;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             // vai descerializar o json
-            ApplicationUser user = new ObjectMapper().readValue(request.getInputStream(), ApplicationUser.class);
+            ApplicationUserModel user = new ObjectMapper().readValue(request.getInputStream(), ApplicationUserModel.class);
             return authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         } catch (IOException e) {
@@ -46,8 +47,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         // 1 - definir a validade do token
         ZonedDateTime expTimeUTC = ZonedDateTime.now(ZoneOffset.UTC).plus(EXPIRATION_TIME, ChronoUnit.MILLIS);
+        
         String token = Jwts.builder()
-                .setSubject(((ApplicationUser) authResult.getPrincipal()).getUsername())
+                .setSubject(((ApplicationUserModel) authResult.getPrincipal()).getUsername())
                 .setExpiration(Date.from(expTimeUTC.toInstant()))
                 .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();

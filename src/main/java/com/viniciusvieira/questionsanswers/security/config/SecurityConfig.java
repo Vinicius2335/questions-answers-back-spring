@@ -1,27 +1,27 @@
 package com.viniciusvieira.questionsanswers.security.config;
 
-import com.viniciusvieira.questionsanswers.security.filter.JWTAuthenticationFilter;
-import com.viniciusvieira.questionsanswers.security.filter.JWTAuthorizationFilter;
-import com.viniciusvieira.questionsanswers.security.service.CustomUserDetailsService;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 
+import com.viniciusvieira.questionsanswers.security.filter.JWTAuthenticationFilter;
+import com.viniciusvieira.questionsanswers.security.filter.JWTAuthorizationFilter;
+import com.viniciusvieira.questionsanswers.security.service.CustomUserDetailsService;
+
+import lombok.RequiredArgsConstructor;
+
 // TODO: Classe depreciada
 @EnableWebSecurity
 @RequiredArgsConstructor
+@SuppressWarnings("deprecation")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
 
     // CORS -> quando algum dia utilizarmos uma aplicaçao javaSript
-    @Override
+	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().configurationSource(request -> new CorsConfiguration()
                 .applyPermitDefaultValues())

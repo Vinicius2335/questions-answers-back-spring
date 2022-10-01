@@ -1,7 +1,8 @@
 package com.viniciusvieira.questionsanswers.security.service;
 
-import com.viniciusvieira.questionsanswers.entity.ApplicationUser;
-import com.viniciusvieira.questionsanswers.repository.ApplicationUserRepository;
+import com.viniciusvieira.questionsanswers.models.ApplicationUserModel;
+import com.viniciusvieira.questionsanswers.repositories.ApplicationUserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -21,11 +22,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ApplicationUser applicationUser = loadAplicationUserByUsername(username);
+        ApplicationUserModel applicationUser = loadAplicationUserByUsername(username);
         return new CustomUserDetails(applicationUser);
     }
 
-    public ApplicationUser loadAplicationUserByUsername(String username) {
+    public ApplicationUserModel loadAplicationUserByUsername(String username) {
         return Optional.ofNullable(applicationUserRepository.findByUsername(username))
                 .orElseThrow(() -> new UsernameNotFoundException("ApplicationUser not found"));
     }
@@ -33,8 +34,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     // Classe estatica que é um aplicationUser e um UserDetails
     // Gambiarra para usar o metodo loadUserByUsername que retorna um UserDetails pre definido pelo spring
     // mas queremos enviar o nosso UserDetails
-    private final static class CustomUserDetails extends ApplicationUser implements UserDetails {
-        private CustomUserDetails(ApplicationUser applicationUser) {
+    private final static class CustomUserDetails extends ApplicationUserModel implements UserDetails {
+        private CustomUserDetails(ApplicationUserModel applicationUser) {
             super(applicationUser);
         }
 

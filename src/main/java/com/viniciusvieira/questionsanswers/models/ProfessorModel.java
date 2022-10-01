@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.entity;
+package com.viniciusvieira.questionsanswers.models;
 
 import lombok.*;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-public class Professor {
+public class ProfessorModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProfessor;

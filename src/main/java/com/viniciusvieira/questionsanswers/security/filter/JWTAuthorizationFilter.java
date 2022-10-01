@@ -1,6 +1,6 @@
 package com.viniciusvieira.questionsanswers.security.filter;
 
-import com.viniciusvieira.questionsanswers.entity.ApplicationUser;
+import com.viniciusvieira.questionsanswers.models.ApplicationUserModel;
 import com.viniciusvieira.questionsanswers.security.service.CustomUserDetailsService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,7 +59,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 .getSubject();
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-        ApplicationUser applicationUser = customUserDetailsService.loadAplicationUserByUsername(username);
+        ApplicationUserModel applicationUser = customUserDetailsService.loadAplicationUserByUsername(username);
 
         return username != null ? new UsernamePasswordAuthenticationToken(applicationUser, null, userDetails.getAuthorities()) : null;
     }

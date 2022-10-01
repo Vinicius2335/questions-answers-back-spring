@@ -14,6 +14,6 @@ public class ProfessorEndpoint {
     public ResponseEntity<?> h1(){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Hi");
+                .body("Hello Word!");
     }
 }
