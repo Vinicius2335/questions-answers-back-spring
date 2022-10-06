@@ -20,6 +20,7 @@ import com.viniciusvieira.questionsanswers.security.service.UserDetailsServiceIm
 
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 	@Autowired
 	@Lazy // resolve um proble de dependencia
@@ -49,10 +50,10 @@ public class WebSecurityConfig {
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-		.antMatchers("/login").permitAll()
-		.antMatchers("/swagger-ui.html").permitAll()
-		.antMatchers("/*/professor/**").hasRole("PROFESSOR")
-		.antMatchers("/*/student/**").hasRole("STUDENT")
+//		.antMatchers("/login").permitAll()
+//		.antMatchers("/swagger-ui.html").permitAll()
+//		.antMatchers("/*/professor/**").hasRole("PROFESSOR")
+//		.antMatchers("/*/student/**").hasRole("STUDENT")
 		.anyRequest()
 		.authenticated();
 		
