@@ -29,7 +29,7 @@ public class CourseEndPoint {
 		
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(courseRepository.findByIdAndProfessor(id, professor)
+				.body(courseRepository.findByProfessor(professor)
 						.orElseThrow(() -> new IllegalArgumentException("Course id invalid")));
 	}
 }

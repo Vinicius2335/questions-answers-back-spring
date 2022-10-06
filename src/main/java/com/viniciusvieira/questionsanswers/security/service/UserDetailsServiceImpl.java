@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final ApplicationUserRepository userRepository;
 
-    // BUG
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return Optional.ofNullable(userRepository.findByUsername(username))

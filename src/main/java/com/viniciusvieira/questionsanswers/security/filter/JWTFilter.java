@@ -34,7 +34,7 @@ public class JWTFilter extends OncePerRequestFilter {
 			FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		String token = getToken(request); // BUG
+		String token = getToken(request);
 		Map<String,Object> claims = jwtHelper.parseClaims(token);
 		
 		SecurityContextHolder.getContext().setAuthentication(createAuthentication(claims));
@@ -53,7 +53,6 @@ public class JWTFilter extends OncePerRequestFilter {
 	}
 
 	private String getToken(HttpServletRequest request) {
-		// BUG
 		return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
 				.filter(auth -> auth.startsWith("Bearer "))
 				.map(auth -> auth.replace("Bearer ", ""))
