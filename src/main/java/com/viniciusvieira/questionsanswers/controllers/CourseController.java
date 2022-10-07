@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.endpoint.v1;
+package com.viniciusvieira.questionsanswers.controllers;
 
 import java.util.List;
 
@@ -27,21 +27,22 @@ import com.viniciusvieira.questionsanswers.services.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/v1/professor/course")
+@RequestMapping("/api/professor/course")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
-public class CourseEndPoint {
+@Tag(name = "Course", description = "Operations related to professors course")
+public class CourseController {
 	private final CourseService courseService;
 	
-	@Operation(summary = "Find course by his Id", description = "Return a course based on it's id")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "When Successful"),
-			@ApiResponse(responseCode = "404", description = "When Course Not Found By ID")
-	})
+	@Operation(summary = "Find course by his Id", description = "Return a course based on it's id",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "When Successful"),
+					@ApiResponse(responseCode = "404", description = "When Course Not Found By ID")	
+			})
 	@GetMapping("/{id}")
 	public ResponseEntity<CourseModel> getCourseById(@PathVariable Long id) {
 		
@@ -49,11 +50,11 @@ public class CourseEndPoint {
 				.body(courseService.findByIdOrThrowCourseNotFoundException(id));
 	}
 	
-	@Operation(summary = "Find courses by name", description = "Return a list of courses related to professor")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "When Successful"),
-			@ApiResponse(responseCode = "404", description = "When Course List is Empty")
-	})
+	@Operation(summary = "Find courses by name", description = "Return a list of courses related to professor",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "When Successful"),
+					@ApiResponse(responseCode = "404", description = "When Course List is Empty")	
+			})
 	@GetMapping("/list")
 	public ResponseEntity<List<CourseModel>> findByName(@RequestParam String name) {
 		List<CourseModel> courses = courseService.findByName(name);
@@ -65,8 +66,7 @@ public class CourseEndPoint {
 		return ResponseEntity.status(HttpStatus.OK).body(courses);
 	}
 	
-	@Operation(summary = "Save Course", description = "Insert course in the database")
-	@ApiResponses(value = {
+	@Operation(summary = "Save Course", description = "Insert course in the database", responses = {
 			@ApiResponse(responseCode = "201", description = "When Successful"),
 			@ApiResponse(responseCode = "400", description = "When Have a Course field Empty")
 	})
@@ -77,8 +77,7 @@ public class CourseEndPoint {
 		return ResponseEntity.status(HttpStatus.CREATED).body(courseService.save(courseDto, professor));
 	}
 	
-	@Operation(summary = "Delete Course", description = "Remove course in the database")
-	@ApiResponses(value = {
+	@Operation(summary = "Delete Course", description = "Remove course in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Course Not Found")
 	})
@@ -88,8 +87,7 @@ public class CourseEndPoint {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Course deleted successfully");
 	}
 	
-	@Operation(summary = "Update Couse", description = "Update course in the database")
-	@ApiResponses(value = {
+	@Operation(summary = "Update Couse", description = "Update course in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Course Not Found")
 	})
