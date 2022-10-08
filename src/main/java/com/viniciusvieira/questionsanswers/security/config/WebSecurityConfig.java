@@ -15,6 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.viniciusvieira.questionsanswers.security.filter.JWTAuthenticationFilter;
 import com.viniciusvieira.questionsanswers.security.filter.JWTValidationFilter;
@@ -48,7 +50,7 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//		http.cors(); como personalizamos o cors abaixo, nao precisa mais disso
+		http.cors(); //como personalizamos o cors abaixo, nao precisa mais disso
 		http.csrf().disable();
 		
 		http.authorizeRequests()
@@ -68,15 +70,30 @@ public class WebSecurityConfig {
 		return http.build();
 	}
 	
-	// TEST: não sei se funciona
 	// cors: permite sua aplicaçao receber requisiçao de outros dominios
 	@Bean
-	UrlBasedCorsConfigurationSource corsConfigurationSource() {
-		final  UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-		source.registerCorsConfiguration("/**", corsConfiguration);
-		
-		return source;
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**")
+				.allowedOrigins("*")
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+			}
+		};
 	}
-
 }
+
+/* .allowedOrigins("*") endereço do frontend, nao é uma boa pratica colocar ("*")
+ *  o certo seria liberar o acesso 1 por 1 manualmente
+ *  
+ *  //liberando app cliente 1
+    registry.addMapping("/**")
+         .allowedOrigins("http://localhost:3000")
+        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+
+    //liberando app cliente 2
+    registry.addMapping("/topicos/**")
+         .allowedOrigins("http://localhost:4000")
+        .allowedMethods("GET", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+ */
