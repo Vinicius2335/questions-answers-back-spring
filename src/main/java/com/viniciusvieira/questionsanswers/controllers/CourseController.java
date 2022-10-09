@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/professor/course")
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
 @Tag(name = "Course", description = "Operations related to professors course")
 public class CourseController {
@@ -57,7 +57,8 @@ public class CourseController {
 			})
 	@GetMapping("/list")
 	public ResponseEntity<List<CourseModel>> findByName(@RequestParam String name) {
-		List<CourseModel> courses = courseService.findByName(name);
+		ProfessorModel professor = courseService.extractProfessorFromToken();
+		List<CourseModel> courses = courseService.findByName(name, professor.getIdProfessor());
 		
 		if (courses.isEmpty()) {
 			throw new CourseNotFoundException("Course List is Empty");

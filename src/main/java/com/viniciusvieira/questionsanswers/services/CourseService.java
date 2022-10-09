@@ -28,8 +28,8 @@ public class CourseService {
 				.orElseThrow(() -> new CourseNotFoundException("Course Not Found"));
 	}
 	
-	public List<CourseModel> findByName(String name){
-		return courseRepository.listCourses(name);
+	public List<CourseModel> findByName(String name, Long idProfessor){
+		return courseRepository.listCoursesByName(name, idProfessor);
 	}
 	
 	@Transactional

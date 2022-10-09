@@ -12,9 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -96,4 +93,19 @@ public class WebSecurityConfig {
     registry.addMapping("/topicos/**")
          .allowedOrigins("http://localhost:4000")
         .allowedMethods("GET", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+        
+        .allowedMethods("*") -> funciona
+        
+        ## ------------ ## ------------- ##
+        
+        Outra forma de configurar o AuthenticationManager
+        
+        @Autowired
+    	AuthenticationConfiguration authenticationConfiguration;
+    
+        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(
+                authenticationConfiguration.getAuthenticationManager());
+                
+        // configurando o path para realizar o login
+        jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
  */

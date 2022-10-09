@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/professor")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Professor", description = "Operations related to professors")
 public class ProfessorController {
 	private final ProfessorService professorService;

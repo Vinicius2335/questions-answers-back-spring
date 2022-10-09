@@ -31,8 +31,6 @@ public class JWTValidationFilter extends BasicAuthenticationFilter {
 		this.userDetailsServiceImpl = userDetailsServiceImpl;
 	}
 	
-	
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {

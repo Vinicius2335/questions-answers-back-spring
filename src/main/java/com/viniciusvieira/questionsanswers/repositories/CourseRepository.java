@@ -1,6 +1,7 @@
 package com.viniciusvieira.questionsanswers.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,11 +14,15 @@ import com.viniciusvieira.questionsanswers.models.CourseModel;
 @Repository
 public interface CourseRepository extends JpaRepository<CourseModel, Long> {
 	
-//	@Query("SELECT c FROM TB_COURSE c WHERE c.id_course = ?1 and c.professor_id = ?#{principal.professor_id}")
-//	Optional<CourseModel> findByIdAndProfessor(Long idCourse);
-	
 	CourseModel findByProfessor(Long idProfessor);
 	
 	@Query(value = "SELECT * FROM TB_COURSE c WHERE c.name LIKE %:name%", nativeQuery = true)
 	List<CourseModel> listCourses(@Param("name") String name);
+	
+	@Query(value = "SELECT * FROM TB_COURSE c WHERE c.name = :name AND"
+			+ " c.professor_id = :id_professor", nativeQuery = true)
+	List<CourseModel> listCoursesByName(
+			@Param("name")String name,
+			@Param("id_professor")Long idProfessor
+	);
 }
