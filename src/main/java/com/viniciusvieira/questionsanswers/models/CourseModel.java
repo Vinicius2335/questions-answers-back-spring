@@ -36,7 +36,10 @@ public class CourseModel implements Serializable {
 	private String name;
 	
 	@ManyToOne
-	@JoinColumn(name = "professor_id")
+	@JoinColumn(name = "professor_id", nullable = false)
 	private ProfessorModel professor;
+	
+	@Column(columnDefinition = "boolean default true", nullable = false)
+	private boolean enabled;
 }
 

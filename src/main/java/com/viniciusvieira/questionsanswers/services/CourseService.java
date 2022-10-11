@@ -25,7 +25,9 @@ public class CourseService {
 	private final ApplicationUserRepository applicationUserRepository;
 	
 	public CourseModel findByIdOrThrowCourseNotFoundException(Long id) {
-		return courseRepository.findById(id)
+		Long idProfessor = extractProfessorFromToken().getIdProfessor();
+		
+		return courseRepository.findOneCourse(id, idProfessor)
 				.orElseThrow(() -> new CourseNotFoundException("Course Not Found"));
 	}
 	
