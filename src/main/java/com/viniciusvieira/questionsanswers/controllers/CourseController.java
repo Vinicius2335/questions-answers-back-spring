@@ -6,26 +6,23 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.viniciusvieira.questionsanswers.dtos.CoursePostDto;
-import com.viniciusvieira.questionsanswers.dtos.CoursePutDto;
+import com.viniciusvieira.questionsanswers.dtos.CourseDto;
 import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.models.CourseModel;
 import com.viniciusvieira.questionsanswers.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.services.CourseService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +69,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "400", description = "When Have a Course field Empty")
 	})
 	@PostMapping
-	public ResponseEntity<CourseModel> save(@RequestBody @Valid CoursePostDto courseDto){
+	public ResponseEntity<CourseModel> save(@RequestBody @Valid CourseDto courseDto){
 		ProfessorModel professor = courseService.extractProfessorFromToken();
 		return ResponseEntity.status(HttpStatus.CREATED).body(courseService.save(courseDto, professor));
 	}
@@ -89,10 +86,11 @@ public class CourseController {
 	
 	@Operation(summary = "Update Couse", description = "Update course in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
+			@ApiResponse(responseCode = "400", description = "When Course Name is Null or Empty"),
 			@ApiResponse(responseCode = "404", description = "When Course Not Found")
 	})
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody @Valid CoursePutDto courseDto){
+	public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody @Valid CourseDto courseDto){
 		courseService.replace(id, courseDto);
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Course updated successfully");

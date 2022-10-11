@@ -1,6 +1,6 @@
 package com.viniciusvieira.questionsanswers.util;
 
-import com.viniciusvieira.questionsanswers.dtos.CoursePostDto;
+import com.viniciusvieira.questionsanswers.dtos.CourseDto;
 import com.viniciusvieira.questionsanswers.models.CourseModel;
 
 public class CourseCreator {
@@ -20,10 +20,15 @@ public class CourseCreator {
 				.build();
 	}
 	
-	public static CoursePostDto mockCoursePostDto() {
-		return CoursePostDto.builder()
+	public static CourseDto mockCourseDto() {
+		return CourseDto.builder()
 				.name("CSS")
 				.build();
+	}
+	
+	public static CourseDto mockInvalidCourseDto() {
+		return CourseDto.builder()
+				.name(null).build();
 	}
 	
 }

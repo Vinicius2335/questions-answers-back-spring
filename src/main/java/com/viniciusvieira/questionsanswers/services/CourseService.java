@@ -7,8 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.viniciusvieira.questionsanswers.dtos.CoursePostDto;
-import com.viniciusvieira.questionsanswers.dtos.CoursePutDto;
+import com.viniciusvieira.questionsanswers.dtos.CourseDto;
 import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.mappers.CourseMapper;
 import com.viniciusvieira.questionsanswers.models.ApplicationUserModel;
@@ -35,14 +34,14 @@ public class CourseService {
 	}
 	
 	@Transactional
-	public CourseModel save(CoursePostDto courseDto, ProfessorModel professor) {
+	public CourseModel save(CourseDto courseDto, ProfessorModel professor) {
 		CourseModel course = CourseMapper.INSTANCE.toCorseModel(courseDto);
 		course.setProfessor(professor);
 		return courseRepository.save(course);
 	}
 	
 	@Transactional
-	public void replace(Long id, CoursePutDto courseDto) {
+	public void replace(Long id, CourseDto courseDto) {
 		CourseModel course = CourseMapper.INSTANCE.toCorseModel(courseDto);
 		CourseModel courseFound = findByIdOrThrowCourseNotFoundException(id);
 		

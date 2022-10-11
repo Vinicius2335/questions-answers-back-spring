@@ -32,7 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.viniciusvieira.questionsanswers.dtos.CoursePostDto;
+import com.viniciusvieira.questionsanswers.dtos.CourseDto;
 import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.models.CourseModel;
 import com.viniciusvieira.questionsanswers.models.ProfessorModel;
@@ -48,8 +48,8 @@ class CourseControllerTest {
 	@MockBean
 	private CourseService courseServiceMock;
 	
-	 @Autowired
-	 protected MockMvc mockMvc;
+	@Autowired
+	protected MockMvc mockMvc;
 	
 	@Autowired
 	private TestRestTemplate testRestTemplate;
@@ -77,12 +77,20 @@ class CourseControllerTest {
 				ArgumentMatchers.anyLong()))
 				.thenReturn(courseList);
 		
+		// extractProfessorFromToken
 		BDDMockito.when(courseServiceMock.extractProfessorFromToken())
-		.thenReturn(ProfessorCreator.mockProfessor());
+				.thenReturn(ProfessorCreator.mockProfessor());
 		
 		// save
-		BDDMockito.when(courseServiceMock.save(ArgumentMatchers.any(CoursePostDto.class),
+		BDDMockito.when(courseServiceMock.save(ArgumentMatchers.any(CourseDto.class),
 				ArgumentMatchers.any(ProfessorModel.class))).thenReturn(courseToSave);
+		
+		// delete
+		BDDMockito.doNothing().when(courseServiceMock).delete(ArgumentMatchers.anyLong());
+		
+		// replace
+		BDDMockito.doNothing().when(courseServiceMock)
+				.replace(ArgumentMatchers.anyLong(), ArgumentMatchers.any(CourseDto.class));
 		
 	}
 	
@@ -186,15 +194,11 @@ class CourseControllerTest {
 		);
 	}
 	
-	// BUG: PARREI AKI, NÃO ESTÁ FUNCIONANDO
 	@Test
 	@DisplayName("save insert course when successful")
 	public void save_InsertCourse_WhenSuccessful() {
 		HttpEntity<CourseModel> httpEntity = new HttpEntity<>(courseToSave, getValidAuthentication()
 				.getHeaders());
-		System.out.println("\nTESTE");
-		System.out.println(httpEntity.getBody());
-		System.out.println(httpEntity.getHeaders());
 		
 		ResponseEntity<CourseModel> exchange = testRestTemplate.exchange("/api/professor/course",
 				HttpMethod.POST, httpEntity, CourseModel.class);
@@ -204,6 +208,96 @@ class CourseControllerTest {
 				() -> assertEquals(courseToSave, exchange.getBody()),
 				() -> assertEquals(HttpStatus.CREATED, exchange.getStatusCode())
 		);
+	}
+	
+	@Test
+	@DisplayName("save returne 400 when course name is empty")
+	public void save_Return400_WhenCourseNameIsEmpty() {
+		CourseDto courseDto = CourseCreator.mockInvalidCourseDto();
+		HttpEntity<CourseDto> httpEntity = new HttpEntity<>(courseDto, getValidAuthentication().getHeaders());
+		
+		ResponseEntity<CourseModel> exchange = testRestTemplate.exchange("/api/professor/course",
+				HttpMethod.POST, httpEntity, CourseModel.class);
+		
+		assertAll(
+				() -> assertNotNull(exchange),
+				() -> assertEquals(HttpStatus.BAD_REQUEST, exchange.getStatusCode())
+		);
+	}
+	
+	@Test
+	@DisplayName("delete remove course when successful")
+	public void delete_RemoveCourse_WhenSuccessful() {
+		ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/professor/course/1",
+				HttpMethod.DELETE, getValidAuthentication(), Void.class);
+		
+		assertAll(
+				() -> assertNotNull(exchange),
+				() -> assertEquals(HttpStatus.NO_CONTENT, exchange.getStatusCode())
+		);
+	}
+	
+	@Test
+	@DisplayName("delete return status code 404 when course not found")
+	public void delete_Return404_WhenCourseNotFound() {
+		BDDMockito.doThrow(CourseNotFoundException.class)
+		.when(courseServiceMock).delete(ArgumentMatchers.anyLong());
+		
+		ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/professor/course/99", HttpMethod.DELETE,
+				getValidAuthentication(), Void.class);
+		
+		assertAll(
+				() -> assertNotNull(exchange),
+				() -> assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode())
+		);
+	}
+	
+	@Test
+	@DisplayName("replace updated course when successful")
+	public void replace_UpdateCourse_WhenSuccessful() {
+		CourseDto courseDto = CourseCreator.mockCourseDto();
+		HttpEntity<CourseDto> httpEntity = new HttpEntity<>(courseDto, getValidAuthentication().getHeaders());
+		
+		ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/professor/course/1", HttpMethod.PUT,
+				httpEntity, Void.class);
+		
+		assertAll(
+				() -> assertNotNull(exchange),
+				() -> assertEquals(HttpStatus.NO_CONTENT, exchange.getStatusCode())
+		);
+	}
+	
+	@Test
+	@DisplayName("replace return status code 404 when course not found")
+	public void replace_Return404_WhenCourseNotFound() {
+		BDDMockito.doThrow(CourseNotFoundException.class).when(courseServiceMock)
+				.replace(ArgumentMatchers.anyLong(), ArgumentMatchers.any(CourseDto.class));
+		
+		CourseDto courseDto = CourseCreator.mockCourseDto();
+		HttpEntity<CourseDto> httpEntity = new HttpEntity<>(courseDto, getValidAuthentication().getHeaders());
+		
+		ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/professor/course/99", HttpMethod.PUT,
+				httpEntity, Void.class);
+		
+		assertAll(
+				() -> assertNotNull(exchange),
+				() -> assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode())
+		);
+	}
+	
+	@Test
+	@DisplayName("replace return status code 400 when course name is null or empty")
+	public void replace_Return400_WhenCourseNameIsNullOrEmpty() {
+		CourseDto courseDto = CourseCreator.mockInvalidCourseDto();
+		HttpEntity<CourseDto> httpEntity = new HttpEntity<>(courseDto, getValidAuthentication().getHeaders());
+		
+		ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/professor/course/1", HttpMethod.PUT,
+				httpEntity, Void.class);
+		
+		assertAll(
+				() -> assertNotNull(exchange),
+				() -> assertEquals(HttpStatus.BAD_REQUEST, exchange.getStatusCode())
+				);
 	}
 	
 }
