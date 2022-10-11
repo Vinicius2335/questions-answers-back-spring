@@ -47,11 +47,13 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors(); //como personalizamos o cors abaixo, nao precisa mais disso
+		http.cors();
 		http.csrf().disable();
 		
+		jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
+		
 		http.authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/login").permitAll()
+		.antMatchers(HttpMethod.POST, "/api/login").permitAll()
 		.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui/index.html")
 		.permitAll()
 		.antMatchers("/*/professor/**").hasRole("PROFESSOR")

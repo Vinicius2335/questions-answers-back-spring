@@ -57,8 +57,8 @@ public class CourseController {
 			})
 	@GetMapping("/list")
 	public ResponseEntity<List<CourseModel>> findByName(@RequestParam String name) {
-		ProfessorModel professor = courseService.extractProfessorFromToken();
-		List<CourseModel> courses = courseService.findByName(name, professor.getIdProfessor());
+		Long idProfessor = courseService.extractProfessorFromToken().getIdProfessor();
+		List<CourseModel> courses = courseService.findByName(name, idProfessor);
 		
 		if (courses.isEmpty()) {
 			throw new CourseNotFoundException("Course List is Empty");
@@ -72,8 +72,7 @@ public class CourseController {
 			@ApiResponse(responseCode = "400", description = "When Have a Course field Empty")
 	})
 	@PostMapping
-	public ResponseEntity<CourseModel> save(@RequestBody @Valid CoursePostDto courseDto,
-			Authentication authentication){
+	public ResponseEntity<CourseModel> save(@RequestBody @Valid CoursePostDto courseDto){
 		ProfessorModel professor = courseService.extractProfessorFromToken();
 		return ResponseEntity.status(HttpStatus.CREATED).body(courseService.save(courseDto, professor));
 	}

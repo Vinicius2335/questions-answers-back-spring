@@ -14,6 +14,7 @@ import com.viniciusvieira.questionsanswers.mappers.CourseMapper;
 import com.viniciusvieira.questionsanswers.models.ApplicationUserModel;
 import com.viniciusvieira.questionsanswers.models.CourseModel;
 import com.viniciusvieira.questionsanswers.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.repositories.ApplicationUserRepository;
 import com.viniciusvieira.questionsanswers.repositories.CourseRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CourseService {
 	private final CourseRepository courseRepository;
+	private final ApplicationUserRepository applicationUserRepository;
 	
 	public CourseModel findByIdOrThrowCourseNotFoundException(Long id) {
 		return courseRepository.findById(id)
@@ -55,7 +57,9 @@ public class CourseService {
 	
 	public ProfessorModel extractProfessorFromToken() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return ((ApplicationUserModel)authentication.getPrincipal()).getProfessor();
+		String username = (String)authentication.getPrincipal();
+		ApplicationUserModel user = applicationUserRepository.findByUsername(username);
+		return user.getProfessor();
 	}
 
 }
