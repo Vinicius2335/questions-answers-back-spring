@@ -31,7 +31,7 @@ public interface CourseRepository extends JpaRepository<CourseModel, Long> {
 	@Transactional
 	@Modifying
 	@Query(value = "UPDATE TB_COURSE c SET c.enabled = false WHERE c.id_course = :id "
-			+ "AND e.professor = :professor", nativeQuery = true)
+			+ "AND c.professor_id = :professor", nativeQuery = true)
 	void deleteById(@Param("id")Long idCourse, @Param("professor") Long idProfessor);
 
 	

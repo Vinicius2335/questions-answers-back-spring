@@ -26,13 +26,11 @@ public interface CustomRepository<T, ID> extends PagingAndSortingRepository<T, I
 		return findById(id) != null;
 	}
 
-	// TEST
 	@Override
 	@Query(value = "SELECT * FROM #{#entityName} e WHERE e.professor = #{principal.professor} "
 			+ "AND e.enabled = true", nativeQuery = true)
 	Iterable<T> findAll();
 
-	// TEST
 	@Override
 	@Query(value = "SELECT * FROM #{#entityName} e WHERE e.professor = #{principal.professor} "
 			+ "AND e.enabled = true", nativeQuery = true)

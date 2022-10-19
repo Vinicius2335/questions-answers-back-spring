@@ -1,7 +1,6 @@
 package com.viniciusvieira.questionsanswers.dtos;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -14,10 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
-public class CourseDto {
-	@NotEmpty(message = "The course name cannot be empty")
-	@Size(max = 150, message = "The course name accept max 150 caracteres")
-	@Schema(description = "This is the course's name", required = true)
-	private String name;
-	
+public class QuestionDto {
+	@NotEmpty(message = "The question title cannot be empty")
+	@Schema(description = "This is the question's title", required = true)
+	private String title;
 }

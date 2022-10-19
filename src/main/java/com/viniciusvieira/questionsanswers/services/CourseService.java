@@ -39,6 +39,7 @@ public class CourseService {
 	public CourseModel save(CourseDto courseDto, ProfessorModel professor) {
 		CourseModel course = CourseMapper.INSTANCE.toCorseModel(courseDto);
 		course.setProfessor(professor);
+		course.setEnabled(true);
 		return courseRepository.save(course);
 	}
 	
@@ -47,13 +48,16 @@ public class CourseService {
 		CourseModel course = CourseMapper.INSTANCE.toCorseModel(courseDto);
 		CourseModel courseFound = findByIdOrThrowCourseNotFoundException(id);
 		
-		course.setIdCourse(courseFound.getIdCourse());
-		courseRepository.save(course);
+		courseFound.setName(course.getName());
+		courseRepository.save(courseFound);
 	}
 	
 	@Transactional
 	public void delete(Long id) {
-		courseRepository.delete(findByIdOrThrowCourseNotFoundException(id));
+		CourseModel course = findByIdOrThrowCourseNotFoundException(id);
+		ProfessorModel professor = extractProfessorFromToken();
+		
+		courseRepository.deleteById(course.getIdCourse(), professor.getIdProfessor());
 	}
 	
 	public ProfessorModel extractProfessorFromToken() {
