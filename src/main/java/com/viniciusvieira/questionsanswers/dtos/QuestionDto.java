@@ -17,4 +17,5 @@ public class QuestionDto {
 	@NotEmpty(message = "The question title cannot be empty")
 	@Schema(description = "This is the question's title", required = true)
 	private String title;
+	
 }

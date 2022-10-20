@@ -11,6 +11,7 @@ import com.viniciusvieira.questionsanswers.dtos.QuestionDto;
 import com.viniciusvieira.questionsanswers.excepiton.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.mappers.QuestionMapper;
 import com.viniciusvieira.questionsanswers.models.ApplicationUserModel;
+import com.viniciusvieira.questionsanswers.models.CourseModel;
 import com.viniciusvieira.questionsanswers.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.repositories.ApplicationUserRepository;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class QuestionService {
 	private final QuestionRepository questionRepository;
 	private final ApplicationUserRepository applicationUserRepository;
+	private final CourseService courseService;
 	
 	public QuestionModel findByIdOrThrowQuestionNotFoundException(Long id) {
 		Long idProfessor = extractProfessorFromToken().getIdProfessor();
@@ -37,9 +39,12 @@ public class QuestionService {
 	
 	// BUG: E O COURSE ?
 	@Transactional
-	public QuestionModel save(QuestionDto questionDto, ProfessorModel professor) {
+	public QuestionModel save(Long idCourse, QuestionDto questionDto) {
 		QuestionModel question = QuestionMapper.INSTANCE.toQuestionModel(questionDto);
-		question.setProfessor(professor);
+		CourseModel course = courseService.findByIdOrThrowCourseNotFoundException(idCourse);
+		
+		question.setCourse(course);
+		question.setProfessor(course.getProfessor());
 		question.setEnabled(true);
 		return questionRepository.save(question);
 	}

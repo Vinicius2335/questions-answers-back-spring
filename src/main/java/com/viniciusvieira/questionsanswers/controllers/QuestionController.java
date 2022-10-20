@@ -40,20 +40,21 @@ public class QuestionController {
 					@ApiResponse(responseCode = "404", description = "When Question Not Found By ID")
 			})
 	@GetMapping("/{id}")
-	public ResponseEntity<QuestionModel> getQuestionById(@RequestBody Long id){
+	public ResponseEntity<QuestionModel> getQuestionById(@PathVariable Long id){
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(questionService.findByIdOrThrowQuestionNotFoundException(id));
 	}
+	
 	
 	@Operation(summary = "Find questions by title", description = "Return a list of questions related to professor",
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Question List is Empty")	
 			})
-	@GetMapping("/list")
-	///api/professor/course/question?idCourse=1&title=
-	public ResponseEntity<List<QuestionModel>> findByTitle(@RequestParam Long idCourse ,
+	@GetMapping("/list/{idCourse}/")
+	// /api/professor/course/question/1/?title=" "
+	public ResponseEntity<List<QuestionModel>> findByTitle(@PathVariable Long idCourse ,
 			@RequestParam String title){
 		ProfessorModel professor = questionService.extractProfessorFromToken();
 		List<QuestionModel> listQuestion = questionService
@@ -67,15 +68,18 @@ public class QuestionController {
 				.body(listQuestion);
 	}
 	
+	
 	@Operation(summary = "Save Question", description = "Insert question in the database", responses = {
 			@ApiResponse(responseCode = "201", description = "When Successful"),
 			@ApiResponse(responseCode = "400", description = "When Have a Question field Empty")
 	})
 	@PostMapping
-	public ResponseEntity<QuestionModel> save(@RequestBody @Valid QuestionDto questionDto){
-		ProfessorModel professor = questionService.extractProfessorFromToken();
-		return ResponseEntity.status(HttpStatus.CREATED).body(questionService.save(questionDto, professor));
+	// ?idCourse=
+	public ResponseEntity<QuestionModel> save(@RequestParam Long idCourse,
+			@RequestBody @Valid QuestionDto questionDto){
+		return ResponseEntity.status(HttpStatus.CREATED).body(questionService.save(idCourse, questionDto));
 	}
+	
 	
 	@Operation(summary = "Delete Question", description = "Remove question in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
@@ -86,6 +90,7 @@ public class QuestionController {
 		questionService.delete(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Question deleted successfully");
 	}
+	
 	
 	@Operation(summary = "Update Question", description = "Update question in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
