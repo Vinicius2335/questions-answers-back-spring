@@ -23,26 +23,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "TB_COURSE")
-public class CourseModel implements Serializable {
+@Table(name = "TB_CHOICE")
+public class ChoiceModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Schema(description = "The id of the course")
+	@Schema(description = "The id of the choice")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idCourse;
+	private Long idChoice;
 	
-	@Schema(description = "The name of the course")
-	@Column(nullable = false, length = 150)
-	private String name;
+	@Schema(description = "The title of the choice")
+	@Column(nullable = false)
+	private String title;
+	
+	// TODO: ??
+	@Schema(description = "Correct answer for the associated question, you can have only one correct answer per question")
+	@Column(nullable = false)
+	private boolean correctAnswer;
+	
+	@Schema(description = "many-to-one relationship with question")
+	// optional false = relacionamento não nulo sempre deve existir.
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "question_id", nullable = false)
+	private QuestionModel question;
 	
 	@Schema(description = "many-to-one relationship with professor")
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "professor_id", nullable = false)
 	private ProfessorModel professor;
 	
-	@Schema(description = "Describes whether the course is enabled or not")
-	@Column(columnDefinition = "boolean default true", nullable = false)
+	@Schema(description = "describes whether the choice is enabled or not")
+	@Column(nullable = false, columnDefinition = "boolean default true")
 	private boolean enabled;
 }
-

@@ -37,13 +37,11 @@ public class QuestionService {
 		return questionRepository.listQuestionByCourseAndTitle(idCourse, title, idProfessor);
 	}
 	
-	// BUG: E O COURSE ?
 	@Transactional
-	public QuestionModel save(Long idCourse, QuestionDto questionDto) {
+	public QuestionModel save(QuestionDto questionDto) {
 		QuestionModel question = QuestionMapper.INSTANCE.toQuestionModel(questionDto);
-		CourseModel course = courseService.findByIdOrThrowCourseNotFoundException(idCourse);
+		CourseModel course = courseService.findByIdOrThrowCourseNotFoundException(question.getIdQuestion());
 		
-		question.setCourse(course);
 		question.setProfessor(course.getProfessor());
 		question.setEnabled(true);
 		return questionRepository.save(question);
@@ -71,6 +69,12 @@ public class QuestionService {
 		String username = (String)authentication.getPrincipal();
 		ApplicationUserModel user = applicationUserRepository.findByUsername(username);
 		return user.getProfessor();
+	}
+	
+	@Transactional
+	public void deleteAllQuestionsRelatedToCouse(Long idCourse) {
+		ProfessorModel professor = extractProfessorFromToken();
+		questionRepository.deleteAllQuestionsRelatedToCouse(idCourse, professor.getIdProfessor());
 	}
 
 }

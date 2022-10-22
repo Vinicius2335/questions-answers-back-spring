@@ -10,18 +10,23 @@ public class QuestionCreator {
 				.title("Qual é seu nome?")
 				.course(CourseCreator.mockCourse())
 				.professor(ProfessorCreator.mockProfessor())
+				.enabled(true)
 				.build();
 	}
+	
 	
 	public static QuestionDto mockQuestionDto() {
 		return QuestionDto.builder()
 				.title("Qual é seu nome?")
+				.course(CourseCreator.mockCourse())
 				.build();
 	}
+	
 	
 	public static QuestionDto mockQuestionDtoInvalid() {
 		return QuestionDto.builder()
 				.title(null)
+				.course(CourseCreator.mockCourse())
 				.build();
 	}
 }

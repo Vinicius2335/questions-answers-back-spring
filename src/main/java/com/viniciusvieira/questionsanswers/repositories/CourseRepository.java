@@ -3,8 +3,6 @@ package com.viniciusvieira.questionsanswers.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,11 +26,9 @@ public interface CourseRepository extends JpaRepository<CourseModel, Long> {
 			@Param("id_professor") Long idProfessor
 	);
 	
-	@Transactional
 	@Modifying
 	@Query(value = "UPDATE TB_COURSE c SET c.enabled = false WHERE c.id_course = :id "
 			+ "AND c.professor_id = :professor", nativeQuery = true)
 	void deleteById(@Param("id")Long idCourse, @Param("professor") Long idProfessor);
 
-	
 }

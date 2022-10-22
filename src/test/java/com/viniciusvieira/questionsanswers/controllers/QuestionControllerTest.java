@@ -83,7 +83,7 @@ class QuestionControllerTest {
 				.thenReturn(questionMockList);
 		
 		// save
-		BDDMockito.when(questionServiceMock.save(anyLong(), any(QuestionDto.class)))
+		BDDMockito.when(questionServiceMock.save(any(QuestionDto.class)))
 				.thenReturn(questionMock);
 		
 		// delete
@@ -165,9 +165,7 @@ class QuestionControllerTest {
 		HttpEntity<QuestionDto> httpEntity = new HttpEntity<>(QuestionCreator.mockQuestionDto(),
 				getValidAuthentication().getHeaders());
 		
-		log.info(httpEntity.getBody());
-		
-		ResponseEntity<QuestionModel> exchange = testRestTemplate.exchange(url + "?idCourse=1", HttpMethod.POST,
+		ResponseEntity<QuestionModel> exchange = testRestTemplate.exchange(url, HttpMethod.POST,
 				httpEntity, QuestionModel.class);
 		
 		assertAll(
@@ -197,7 +195,7 @@ class QuestionControllerTest {
 	@Test
 	@DisplayName("save Return status code 404 when Course not found by id")
 	void save_Return404_WhenCourseNotFoundById() {
-		BDDMockito.when(questionServiceMock.save(anyLong(), any(QuestionDto.class)))
+		BDDMockito.when(questionServiceMock.save(any(QuestionDto.class)))
 				.thenThrow(CourseNotFoundException.class);
 		
 		HttpEntity<QuestionDto> httpEntity = new HttpEntity<>(QuestionCreator.mockQuestionDto(),

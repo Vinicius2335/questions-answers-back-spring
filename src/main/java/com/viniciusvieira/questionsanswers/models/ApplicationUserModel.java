@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,20 +35,25 @@ import lombok.NoArgsConstructor;
 public class ApplicationUserModel implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Schema(description = "The id of the user")
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
 
+	@Schema(description = "The username of the user, needed to access the features", required = true)
     @Column(nullable = false, unique = true, length = 128)
     private String username;
 
+	@Schema(description = "The password of the user, need to access the features", required = true)
     @Column(nullable = false, length = 128)
     private String password;
     
+	@Schema(description = "one-to-one relationship with professor")
     @OneToOne
     @JoinColumn(name = "professor_id")
     private ProfessorModel professor;
 
+	@Schema(description = "many-to-many relationship between user and role")
     // fetch = FetchType.EAGER Resolve o problema de lazy load
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "TB_USERS_ROLES",

@@ -3,8 +3,6 @@ package com.viniciusvieira.questionsanswers.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,9 +15,19 @@ import com.viniciusvieira.questionsanswers.models.QuestionModel;
 @Repository
 public interface QuestionRepository extends JpaRepository<QuestionModel, Long> {
 	
-	@Query(value = "SELECT * FROM TB_QUESTION q WHERE q.id_question = :id "
-			+ "AND q.professor_id = :professor AND q.enabled = true", nativeQuery = true)
-	Optional<QuestionModel> findOneQuestion(@Param("id") Long idQuestion, @Param("professor") Long idProfessor);
+	@Query(value = "SELECT * FROM TB_QUESTION q WHERE q.id_question = :id_question "
+			+ "AND q.professor_id = :professor_id AND q.enabled = true", nativeQuery = true)
+	Optional<QuestionModel> findOneQuestion(
+			@Param("id_question") Long idQuestion, 
+			@Param("professor_id") Long idProfessor
+	);
+	
+	@Query(value = "SELECT * FROM TB_QUESTION q WHERE q.course_id = :course_id AND"
+			+ " q.professor_id = :professor_id ", nativeQuery = true)
+	QuestionModel findByIdCourse(
+			@Param("course_id") Long idCourse,
+			@Param("professor_id") Long idProfessor
+	);
 	
 	@Query(value = "SELECT * FROM TB_QUESTION q WHERE q.course_id = :id_course AND q.title LIKE %:title% AND"
 			+ " q.professor_id = :id_professor AND q.enabled = true", nativeQuery = true)
@@ -29,11 +37,18 @@ public interface QuestionRepository extends JpaRepository<QuestionModel, Long> {
 			@Param("id_professor") Long idProfessor
 	);
 	
-	@Transactional
 	@Modifying
 	@Query(value = "UPDATE TB_QUESTION q SET q.enabled = false WHERE q.id_question = :id "
-			+ "AND q.professor_id = :professor", nativeQuery = true)
-	void deleteById(@Param("id")Long idQuestion, @Param("professor") Long idProfessor);
-
+			+ "AND q.professor_id = :professor_id", nativeQuery = true)
+	void deleteById(@Param("id")Long idQuestion, @Param("professor_id") Long idProfessor);
+	
+	// cascade soft delete course -> question
+	@Modifying
+	@Query(value = "UPDATE TB_QUESTION q SET q.enabled = false WHERE q.course_id = :course_id "
+			+ "AND q.professor_id = :professor_id", nativeQuery = true)
+	void deleteAllQuestionsRelatedToCouse(
+			@Param("course_id") Long idCourse, 
+			@Param("professor_id") Long idProfessor
+	);
 	
 }

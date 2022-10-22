@@ -74,10 +74,8 @@ public class QuestionController {
 			@ApiResponse(responseCode = "400", description = "When Have a Question field Empty")
 	})
 	@PostMapping
-	// ?idCourse=
-	public ResponseEntity<QuestionModel> save(@RequestParam Long idCourse,
-			@RequestBody @Valid QuestionDto questionDto){
-		return ResponseEntity.status(HttpStatus.CREATED).body(questionService.save(idCourse, questionDto));
+	public ResponseEntity<QuestionModel> save(@RequestBody @Valid QuestionDto questionDto){
+		return ResponseEntity.status(HttpStatus.CREATED).body(questionService.save(questionDto));
 	}
 	
 	

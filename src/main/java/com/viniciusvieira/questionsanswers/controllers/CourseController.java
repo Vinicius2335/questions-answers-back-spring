@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.models.CourseModel;
 import com.viniciusvieira.questionsanswers.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.services.CourseService;
+import com.viniciusvieira.questionsanswers.services.QuestionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Course", description = "Operations related to professors course")
 public class CourseController {
 	private final CourseService courseService;
+	private final QuestionService questionService;
 	
 	@Operation(summary = "Find course by his Id", description = "Return a course based on it's id",
 			responses = {
@@ -79,8 +82,12 @@ public class CourseController {
 			@ApiResponse(responseCode = "404", description = "When Course Not Found")
 	})
 	@DeleteMapping("/{id}")
+	// Transactional porque realizaremos 2 alteraçoes no banco de dados, se desse erro em 1,
+	// a outra funcionaria normalmente, porem só queremos salvar a alteraçao caso as 2 operaçoes aconteça
+	@Transactional 
 	public ResponseEntity<Object> delete(@PathVariable Long id){
 		courseService.delete(id);
+		questionService.deleteAllQuestionsRelatedToCouse(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Course deleted successfully");
 	}
 	

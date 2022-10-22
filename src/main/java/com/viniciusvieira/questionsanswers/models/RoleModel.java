@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.viniciusvieira.questionsanswers.Enums.RoleNames;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,10 +31,12 @@ import lombok.NoArgsConstructor;
 public class RoleModel implements GrantedAuthority, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Schema(description = "The id of the role")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idRole;
 	
+	@Schema(description = "The name of the role")
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, unique = true)
 	private RoleNames roleName;

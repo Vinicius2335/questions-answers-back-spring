@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.repositories;
+package com.viniciusvieira.questionsanswers.util;
 
 import java.util.Optional;
 

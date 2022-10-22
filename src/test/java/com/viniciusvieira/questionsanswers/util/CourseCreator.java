@@ -9,7 +9,9 @@ public class CourseCreator {
 		return CourseModel.builder()
 				.idCourse(1L)
 				.name("Java")
-				.professor(ProfessorCreator.mockProfessor()).build();
+				.professor(ProfessorCreator.mockProfessor())
+				.enabled(true)
+				.build();
 	}
 	
 	public static CourseModel mockCourseToSave() {
@@ -17,6 +19,7 @@ public class CourseCreator {
 				.idCourse(2L)
 				.name("CSS")
 				.professor(ProfessorCreator.mockProfessor())
+				.enabled(true)
 				.build();
 	}
 	
@@ -28,7 +31,8 @@ public class CourseCreator {
 	
 	public static CourseDto mockInvalidCourseDto() {
 		return CourseDto.builder()
-				.name(null).build();
+				.name(null)
+				.build();
 	}
 	
 }
