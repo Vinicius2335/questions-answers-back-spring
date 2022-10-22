@@ -23,11 +23,27 @@ public class CourseCreator {
 				.build();
 	}
 	
+	public static CourseModel mockCourseUpdated() {
+		return CourseModel.builder()
+				.idCourse(1L)
+				.name("Python")
+				.professor(ProfessorCreator.mockProfessor())
+				.enabled(true)
+				.build();
+	}
+	
 	public static CourseDto mockCourseDto() {
 		return CourseDto.builder()
 				.name("CSS")
 				.build();
 	}
+	
+	public static CourseDto mockCourseDtoToUpdated() {
+		return CourseDto.builder()
+				.name("Python")
+				.build();
+	}
+	
 	
 	public static CourseDto mockInvalidCourseDto() {
 		return CourseDto.builder()
