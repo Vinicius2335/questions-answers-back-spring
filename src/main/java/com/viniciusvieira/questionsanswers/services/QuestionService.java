@@ -40,7 +40,7 @@ public class QuestionService {
 	@Transactional
 	public QuestionModel save(QuestionDto questionDto) {
 		QuestionModel question = QuestionMapper.INSTANCE.toQuestionModel(questionDto);
-		CourseModel course = courseService.findByIdOrThrowCourseNotFoundException(question.getIdQuestion());
+		CourseModel course = courseService.findByIdOrThrowCourseNotFoundException(question.getCourse().getIdCourse());
 		
 		question.setProfessor(course.getProfessor());
 		question.setEnabled(true);

@@ -45,6 +45,7 @@ import lombok.extern.log4j.Log4j2;
 class CourseServiceTest {
 	@InjectMocks
 	private CourseService courseService;
+	
 	@Mock
 	private CourseRepository courseRepositoryMock;
 	@Mock
