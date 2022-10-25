@@ -33,7 +33,7 @@ public class ChoiceService {
 		return choiceRepository.listChoiceByQuestionId(question.getIdQuestion(), professor.getIdProfessor());
 	}
 	
-	private ChoiceModel getChoiceByIdOrThrowChoiceNotFoundException(Long idChoice) {
+	public ChoiceModel getChoiceByIdOrThrowChoiceNotFoundException(Long idChoice) {
 		return choiceRepository.findOneChoice(idChoice, extractProfessorFromToken().getIdProfessor())
 				.orElseThrow(() -> new ChoiceNotFoundException("Choice Not Found"));
 	}
@@ -54,15 +54,15 @@ public class ChoiceService {
 	
 	@Transactional
 	public void replace(Long idChoice, ChoiceDto choiceDto) {
-		ChoiceModel choiceFound = getChoiceByIdOrThrowChoiceNotFoundException(idChoice);
-		ChoiceModel choiceToUpdated = ChoiceMapper.INSTANCE.toChoiceModel(choiceDto);
+		ChoiceModel choiceToUpdate = getChoiceByIdOrThrowChoiceNotFoundException(idChoice);
+		ChoiceModel newChoice = ChoiceMapper.INSTANCE.toChoiceModel(choiceDto);
 		
-		questionService.findByIdOrThrowQuestionNotFoundException(choiceToUpdated.getQuestion().getIdQuestion());
+		questionService.findByIdOrThrowQuestionNotFoundException(newChoice.getQuestion().getIdQuestion());
 		
-		choiceFound.setTitle(choiceToUpdated.getTitle());
-		choiceFound.setCorrectAnswer(choiceToUpdated.isCorrectAnswer());
-		choiceRepository.save(choiceFound);
-		updateChangingOtherChoicesCorrectAnswerToFalse(choiceToUpdated);
+		choiceToUpdate.setTitle(newChoice.getTitle());
+		choiceToUpdate.setCorrectAnswer(newChoice.isCorrectAnswer());
+		choiceRepository.save(choiceToUpdate);
+		updateChangingOtherChoicesCorrectAnswerToFalse(choiceToUpdate);
 	}
 	
 	@Transactional
@@ -90,6 +90,7 @@ public class ChoiceService {
 		choiceRepository.deleteAllChoicesRelatedToQuestion(idQuestion,
 				extractProfessorFromToken().getIdProfessor());
 	}
+
 
 }
 

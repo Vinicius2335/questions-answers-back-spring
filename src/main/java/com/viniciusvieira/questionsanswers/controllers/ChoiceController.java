@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.viniciusvieira.questionsanswers.dtos.ChoiceDto;
 import com.viniciusvieira.questionsanswers.excepiton.ChoiceNotFoundException;
 import com.viniciusvieira.questionsanswers.models.ChoiceModel;
+import com.viniciusvieira.questionsanswers.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.services.ChoiceService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +51,19 @@ public class ChoiceController {
 	}
 	
 	
+	@Operation(summary = "Find choice by his Id" , description = "Return a achoice based on it's id", 
+			responses = {
+					@ApiResponse(responseCode = "200", description = "When Successful"),
+					@ApiResponse(responseCode = "404", description = "When Choice Not Found By ID")
+			})
+	@GetMapping("/{id}")
+	public ResponseEntity<ChoiceModel> getChoiceById(@PathVariable Long id){
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(choiceService.getChoiceByIdOrThrowChoiceNotFoundException(id));
+	}
+	
+	
 	@Operation(summary = "Created Choice", description = "if the choice's correctAnswer is true, all other"
 			+ " choice's correctAnswer related to this questions will be updated to false", responses = {
 					@ApiResponse(responseCode = "201", description = "When Successful"),
@@ -66,9 +80,9 @@ public class ChoiceController {
 	
 	@Operation(summary = "Update Choice", description = "if the choice's correctAnswer is true, all other"
 			+ " choice's correctAnswer related to this questions will be updated to false", responses = {
-					@ApiResponse(responseCode = "201", description = "When Successful"),
+					@ApiResponse(responseCode = "204", description = "When Successful"),
 					@ApiResponse(responseCode = "400", description = "When ChoiceDto have Invalid Fields"),
-					@ApiResponse(responseCode = "404", description = "When Question Not Found")
+					@ApiResponse(responseCode = "404", description = "When Choice or Question Not Found")
 	})
 	@Transactional
 	@PutMapping("/{idChoice}")
@@ -78,6 +92,7 @@ public class ChoiceController {
 				.status(HttpStatus.NO_CONTENT)
 				.body("Choice updated successfully");
 	}
+	
 	
 	@Operation(summary = "Delete Choice", description = "Remove choice in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),

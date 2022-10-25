@@ -25,15 +25,18 @@ public interface ChoiceRepository extends JpaRepository<ChoiceModel, Long> {
 			@Param("professor_id") Long idProfessor
 	);
 	
-	// TODO: sei se vai dar certo não
+	// TODO: sei se vai dar certo
 	@Modifying
-	@Query(value = "UPDATE TB_CHOICE c WHERE c <> :choice AND c.question_id = :question AND"
+	@Query(value = "UPDATE TB_CHOICE c SET c.correct_answer = false WHERE c.id_choice <> :choice AND c.question_id = :question AND"
 			+ " c.professor_id = :professor_id AND c.enabled = true", nativeQuery = true)
 	void updatedAllOtherChoicesCorrectAnswerToFalse(
 			@Param("choice") ChoiceModel choice,
 			@Param("question") QuestionModel question,
 			@Param("professor_id") Long idProfessor
 	);
+	
+	@Query(value = "SELECT * FROM TB_CHOICE c WHERE c.correct_answer <> true", nativeQuery = true)
+	List<ChoiceModel> testUpdatedAllOtherChoicesCorrectAnswerToFalse();
 	
 	@Modifying
 	@Query(value = "UPDATE TB_CHOICE c SET c.enabled = false WHERE c.id_choice = :id "

@@ -40,6 +40,7 @@ class QuestionRepositoryTest {
 	private RoleRepository roleRepository;
 	@Autowired
 	private QuestionRepository questionRepository;
+	
 	private QuestionModel questionToSave;
 	private ProfessorModel professorSaved;
 	private CourseModel courseSaved;
