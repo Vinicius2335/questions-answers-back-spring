@@ -76,6 +76,10 @@ class ChoiceServiceTest {
 		BDDMockito.when(choiceRepositoryMock.findOneChoice(anyLong(), anyLong()))
 				.thenReturn(Optional.of(choiceToSave));
 		
+		// listChoiceByQuestionAndTitle
+		BDDMockito.when(choiceRepositoryMock.listChoiceByQuestionAndTitle(anyLong(), anyString(), anyLong()))
+				.thenReturn(expectedChoiceList);
+		
 		// save
 		BDDMockito.when(choiceRepositoryMock.save(any(ChoiceModel.class))).thenReturn(choiceToSave);
 		
@@ -136,6 +140,42 @@ class ChoiceServiceTest {
 		
 		assertThrows(ChoiceNotFoundException.class, () -> choiceService
 				.getChoiceByIdOrThrowChoiceNotFoundException(1L));
+	}
+	
+	@Test
+	@DisplayName("findByQuestionAndTitle return a list choice when successful")
+	void findByQuestionAndTitle_ReturnListChoice_WhenSuccessful() {
+		List<ChoiceModel> findByQuestionAndTitle = choiceService.findByQuestionAndTitle(1L, "Olá?");
+		
+		assertAll(
+				() -> assertNotNull(findByQuestionAndTitle),
+				() -> assertFalse(findByQuestionAndTitle.isEmpty()),
+				() -> assertEquals(1, findByQuestionAndTitle.size()),
+				() -> assertTrue(findByQuestionAndTitle.contains(choiceToSave))
+		);
+	}
+	
+	@Test
+	@DisplayName("findByQuestionAndTitle return a empty list choice when choice not found")
+	void findByQuestionAndTitle_ReturnEmptyListChoice_WhenChoiceNotFound() {
+		BDDMockito.when(choiceRepositoryMock.listChoiceByQuestionAndTitle(anyLong(), anyString(), anyLong()))
+				.thenReturn(List.of());
+		
+		List<ChoiceModel> findByQuestionAndTitle = choiceService.findByQuestionAndTitle(1L, "Olá?");
+		
+		assertAll(
+				() -> assertNotNull(findByQuestionAndTitle),
+				() -> assertTrue(findByQuestionAndTitle.isEmpty())
+		);
+	}
+	
+	@Test
+	@DisplayName("findByQuestionAndTitle Throws QuestionNotFoundException when question not found")
+	void findByQuestionAndTitle_ThrowsQuestionNotFoundException_WhenQuestionNotFound() {
+		BDDMockito.when(questionServiceMock.findByIdOrThrowQuestionNotFoundException(anyLong()))
+				.thenThrow(QuestionNotFoundException.class);
+		
+		assertThrows(QuestionNotFoundException.class, () -> choiceService.findByQuestionAndTitle(1L, "Olá?"));
 	}
 		
 	@Test
