@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.List;
 
@@ -73,6 +74,10 @@ class ChoiceControllerTest {
 		// getChoiceByIdOrThrowChoiceNotFoundException
 		BDDMockito.when(choiceServiceMock.getChoiceByIdOrThrowChoiceNotFoundException(anyLong()))
 				.thenReturn(choiceToSave);
+		
+		// findByQuestionAndTitle
+		BDDMockito.when(choiceServiceMock.findByQuestionAndTitle(anyLong(), anyString()))
+				.thenReturn(expectedChoiceList);
 		
 		// save
 		BDDMockito.when(choiceServiceMock.save(any(ChoiceDto.class))).thenReturn(choiceToSave);
@@ -147,6 +152,58 @@ class ChoiceControllerTest {
 				getValidAuthentication(), Object.class);
 		
 		log.info(exchange.getBody());
+		
+		assertAll(
+				() -> assertNotNull(exchange.getBody()),
+				() -> assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode())
+		);
+	}
+	
+	@Test
+	@DisplayName("findByTitle return a list of choice when successful")
+	void findByTitle_ReturnChoiceList_WhenSuccessful() {
+		ParameterizedTypeReference<List<ChoiceModel>> typeReference = new ParameterizedTypeReference<List<ChoiceModel>>() {
+		};
+		
+		ResponseEntity<List<ChoiceModel>> exchange = testRestTemplate.exchange(url + "/list/1/?title=", HttpMethod.GET,
+				getValidAuthentication(), typeReference);
+		
+		assertAll(
+				() -> assertNotNull(exchange.getBody()),
+				() -> assertFalse(exchange.getBody().isEmpty()),
+				() -> assertEquals(HttpStatus.OK, exchange.getStatusCode()),
+				() -> assertEquals(1, exchange.getBody().size()),
+				() -> assertTrue(exchange.getBody().contains(choiceToSave))
+		);
+	}
+	
+	@Test
+	@DisplayName("findByTitle return status code 404 when choice not found")
+	void findByTitle_ReturnStatusCode404_WhenChoiceNotFound() {
+		BDDMockito.when(choiceServiceMock.findByQuestionAndTitle(anyLong(), anyString()))
+		.thenReturn(List.of());
+		
+		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/list/1/?title=", HttpMethod.GET,
+				getValidAuthentication(), Object.class);
+		
+		log.info("TESTE {}", exchange.getBody());
+		
+		assertAll(
+				() -> assertNotNull(exchange.getBody()),
+				() -> assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode())
+		);
+	}
+	
+	@Test
+	@DisplayName("findByTitle return status code 404 when question not found")
+	void findByTitle_ReturnStatusCode404_WhenQuestionNotFound() {
+		BDDMockito.when(choiceServiceMock.findByQuestionAndTitle(anyLong(), anyString()))
+				.thenThrow(QuestionNotFoundException.class);
+		
+		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/list/1/?title=", HttpMethod.GET,
+				getValidAuthentication(), Object.class);
+		
+		log.info("TESTE {}", exchange.getBody());
 		
 		assertAll(
 				() -> assertNotNull(exchange.getBody()),

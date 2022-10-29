@@ -38,6 +38,13 @@ public class ChoiceService {
 				.orElseThrow(() -> new ChoiceNotFoundException("Choice Not Found"));
 	}
 	
+	public List<ChoiceModel> findByQuestionAndTitle(Long idQuestion, String title){
+		questionService.findByIdOrThrowQuestionNotFoundException(idQuestion);
+		ProfessorModel professor = extractProfessorFromToken();
+		
+		return choiceRepository.listChoiceByQuestionAndTitle(idQuestion, title, professor.getIdProfessor());
+	}
+	
 	@Transactional
 	public ChoiceModel save(ChoiceDto choiceDto) {
 		ChoiceModel choice = ChoiceMapper.INSTANCE.toChoiceModel(choiceDto);

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.viniciusvieira.questionsanswers.dtos.ChoiceDto;
 import com.viniciusvieira.questionsanswers.excepiton.ChoiceNotFoundException;
 import com.viniciusvieira.questionsanswers.models.ChoiceModel;
-import com.viniciusvieira.questionsanswers.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.services.ChoiceService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,6 +61,27 @@ public class ChoiceController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(choiceService.getChoiceByIdOrThrowChoiceNotFoundException(id));
+	}
+	
+	
+	@Operation(summary = "Find choices by question and title", description = "Return a list of choices related to professor",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "When Successful"),
+					@ApiResponse(responseCode = "404", description = "When Choice List is Empty or Question Not Found")	
+			})
+	@GetMapping("/list/{idQuestion}/")
+	// /api/professor/course/question/choice/1/?title=" "
+	public ResponseEntity<List<ChoiceModel>> findByTitle(@PathVariable Long idQuestion ,
+			@RequestParam String title){
+		List<ChoiceModel> listChoice = choiceService
+				.findByQuestionAndTitle(idQuestion, title);
+		
+		if (listChoice.isEmpty()) {
+			throw new ChoiceNotFoundException("Choice List is Empty");
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(listChoice);
 	}
 	
 	

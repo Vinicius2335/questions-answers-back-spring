@@ -22,8 +22,15 @@ public interface ChoiceRepository extends JpaRepository<ChoiceModel, Long> {
 			+ " c.professor_id = :professor_id AND c.enabled = true", nativeQuery = true)
 	List<ChoiceModel> listChoiceByQuestionId(@Param("question_id") Long idQuestion,
 			@Param("professor_id") Long idProfessor);
+	
+	@Query(value = "SELECT * FROM TB_CHOICE c WHERE c.question_id = :id_question AND c.title LIKE %:title% AND"
+			+ " c.professor_id = :id_professor AND c.enabled = true", nativeQuery = true)
+	List<ChoiceModel> listChoiceByQuestionAndTitle(
+			@Param("id_question") Long idQuestion,
+			@Param("title") String title,
+			@Param("id_professor") Long idProfessor
+	);
 
-	// TODO: sei se vai dar certo
 	@Modifying
 	@Query(value = "UPDATE TB_CHOICE c SET c.correct_answer = false WHERE c.id_choice <> :choice AND c.question_id = :question AND"
 			+ " c.professor_id = :professor_id AND c.enabled = true", nativeQuery = true)
@@ -38,7 +45,7 @@ public interface ChoiceRepository extends JpaRepository<ChoiceModel, Long> {
 			+ "AND c.professor_id = :professor_id", nativeQuery = true)
 	void deleteById(@Param("id") Long idChoice, @Param("professor_id") Long idProfessor);
 
-	// TEST OS 2
+	// TEST: Falta implementar os 2
 	// cascade soft delete course -> question -> choice
 	@Modifying
 	@Query(value = "UPDATE TB_CHOICE c SET c.enabled = false WHERE c.question_id = :question_id "
