@@ -45,7 +45,6 @@ public interface ChoiceRepository extends JpaRepository<ChoiceModel, Long> {
 			+ "AND c.professor_id = :professor_id", nativeQuery = true)
 	void deleteById(@Param("id") Long idChoice, @Param("professor_id") Long idProfessor);
 
-	// TEST: Falta implementar os 2
 	// cascade soft delete course -> question -> choice
 	@Modifying
 	@Query(value = "UPDATE TB_CHOICE c SET c.enabled = false WHERE c.question_id = :question_id "

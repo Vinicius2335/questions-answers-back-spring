@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class ChoiceService {
 	private final ChoiceRepository choiceRepository;
 	private final QuestionService questionService;
+	private final CourseService courseService;
 	private final ApplicationUserRepository applicationUserRepository;
 	
 	public List<ChoiceModel> listChoiceByQuestion(Long idQuestion){
@@ -94,11 +95,16 @@ public class ChoiceService {
 	}
 	
 	public void deleteAllChoicesRelatedToQuestion(Long idQuestion) {
+		questionService.findByIdOrThrowQuestionNotFoundException(idQuestion);
 		choiceRepository.deleteAllChoicesRelatedToQuestion(idQuestion,
 				extractProfessorFromToken().getIdProfessor());
 	}
-
+	
+	public void deleteAllChoicesRelatedToCourse(Long idCourse) {
+		courseService.findByIdOrThrowCourseNotFoundException(idCourse);
+		choiceRepository.deleteAllChoicesRelatedToCourse(idCourse,
+				extractProfessorFromToken().getIdProfessor());
+	}
 
 }
 
-// TODO: CASCATE DELETE

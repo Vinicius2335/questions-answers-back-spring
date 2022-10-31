@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.excepiton.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.excepiton.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.repositories.ApplicationUserRepository;
@@ -43,6 +44,8 @@ class ChoiceServiceTest {
 	private ApplicationUserRepository applicationUserRepositoryMock;
 	@Mock
 	private QuestionService questionServiceMock;
+	@Mock
+	private CourseService courseServiceMock;
 	
 	private ChoiceModel choiceToSave;
 	private List<ChoiceModel> expectedChoiceList;
@@ -85,6 +88,13 @@ class ChoiceServiceTest {
 		
 		// deleteById
 		BDDMockito.doNothing().when(choiceRepositoryMock).deleteById(anyLong(), anyLong());
+		
+		// deleteAllChoicesRelatedToQuestion
+		BDDMockito.doNothing().when(choiceRepositoryMock).deleteAllChoicesRelatedToQuestion(anyLong(), anyLong());
+		
+		// deleteAllChoicesRelatedToCourse
+		BDDMockito.doNothing().when(choiceRepositoryMock).deleteAllChoicesRelatedToCourse(anyLong(), anyLong());
+		
 	}
 
 	@Test
@@ -244,6 +254,36 @@ class ChoiceServiceTest {
 		.thenThrow(QuestionNotFoundException.class);
 		
 		assertThrows(QuestionNotFoundException.class, () -> choiceService.delete(1L));
+	}
+	
+	@Test
+	@DisplayName("deleteAllChoicesRelatedToQuestion Remove choice related to question removed when successful")
+	void deleteAllChoicesRelatedToQuestion_RemoveChoiceRelatedQuestionRemoved_WhenSuccessful() {
+		assertDoesNotThrow(() -> choiceService.deleteAllChoicesRelatedToQuestion(1L));
+	}
+	
+	@Test
+	@DisplayName("deleteAllChoicesRelatedToQuestion throw QuestionNotFoundException when question not found")
+	void deleteAllChoicesRelatedToQuestion_ThrowQuestionNotFoundException_WhenQuestionNotFound() {
+		BDDMockito.when(questionServiceMock.findByIdOrThrowQuestionNotFoundException(anyLong()))
+				.thenThrow(QuestionNotFoundException.class);
+		
+		assertThrows(QuestionNotFoundException.class, () -> choiceService.deleteAllChoicesRelatedToQuestion(1L));
+	}
+	
+	@Test
+	@DisplayName("deleteAllChoicesRelatedToCourse Remove choice related to course removed when successful")
+	void deleteAllChoicesRelatedToCourse_RemoveChoiceRelatedCourseRemoved_WhenSuccessful() {
+		assertDoesNotThrow(() -> choiceService.deleteAllChoicesRelatedToCourse(1L));
+	}
+	
+	@Test
+	@DisplayName("deleteAllChoicesRelatedToCourse throw CourseNotFoundException when course not found")
+	void deleteAllChoicesRelatedToCourse_ThrowCourseNotFoundException_WhenCourseNotFound() {
+		BDDMockito.when(courseServiceMock.findByIdOrThrowCourseNotFoundException(anyLong()))
+				.thenThrow(CourseNotFoundException.class);
+		
+		assertThrows(CourseNotFoundException.class, () -> choiceService.deleteAllChoicesRelatedToCourse(1L));
 	}
 
 }

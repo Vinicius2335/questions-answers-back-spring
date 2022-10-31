@@ -21,8 +21,8 @@ import com.viniciusvieira.questionsanswers.dtos.CourseDto;
 import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.models.CourseModel;
 import com.viniciusvieira.questionsanswers.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.services.CourseService;
-import com.viniciusvieira.questionsanswers.services.QuestionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,12 +31,11 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/professor/course")
-//@CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
 @Tag(name = "Course", description = "Operations related to professors course")
 public class CourseController {
 	private final CourseService courseService;
-	private final QuestionService questionService;
+	private final CascadeDeleteService cascadeDeleteService;
 	
 	@Operation(summary = "Find course by his Id", description = "Return a course based on it's id",
 			responses = {
@@ -77,7 +76,8 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(courseService.save(courseDto, professor));
 	}
 	
-	@Operation(summary = "Delete Course", description = "Remove course in the database", responses = {
+	@Operation(summary = "Delete Course", description = "Remove course in the database and all related questions"
+			+ " and choices", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Course Not Found")
 	})
@@ -86,8 +86,7 @@ public class CourseController {
 	// a outra funcionaria normalmente, porem só queremos salvar a alteraçao caso as 2 operaçoes aconteça
 	@Transactional 
 	public ResponseEntity<Object> delete(@PathVariable Long id){
-		courseService.delete(id);
-		questionService.deleteAllQuestionsRelatedToCouse(id);
+		cascadeDeleteService.cascadeDeleteCourseQuestionAndChoice(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Course deleted successfully");
 	}
 	

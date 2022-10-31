@@ -36,10 +36,9 @@ public class ChoiceModel implements Serializable {
 	@Column(nullable = false)
 	private String title;
 	
-	// TODO: ??
 	@Schema(description = "Correct answer for the associated question, you can have only one correct answer "
-			+ "per question")
-	@Column(nullable = false)
+			+ "per question") 
+	@Column(nullable = false, columnDefinition = "boolean default false")
 	private boolean correctAnswer;
 	
 	@Schema(description = "many-to-one relationship with question")

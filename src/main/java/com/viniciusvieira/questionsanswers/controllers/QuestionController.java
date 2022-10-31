@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.viniciusvieira.questionsanswers.dtos.QuestionDto;
 import com.viniciusvieira.questionsanswers.excepiton.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.models.QuestionModel;
+import com.viniciusvieira.questionsanswers.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.services.QuestionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Question", description = "Operations related to courses question")
 public class QuestionController {
 	private final QuestionService questionService;
+	private final CascadeDeleteService cascadeDeleteService; 
 	
 	@Operation(summary = "Find question by his Id" , description = "Return a question based on it's id", 
 			responses = {
@@ -78,14 +81,14 @@ public class QuestionController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(questionService.save(questionDto));
 	}
 	
-	
-	@Operation(summary = "Delete Question", description = "Remove question in the database", responses = {
+	@Operation(summary = "Delete Question", description = "Remove question in the database and all related choices", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Question Not Found")
 	})
+	@Transactional
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> delete(@PathVariable Long id){
-		questionService.delete(id);
+		cascadeDeleteService.cascadeDeleteQuestionAndChoice(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Question deleted successfully");
 	}
 	
