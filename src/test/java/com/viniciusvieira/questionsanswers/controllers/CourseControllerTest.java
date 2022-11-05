@@ -32,11 +32,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.viniciusvieira.questionsanswers.dtos.CourseDto;
-import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.models.CourseModel;
-import com.viniciusvieira.questionsanswers.models.ProfessorModel;
-import com.viniciusvieira.questionsanswers.services.CourseService;
+import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
+import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
+import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.domain.services.CourseService;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 

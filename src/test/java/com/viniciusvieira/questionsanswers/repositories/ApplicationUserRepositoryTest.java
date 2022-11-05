@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.viniciusvieira.questionsanswers.models.ApplicationUserModel;
+import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;
+import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.ProfessorRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.RoleRepository;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 import com.viniciusvieira.questionsanswers.util.RoleCreator;

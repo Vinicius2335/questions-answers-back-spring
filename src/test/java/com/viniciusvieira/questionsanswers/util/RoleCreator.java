@@ -1,7 +1,7 @@
 package com.viniciusvieira.questionsanswers.util;
 
-import com.viniciusvieira.questionsanswers.Enums.RoleNames;
-import com.viniciusvieira.questionsanswers.models.RoleModel;
+import com.viniciusvieira.questionsanswers.domain.enums.RoleNames;
+import com.viniciusvieira.questionsanswers.domain.models.RoleModel;
 
 public class RoleCreator {
 	public static RoleModel mockRoleProfessor() {

@@ -31,12 +31,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.viniciusvieira.questionsanswers.dtos.QuestionDto;
-import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.excepiton.QuestionNotFoundException;
-import com.viniciusvieira.questionsanswers.models.QuestionModel;
-import com.viniciusvieira.questionsanswers.services.CourseService;
-import com.viniciusvieira.questionsanswers.services.QuestionService;
+import com.viniciusvieira.questionsanswers.api.representation.models.QuestionDto;
+import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
+import com.viniciusvieira.questionsanswers.domain.services.CourseService;
+import com.viniciusvieira.questionsanswers.domain.services.QuestionService;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 import com.viniciusvieira.questionsanswers.util.QuestionCreator;
 

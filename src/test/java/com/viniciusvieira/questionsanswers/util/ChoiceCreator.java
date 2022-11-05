@@ -1,7 +1,7 @@
 package com.viniciusvieira.questionsanswers.util;
 
-import com.viniciusvieira.questionsanswers.dtos.ChoiceDto;
-import com.viniciusvieira.questionsanswers.models.ChoiceModel;
+import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
+import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 
 public class ChoiceCreator {
 	public static ChoiceModel mockChoice() {

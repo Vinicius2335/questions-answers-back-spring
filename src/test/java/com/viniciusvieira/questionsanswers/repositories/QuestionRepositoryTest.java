@@ -17,9 +17,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
-import com.viniciusvieira.questionsanswers.models.CourseModel;
-import com.viniciusvieira.questionsanswers.models.ProfessorModel;
-import com.viniciusvieira.questionsanswers.models.QuestionModel;
+import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
+import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
+import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.ProfessorRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.QuestionRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.RoleRepository;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;

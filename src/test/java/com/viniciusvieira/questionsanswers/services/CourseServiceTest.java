@@ -28,11 +28,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.viniciusvieira.questionsanswers.excepiton.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.models.CourseModel;
-import com.viniciusvieira.questionsanswers.models.ProfessorModel;
-import com.viniciusvieira.questionsanswers.repositories.ApplicationUserRepository;
-import com.viniciusvieira.questionsanswers.repositories.CourseRepository;
+import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
+import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
+import com.viniciusvieira.questionsanswers.domain.services.CourseService;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;

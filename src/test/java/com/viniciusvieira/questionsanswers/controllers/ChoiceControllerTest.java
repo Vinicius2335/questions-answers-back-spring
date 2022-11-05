@@ -31,12 +31,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.viniciusvieira.questionsanswers.dtos.ChoiceDto;
-import com.viniciusvieira.questionsanswers.excepiton.ChoiceNotFoundException;
-import com.viniciusvieira.questionsanswers.excepiton.QuestionNotFoundException;
-import com.viniciusvieira.questionsanswers.models.ChoiceModel;
-import com.viniciusvieira.questionsanswers.services.ChoiceService;
-import com.viniciusvieira.questionsanswers.services.QuestionService;
+import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
+import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
+import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
+import com.viniciusvieira.questionsanswers.domain.services.QuestionService;
 import com.viniciusvieira.questionsanswers.util.ChoiceCreator;
 
 import lombok.extern.log4j.Log4j2;

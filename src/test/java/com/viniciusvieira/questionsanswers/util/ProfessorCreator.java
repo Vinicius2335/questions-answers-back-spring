@@ -1,6 +1,6 @@
 package com.viniciusvieira.questionsanswers.util;
 
-import com.viniciusvieira.questionsanswers.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 
 public class ProfessorCreator {
 	
