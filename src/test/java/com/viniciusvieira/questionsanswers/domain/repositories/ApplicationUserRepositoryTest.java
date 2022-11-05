@@ -1,6 +1,8 @@
 package com.viniciusvieira.questionsanswers.domain.repositories;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;
-import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.ProfessorRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.RoleRepository;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 import com.viniciusvieira.questionsanswers.util.RoleCreator;
@@ -19,13 +18,14 @@ import com.viniciusvieira.questionsanswers.util.RoleCreator;
 @DataJpaTest
 @DisplayName("Test for application user repository")
 class ApplicationUserRepositoryTest {
-	
 	@Autowired
 	private ApplicationUserRepository applicationUserRepository;
+	
 	@Autowired
 	private ProfessorRepository professorRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	
 	private ApplicationUserModel userToSave;
 	
 	@BeforeEach

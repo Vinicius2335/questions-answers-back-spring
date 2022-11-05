@@ -20,11 +20,6 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
-import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.ProfessorRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.QuestionRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.RoleRepository;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
@@ -36,6 +31,9 @@ import com.viniciusvieira.questionsanswers.util.RoleCreator;
 @DisplayName("Test for question repository")
 class QuestionRepositoryTest {
 	@Autowired
+	private QuestionRepository questionRepository;
+	
+	@Autowired
 	private CourseRepository courseRepository;
 	@Autowired
 	private ProfessorRepository professorRepository;
@@ -43,8 +41,6 @@ class QuestionRepositoryTest {
 	private ApplicationUserRepository applicationUserRepository;
 	@Autowired
 	private RoleRepository roleRepository;
-	@Autowired
-	private QuestionRepository questionRepository;
 	
 	private QuestionModel questionToSave;
 	private ProfessorModel professorSaved;

@@ -1,6 +1,12 @@
-package com.viniciusvieira.questionsanswers.services;
+package com.viniciusvieira.questionsanswers.domain.services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,9 +33,6 @@ import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundExce
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
 import com.viniciusvieira.questionsanswers.domain.repositories.ChoiceRepository;
-import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
-import com.viniciusvieira.questionsanswers.domain.services.CourseService;
-import com.viniciusvieira.questionsanswers.domain.services.QuestionService;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.ChoiceCreator;
 import com.viniciusvieira.questionsanswers.util.QuestionCreator;

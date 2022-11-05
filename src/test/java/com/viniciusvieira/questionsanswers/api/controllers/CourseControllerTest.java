@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.controllers;
+package com.viniciusvieira.questionsanswers.api.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;

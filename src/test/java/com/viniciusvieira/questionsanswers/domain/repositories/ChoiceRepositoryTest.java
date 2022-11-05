@@ -1,6 +1,11 @@
 package com.viniciusvieira.questionsanswers.domain.repositories;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,16 +15,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
-import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.ChoiceRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.ProfessorRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.QuestionRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.RoleRepository;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.ChoiceCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
@@ -29,6 +30,7 @@ import com.viniciusvieira.questionsanswers.util.RoleCreator;
 
 @DataJpaTest
 @DisplayName("Test for choice repository")
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class ChoiceRepositoryTest {
 	@Autowired
 	private ChoiceRepository choiceRepository;

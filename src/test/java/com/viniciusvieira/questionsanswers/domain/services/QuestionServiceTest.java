@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.services;
+package com.viniciusvieira.questionsanswers.domain.services;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

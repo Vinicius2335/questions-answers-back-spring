@@ -62,10 +62,9 @@ public class AssignmentService {
 	
 	@Transactional
 	public void delete(Long idAssignment) {
-		AssignmentModel assignmentToDelete = findAssignmentOrThrowsAssignmentNotFoundException(idAssignment);
-		courseService.findByIdOrThrowCourseNotFoundException(assignmentToDelete.getCourse().getIdCourse());
+		findAssignmentOrThrowsAssignmentNotFoundException(idAssignment);
 		
-		assignmentRepository.delete(assignmentToDelete);
+		assignmentRepository.deleteById(idAssignment);
 	}
 	
 	public void deleteAllAssignmentRelatedToCourse(Long idCourse) {
