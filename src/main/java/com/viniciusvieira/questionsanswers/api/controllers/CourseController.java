@@ -86,7 +86,7 @@ public class CourseController {
 	// a outra funcionaria normalmente, porem só queremos salvar a alteraçao caso as 2 operaçoes aconteça
 	@Transactional 
 	public ResponseEntity<Object> delete(@PathVariable Long id){
-		cascadeDeleteService.cascadeDeleteCourseQuestionAndChoice(id);
+		cascadeDeleteService.deleteCourseAndAllRelatedEntities(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Course deleted successfully");
 	}
 	

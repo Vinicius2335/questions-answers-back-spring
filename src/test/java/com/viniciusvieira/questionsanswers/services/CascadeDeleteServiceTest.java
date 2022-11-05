@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.services.AssignmentService;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
 import com.viniciusvieira.questionsanswers.domain.services.CourseService;
@@ -31,6 +32,8 @@ class CascadeDeleteServiceTest {
 	private ChoiceService choiceServiceMock;
 	@Mock
 	private CourseService courseServiceMock;
+	@Mock
+	private AssignmentService assignmentService;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -44,6 +47,9 @@ class CascadeDeleteServiceTest {
 		// choice service deleteAllChoicesRelatedToCourse
 		BDDMockito.doNothing().when(choiceServiceMock).deleteAllChoicesRelatedToCourse(anyLong());
 		
+		// assignment service deleteAllAssignmentRelatedToCourse
+		BDDMockito.doNothing().when(assignmentService).deleteAllAssignmentRelatedToCourse(anyLong());
+		
 		// question service delete
 		BDDMockito.doNothing().when(questionServiceMock).delete(anyLong());
 		
@@ -52,9 +58,9 @@ class CascadeDeleteServiceTest {
 	}
 
 	@Test
-	@DisplayName("cascadeDeleteCourseQuestionAndChoice remove course and all related questions and choices")
-	void cascadeDeleteCourseQuestionAndChoice_RemoveCourseAndAllRelatedQuestionsAndChoices_WhenSuccessful() {
-		assertDoesNotThrow(() -> cascadeDeleteService.cascadeDeleteCourseQuestionAndChoice(1L));
+	@DisplayName("cascadeDeleteCourseQuestionAndChoice remove course and all related questions, choices and assignments")
+	void cascadeDeleteCourseQuestionAndChoice_RemoveCourseAndAllRelatedQuestionsChoicesAndAssignment_WhenSuccessful() {
+		assertDoesNotThrow(() -> cascadeDeleteService.deleteCourseAndAllRelatedEntities(1L));
 	}
 	
 	@Test
@@ -63,13 +69,13 @@ class CascadeDeleteServiceTest {
 		BDDMockito.doThrow(CourseNotFoundException.class).when(courseServiceMock).delete(anyLong());
 		
 		assertThrows(CourseNotFoundException.class, () -> cascadeDeleteService
-				.cascadeDeleteCourseQuestionAndChoice(1L));
+				.deleteCourseAndAllRelatedEntities(1L));
 	}
 	
 	@Test
 	@DisplayName("cascadeDeleteQuestionAndChoice remove question and all related choices")
 	void cascadeDeleteQuestionAndChoice_RemoveQuestionAndAllRelatedChoices_WhenSuccessful() {
-		assertDoesNotThrow(() -> cascadeDeleteService.cascadeDeleteQuestionAndChoice(1L));
+		assertDoesNotThrow(() -> cascadeDeleteService.deleteQuestionAndAllRelatedEntities(1L));
 	}
 	
 	@Test
@@ -77,7 +83,7 @@ class CascadeDeleteServiceTest {
 	void cascadeDeleteQuestionAndChoice_ThrowsQuestionNotFoundException_WhenQuestionNotFound() {
 		BDDMockito.doThrow(QuestionNotFoundException.class).when(questionServiceMock).delete(anyLong());
 		
-		assertThrows(QuestionNotFoundException.class, () -> cascadeDeleteService.cascadeDeleteQuestionAndChoice(1L));
+		assertThrows(QuestionNotFoundException.class, () -> cascadeDeleteService.deleteQuestionAndAllRelatedEntities(1L));
 	}
 
 }

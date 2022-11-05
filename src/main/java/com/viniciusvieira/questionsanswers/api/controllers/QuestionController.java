@@ -88,7 +88,7 @@ public class QuestionController {
 	@Transactional
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> delete(@PathVariable Long id){
-		cascadeDeleteService.cascadeDeleteQuestionAndChoice(id);
+		cascadeDeleteService.deleteQuestionAndAllRelatedEntities(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Question deleted successfully");
 	}
 	

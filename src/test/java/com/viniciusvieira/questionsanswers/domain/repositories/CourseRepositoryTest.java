@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.repositories;
+package com.viniciusvieira.questionsanswers.domain.repositories;
 
 import static org.junit.jupiter.api.Assertions.*;
 
