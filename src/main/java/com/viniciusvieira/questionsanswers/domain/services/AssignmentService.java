@@ -36,7 +36,8 @@ public class AssignmentService {
 		ProfessorModel professor = extractProfessorFromToken();
 		CourseModel courseFound = courseService.findByIdOrThrowCourseNotFoundException(idCourse);
 		
-		return assignmentRepository.listAssignmentByCourseAndTitle(courseFound.getIdCourse(), title, professor.getIdProfessor());
+		return assignmentRepository.listAssignmentByCourseAndTitle(courseFound.getIdCourse(),
+				title, professor.getIdProfessor());
 	}
 	
 	@Transactional

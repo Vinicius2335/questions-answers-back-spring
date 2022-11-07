@@ -82,7 +82,6 @@ public class AssignmentController {
 	
 	@Operation(summary = "Delete Assignment", description = "Remove assignment in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
-			@ApiResponse(responseCode = "404", description = "When Course Not Found"),
 			@ApiResponse(responseCode = "404", description = "When Assignment Not Found")
 	})
 	@Transactional

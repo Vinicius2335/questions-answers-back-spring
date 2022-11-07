@@ -41,10 +41,10 @@ import com.viniciusvieira.questionsanswers.util.ChoiceCreator;
 
 import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@Log4j2
 @DisplayName("Test for choice controller")
 class ChoiceControllerTest {
 	@MockBean

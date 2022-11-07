@@ -1,6 +1,7 @@
 package com.viniciusvieira.questionsanswers.domain.services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.services.AssignmentService;
-import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
-import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
-import com.viniciusvieira.questionsanswers.domain.services.CourseService;
-import com.viniciusvieira.questionsanswers.domain.services.QuestionService;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Test for cascade delete service")

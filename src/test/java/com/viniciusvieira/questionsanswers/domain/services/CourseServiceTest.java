@@ -33,16 +33,15 @@ import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
 import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
-import com.viniciusvieira.questionsanswers.domain.services.CourseService;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 
 import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @ExtendWith(SpringExtension.class)
 @DisplayName("Test for course service")
-@Log4j2
 class CourseServiceTest {
 	@InjectMocks
 	private CourseService courseService;
