@@ -275,6 +275,9 @@ class AssignmentControllerTest {
 		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.PUT, httpEntity,
 				Object.class);
 		
+		System.out.println();
+		System.out.println(exchange.getBody());
+		
 		assertAll(
 				() -> assertNotNull(exchange.getBody()),
 				() -> assertEquals(HttpStatus.BAD_REQUEST, exchange.getStatusCode())

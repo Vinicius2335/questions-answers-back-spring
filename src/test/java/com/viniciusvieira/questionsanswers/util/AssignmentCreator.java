@@ -42,7 +42,7 @@ public class AssignmentCreator {
 	public static AssignmentDto mockAssignmentDtoInvalid() {
 		return AssignmentDto.builder()
 				.title(null)
-				.course(CourseCreator.mockCourse())
+				.course(null)
 				.build();
 	}
 	
