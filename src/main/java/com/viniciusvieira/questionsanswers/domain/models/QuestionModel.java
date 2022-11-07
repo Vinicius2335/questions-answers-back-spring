@@ -1,15 +1,20 @@
 package com.viniciusvieira.questionsanswers.domain.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -45,6 +50,10 @@ public class QuestionModel implements Serializable{
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "professor_id")
 	private ProfessorModel professor;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+	private List<ChoiceModel> choices;
 	
 	@Schema(description = "describes whether the question is enabled or not")
 	@Column(columnDefinition = "boolean default true", nullable = false)

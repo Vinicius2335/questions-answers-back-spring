@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
 
@@ -49,6 +50,19 @@ public interface QuestionRepository extends JpaRepository<QuestionModel, Long> {
 	void deleteAllQuestionsRelatedToCouse(
 			@Param("course_id") Long idCourse, 
 			@Param("professor_id") Long idProfessor
+	);
+	
+	// TEST
+	@Query(value = "SELECT * FROM TB_QUESTION q WHERE q.course_id = :course_id AND q.id_question NOT IN "
+			+ "(SELECT qa.question_id FROM TB_QUESTION_ASSIGNMENT qa WHERE qa.assignment_id = :assignment_id AND "
+			+ "qa.professor_id = :professor_id AND q.enabled = true) AND "
+			+ "q.professor_id = :professor_id AND q.enabled = true",
+			nativeQuery = true)
+	@Transactional
+	List<QuestionModel> findAllQuestionsByCourseNotAssociatedWithAnAssignment(
+			@Param("course_id") Long courseId,
+			@Param("assignment_id") Long assignmentId,
+			@Param("professor_id") Long professorId
 	);
 	
 }

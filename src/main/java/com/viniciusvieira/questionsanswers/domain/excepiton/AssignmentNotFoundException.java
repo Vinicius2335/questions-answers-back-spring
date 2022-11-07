@@ -12,3 +12,5 @@ public class AssignmentNotFoundException extends RuntimeException {
 	}
 
 }
+
+// NOTE: Falta fazer o ExceptionHandler
