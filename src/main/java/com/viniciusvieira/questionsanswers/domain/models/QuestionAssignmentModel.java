@@ -47,6 +47,7 @@ public class QuestionAssignmentModel {
 	private ProfessorModel professor;
 	
 	@Column(nullable = false)
+	@Schema(description = "The grade of the questionAssigment")
 	private double grade;
 	
 	@Column(nullable = false, columnDefinition = "boolean default true")

@@ -2,9 +2,17 @@ package com.viniciusvieira.questionsanswers.domain.services;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import javax.validation.Valid;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.viniciusvieira.questionsanswers.api.mappers.QuestionAssignmentMapper;
+import com.viniciusvieira.questionsanswers.api.representation.models.QuestionAssignmentDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmetAlreadyExistsException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionAssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
@@ -17,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class QuestionAssignmentService {
 	private final QuestionAssignmentRepository questionAssignmentRepository;
 	private final QuestionService questionService;
+	private final AssignmentService assignmentService;
 	private final ExtractProfessorService extractProfessorService;
 	
 	public QuestionAssignmentModel findQuestionAssignmentOrThrowsQuestionAssignmentNotFound(Long idQuestionAssignment) {
@@ -26,11 +35,100 @@ public class QuestionAssignmentService {
 				professor.getIdProfessor())
 				.orElseThrow(() -> new QuestionAssignmentNotFoundException("Question Not Found!"));
 	}
+	
+	public List<QuestionModel> findQuestionById(Long courseId, Long assignmentId) {
+		List<QuestionModel> questionsList = listValidQuestionsByCourseNotAssociatedWithAnAssignment(courseId, assignmentId);
+		
+		List<QuestionModel> validQuestions = questionsList.stream()
+				.filter(question -> hasMoreThanOneChoices(question) 
+				&& hasOnlyCorrectAnswer(question)).toList();
+		
+		if (validQuestions.isEmpty()) {
+			throw new QuestionNotFoundException("Question Not Found!");
+		}
+		
+		return validQuestions;
+	}
 
-	public List<QuestionModel> listValidQuestionsByCourseNotAssociatedWithAnAssignment(Long courseId,
+	private List<QuestionModel> listValidQuestionsByCourseNotAssociatedWithAnAssignment(Long courseId,
 			Long assignmentId) {
 		return questionService.listQuestionsByCourseNotAssociatedWithAnAssignment(courseId, assignmentId);
 	}
 	
+	private boolean hasOnlyCorrectAnswer(QuestionModel question) {
+		return question.getChoices().stream().filter(ChoiceModel::isCorrectAnswer).count() == 1;
+	}
+
+	private boolean hasMoreThanOneChoices(QuestionModel question) {
+		return question.getChoices().size() > 1;
+	}
 	
+	public List<QuestionAssignmentModel> listByAssignment(Long assignmentId){
+		assignmentService.findAssignmentOrThrowsAssignmentNotFoundException(assignmentId);
+		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		return questionAssignmentRepository.listQuestionAssignmentByAssignmentId(assignmentId,
+				professor.getIdProfessor());
+	}
+	
+	@Transactional
+	public QuestionAssignmentModel save(QuestionAssignmentDto questionAssignmentDto) {
+		questionService.findByIdOrThrowQuestionNotFoundException(questionAssignmentDto.getQuestion().getIdQuestion());
+		assignmentService.findAssignmentOrThrowsAssignmentNotFoundException(questionAssignmentDto.getAssignment().getIdAssignment());
+		
+		QuestionAssignmentModel questionAssignmentToSave = QuestionAssignmentMapper.INSTANCE.toQuestionAssignmentModel(questionAssignmentDto);
+		questionAssignmentToSave.setEnabled(true);
+		questionAssignmentToSave.setProfessor(extractProfessorService.extractProfessorFromToken());
+		
+		if (isQuestionAlreadyAssociatedWithAssignment(questionAssignmentToSave)) {
+			throw new QuestionAssignmetAlreadyExistsException("Question Assignment Association Already Exists");
+		}
+		
+		return questionAssignmentRepository.save(questionAssignmentToSave);
+	}
+	
+	private boolean isQuestionAlreadyAssociatedWithAssignment(QuestionAssignmentModel questionAssignment) {
+		List<QuestionAssignmentModel> questionAssignments = questionAssignmentRepository.listQuestionAssignmentByQuestionAndAssignment(
+				questionAssignment.getQuestion().getIdQuestion(),
+				questionAssignment.getAssignment().getIdAssignment(),
+				questionAssignment.getProfessor().getIdProfessor());
+		
+		return !questionAssignments.isEmpty();
+	}
+	
+	@Transactional
+	public void replace(Long idQuestionAssignment, @Valid QuestionAssignmentDto questionAssignmentDto) {
+		QuestionAssignmentModel questionAssignmentToUpdate = findQuestionAssignmentOrThrowsQuestionAssignmentNotFound(idQuestionAssignment);
+		
+		questionAssignmentToUpdate.setGrade(questionAssignmentDto.getGrade());
+		questionAssignmentToUpdate.setQuestion(questionAssignmentDto.getQuestion());
+		questionAssignmentToUpdate.setAssignment(questionAssignmentDto.getAssignment());
+		
+		questionAssignmentRepository.save(questionAssignmentToUpdate);
+	}
+	
+	@Transactional
+	public void delete(Long idQuestionAssignment) {
+		findQuestionAssignmentOrThrowsQuestionAssignmentNotFound(idQuestionAssignment);
+		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		questionAssignmentRepository.deleteById(idQuestionAssignment, professor.getIdProfessor());
+	}
+	
+	public void deleteAllQuestionAssignmentRelatedToCourse(Long courseId) {
+		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		questionAssignmentRepository.deleteAllQuestionAssignmentRelatedToCourse(courseId,
+				professor.getIdProfessor());
+	}
+	
+	public void deleteAllQuestionAssignmentRelatedToAssignment(Long assignmentId) {
+		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		questionAssignmentRepository.deleteAllQuestionAssignmentRelatedToAssignment(assignmentId,
+				professor.getIdProfessor());
+	}
+	
+	public void deleteAllQuestionAssignmentRelatedToQuestion(Long questionId) {
+		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		questionAssignmentRepository.deleteAllQuestionAssignmentRelatedToQuestion(questionId,
+				professor.getIdProfessor());
+	}
+
 }

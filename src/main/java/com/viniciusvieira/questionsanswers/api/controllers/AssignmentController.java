@@ -21,6 +21,7 @@ import com.viniciusvieira.questionsanswers.api.representation.models.AssignmentD
 import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.AssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.services.AssignmentService;
+import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Assignment", description = "Operations related to course's assignment")
 public class AssignmentController {
 	private final AssignmentService assignmentService;
+	private final CascadeDeleteService cascadeDeleteService;
 	
 	@Operation(summary = "Find assignment by his Id" , description = "Return a assignment based on it's id", 
 			responses = {
@@ -79,7 +81,7 @@ public class AssignmentController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.save(assignmentDto));
 	}
 	
-	
+	//TEST
 	@Operation(summary = "Delete Assignment", description = "Remove assignment in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Assignment Not Found")
@@ -87,7 +89,7 @@ public class AssignmentController {
 	@Transactional
 	@DeleteMapping("/{idAssignment}")
 	public ResponseEntity<Object> delete(@PathVariable Long idAssignment){
-		assignmentService.delete(idAssignment);
+		cascadeDeleteService.deleteAssignmentAndAllRelatedEntities(idAssignment);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Assignment deleted successfully");
 	}
 	

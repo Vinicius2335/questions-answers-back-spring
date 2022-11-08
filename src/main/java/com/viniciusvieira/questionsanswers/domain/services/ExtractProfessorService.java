@@ -10,6 +10,7 @@ import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRe
 
 import lombok.RequiredArgsConstructor;
 
+//TEST
 @Service
 @RequiredArgsConstructor
 public class ExtractProfessorService {

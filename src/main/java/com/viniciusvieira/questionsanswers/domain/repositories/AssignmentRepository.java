@@ -36,7 +36,6 @@ public interface AssignmentRepository extends JpaRepository<AssignmentModel, Lon
 	void deleteById(@Param("id_assignment") Long idAssignment, @Param("professor_id") Long idProfessor);
 
 	// cascade soft delete course -> assignment
-	// NOTE adicionar dps no cascadeDeleteService
 	@Modifying
 	@Query(value = "UPDATE TB_ASSIGNMENT a SET a.enabled = false WHERE a.course_id = :course_id "
 			+ "AND a.professor_id = :professor_id AND a.enabled = true", nativeQuery = true)

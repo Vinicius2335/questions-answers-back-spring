@@ -15,6 +15,8 @@ import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundEx
 import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.ProfessorNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmetAlreadyExistsException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
 
 @ControllerAdvice
@@ -75,6 +77,28 @@ public class ApiExceptionHandler {
 		);
 	}
 	
+	@ExceptionHandler(QuestionAssignmentNotFoundException.class)
+	public ResponseEntity<ExceptionDetails> handlerQuestionAssignmentNotFoundException(
+			QuestionAssignmentNotFoundException ex){
+		return new ResponseEntity<>(
+				ExceptionDetails.builder()
+				.title("Question Assignment Not Found Exception, Check the Documentation")
+				.status(HttpStatus.NOT_FOUND.value())
+				.timestamp(OffsetDateTime.now()).build(), HttpStatus.NOT_FOUND
+		);
+	}
+	
+	@ExceptionHandler(QuestionAssignmetAlreadyExistsException.class)
+	public ResponseEntity<ExceptionDetails> handlerQuestionAssignmentAlreadyExistsException(
+			QuestionAssignmentNotFoundException ex){
+		return new ResponseEntity<>(
+				ExceptionDetails.builder()
+				.title("Question Assignment Already Exists Exception, Check the Documentation")
+				.status(HttpStatus.NOT_MODIFIED.value())
+				.timestamp(OffsetDateTime.now()).build(), HttpStatus.NOT_MODIFIED
+		);
+	}
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ExceptionDetails> handlerMethodArgumentNotValidException(
 			MethodArgumentNotValidException ex){
@@ -84,7 +108,8 @@ public class ApiExceptionHandler {
 		fieldErrors.forEach(fieldError -> fields.add(new ExceptionDetails.Field(
 				fieldError.getField(),
 				fieldError.getDefaultMessage()
-		)));
+			))
+		);
 		
 		return new ResponseEntity<>(
 				ExceptionDetails.builder()
