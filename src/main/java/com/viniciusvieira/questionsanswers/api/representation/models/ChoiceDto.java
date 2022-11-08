@@ -25,7 +25,6 @@ public class ChoiceDto {
 	@Schema(description = "The question related to choice")
 	private QuestionModel question;
 	
-	// BUG: ficar esperto com o erro de constraint aki
 	@NotNull
 	@Schema(description = "Correct answer for the associated question, you can have only one correct answer per question")
 	private boolean correctAnswer;

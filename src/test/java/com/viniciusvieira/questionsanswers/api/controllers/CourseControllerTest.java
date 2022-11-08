@@ -3,6 +3,7 @@ package com.viniciusvieira.questionsanswers.api.controllers;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,6 +37,7 @@ import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.CourseService;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
@@ -47,6 +49,8 @@ import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 class CourseControllerTest {
 	@MockBean
 	private CourseService courseServiceMock;
+	@MockBean
+	private CascadeDeleteService cascadeDeleteServiceMock;
 	
 	@Autowired
 	protected MockMvc mockMvc;
@@ -86,7 +90,8 @@ class CourseControllerTest {
 				ArgumentMatchers.any(ProfessorModel.class))).thenReturn(courseToSave);
 		
 		// delete
-		BDDMockito.doNothing().when(courseServiceMock).delete(ArgumentMatchers.anyLong());
+		//BDDMockito.doNothing().when(courseServiceMock).delete(ArgumentMatchers.anyLong());
+		BDDMockito.doNothing().when(cascadeDeleteServiceMock).deleteCourseAndAllRelatedEntities(anyLong());
 		
 		// replace
 		BDDMockito.doNothing().when(courseServiceMock)
@@ -240,11 +245,17 @@ class CourseControllerTest {
 	@Test
 	@DisplayName("delete return status code 404 when course not found")
 	public void delete_Return404_WhenCourseNotFound() {
-		BDDMockito.doThrow(CourseNotFoundException.class)
-		.when(courseServiceMock).delete(ArgumentMatchers.anyLong());
+//		BDDMockito.doThrow(CourseNotFoundException.class)
+//				.when(courseServiceMock).delete(ArgumentMatchers.anyLong());
 		
-		ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/professor/course/99", HttpMethod.DELETE,
-				getValidAuthentication(), Void.class);
+		BDDMockito.doThrow(CourseNotFoundException.class)
+				.when(cascadeDeleteServiceMock).deleteCourseAndAllRelatedEntities(anyLong());
+		
+		ResponseEntity<Object> exchange = testRestTemplate.exchange("/api/professor/course/99", HttpMethod.DELETE,
+				getValidAuthentication(), Object.class);
+		
+		System.out.println();
+		System.out.println(exchange.getBody());
 		
 		assertAll(
 				() -> assertNotNull(exchange),

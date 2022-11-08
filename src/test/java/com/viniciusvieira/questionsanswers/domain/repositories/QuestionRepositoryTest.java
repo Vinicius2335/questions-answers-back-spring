@@ -17,18 +17,25 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
+import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
+import com.viniciusvieira.questionsanswers.util.AssignmentCreator;
+import com.viniciusvieira.questionsanswers.util.ChoiceCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
+import com.viniciusvieira.questionsanswers.util.QuestionAssignmentCreator;
 import com.viniciusvieira.questionsanswers.util.QuestionCreator;
 import com.viniciusvieira.questionsanswers.util.RoleCreator;
+
+import lombok.RequiredArgsConstructor;
 
 @DataJpaTest
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @DisplayName("Test for question repository")
+@RequiredArgsConstructor
 class QuestionRepositoryTest {
 	@Autowired
 	private QuestionRepository questionRepository;
@@ -41,6 +48,13 @@ class QuestionRepositoryTest {
 	private ApplicationUserRepository applicationUserRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private ChoiceRepository choiceRepository;
+	@Autowired
+	private AssignmentRepository assignmentRepository;
+	@Autowired
+	private QuestionAssignmentRepository questionAssignmentRepository;
+	
 	
 	private QuestionModel questionToSave;
 	private ProfessorModel professorSaved;
@@ -55,6 +69,21 @@ class QuestionRepositoryTest {
 		System.out.println("TESTE " + professorSaved);
 		applicationUserRepository.save(ApplicationUserCreator.mockUserProfessor());
 		courseSaved = courseRepository.save(CourseCreator.mockCourse());
+		
+		ChoiceModel choice2 = ChoiceModel.builder().idChoice(2L).title("Churrasco").correctAnswer(false)
+				.question(QuestionCreator.mockQuestion()).professor(ProfessorCreator.mockProfessor()).enabled(true)
+				.build();
+
+		ChoiceModel choice3 = ChoiceModel.builder().idChoice(3L).title("Lasanha").correctAnswer(false)
+				.question(QuestionCreator.mockQuestion()).professor(ProfessorCreator.mockProfessor()).enabled(true)
+				.build();
+		
+		questionRepository.save(QuestionCreator.mockQuestion());
+		choiceRepository.save(ChoiceCreator.mockChoice());
+		choiceRepository.save(choice2);
+		choiceRepository.save(choice3);
+		assignmentRepository.save(AssignmentCreator.mockAssignment());
+		questionAssignmentRepository.save(QuestionAssignmentCreator.mockQuestionAssignment());
 	}
 
 	@Test
@@ -144,6 +173,19 @@ class QuestionRepositoryTest {
 				professorSaved.getIdProfessor());
 		
 		assertTrue(questionFound.isEmpty());
+	}
+	
+	// TODO: Falta terminar
+	@Test
+	@DisplayName("findAllQuestionsByCourseNotAssociatedWithAnAssignment return a questionList when successful")
+	void findAllQuestionsByCourseNotAssociatedWithAnAssignment_ReturnQuestionList_WhenSuccessful() {
+		List<QuestionModel> questionList = questionRepository.findAllQuestionsByCourseNotAssociatedWithAnAssignment(1l, 1l, 1l);
+		
+		System.out.println();
+		System.out.println(questionList);
+		System.out.println();
+		
+		assertNotNull(questionList);
 	}
 
 }

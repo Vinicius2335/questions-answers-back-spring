@@ -28,15 +28,13 @@ public class CascadeDeleteService {
 		questionAssignmentService.deleteAllQuestionAssignmentRelatedToQuestion(idQuestion);
 	}
 	
-	//TEST
 	public void deleteAssignmentAndAllRelatedEntities(long idAssignment) {
 		assignmentService.delete(idAssignment);
 		questionAssignmentService.deleteAllQuestionAssignmentRelatedToAssignment(idAssignment);
 	}
 	
-	//TEST
 	public void deleteQuestionAssignmentAndAllRelatedEntities(long idQuestionAssignment) {
-		questionAssignmentService.deleteAllQuestionAssignmentRelatedToAssignment(idQuestionAssignment);
+		questionAssignmentService.delete(idQuestionAssignment);
 	}
 	
 }

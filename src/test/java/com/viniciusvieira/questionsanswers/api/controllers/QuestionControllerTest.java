@@ -35,7 +35,7 @@ import com.viniciusvieira.questionsanswers.api.representation.models.QuestionDto
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
-import com.viniciusvieira.questionsanswers.domain.services.CourseService;
+import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.QuestionService;
 import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 import com.viniciusvieira.questionsanswers.util.QuestionCreator;
@@ -50,9 +50,8 @@ import lombok.extern.log4j.Log4j2;
 class QuestionControllerTest {
 	@MockBean
 	private QuestionService questionServiceMock;
-	
 	@MockBean
-	private CourseService courseServiceMock;
+	private CascadeDeleteService cascadeDeleteServiceMock;
 	
 	@Autowired
 	private TestRestTemplate testRestTemplate;
@@ -87,7 +86,8 @@ class QuestionControllerTest {
 				.thenReturn(questionMock);
 		
 		// delete
-		BDDMockito.doNothing().when(questionServiceMock).delete(anyLong());
+		//BDDMockito.doNothing().when(questionServiceMock).delete(anyLong());
+		BDDMockito.doNothing().when(cascadeDeleteServiceMock).deleteQuestionAndAllRelatedEntities(anyLong());
 		
 		// replace
 		BDDMockito.doNothing().when(questionServiceMock).replace(anyLong(), any(QuestionDto.class));
@@ -228,10 +228,14 @@ class QuestionControllerTest {
 	@Test
 	@DisplayName("delete return status code 404 when question not found by id")
 	void delete_Return404_whenQuestionNotFoundById() {
-		BDDMockito.doThrow(QuestionNotFoundException.class).when(questionServiceMock).delete(anyLong());
+		//BDDMockito.doThrow(QuestionNotFoundException.class).when(questionServiceMock).delete(anyLong());
+		BDDMockito.doThrow(QuestionNotFoundException.class)
+				.when(cascadeDeleteServiceMock).deleteQuestionAndAllRelatedEntities(anyLong());
 		
 		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.DELETE,
 				getValidAuthentication(), Object.class);
+		
+		log.info(exchange.getBody());
 		
 		assertAll(
 				() -> assertNotNull(exchange.getBody()),

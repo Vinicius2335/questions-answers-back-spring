@@ -81,7 +81,6 @@ public class AssignmentController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.save(assignmentDto));
 	}
 	
-	//TEST
 	@Operation(summary = "Delete Assignment", description = "Remove assignment in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Assignment Not Found")

@@ -34,6 +34,7 @@ import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundEx
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.AssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.services.AssignmentService;
+import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.util.AssignmentCreator;
 
 @AutoConfigureMockMvc
@@ -43,6 +44,8 @@ import com.viniciusvieira.questionsanswers.util.AssignmentCreator;
 class AssignmentControllerTest {
 	@MockBean
 	private AssignmentService assignmentServiceMock;
+	@MockBean
+	private CascadeDeleteService cascadeDeleteServiceMock;
 	
 	@Autowired
 	private TestRestTemplate testRestTemplate;
@@ -72,7 +75,8 @@ class AssignmentControllerTest {
 		BDDMockito.when(assignmentServiceMock.save(any(AssignmentDto.class))).thenReturn(expectedAssignment);
 		
 		// delete
-		BDDMockito.doNothing().when(assignmentServiceMock).delete(anyLong());
+		//BDDMockito.doNothing().when(assignmentServiceMock).delete(anyLong());
+		BDDMockito.doNothing().when(cascadeDeleteServiceMock).deleteAssignmentAndAllRelatedEntities(anyLong());
 		
 		// replace
 		BDDMockito.doNothing().when(assignmentServiceMock).replace(anyLong(), any(AssignmentDto.class));
@@ -235,7 +239,9 @@ class AssignmentControllerTest {
 	@Test
 	@DisplayName("delete return 404 when assignment not found")
 	void delete_Return404_WhenAssignmentNotFound() {
-		BDDMockito.doNothing().when(assignmentServiceMock).delete(anyLong());
+		//BDDMockito.doNothing().when(assignmentServiceMock).delete(anyLong());
+		BDDMockito.doThrow(AssignmentNotFoundException.class).when(cascadeDeleteServiceMock)
+				.deleteAssignmentAndAllRelatedEntities(anyLong());
 		
 		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.DELETE,
 				getValidAuthentication(), Object.class);
@@ -245,7 +251,7 @@ class AssignmentControllerTest {
 		
 		assertAll(
 				() -> assertNotNull(exchange),
-				() -> assertEquals(HttpStatus.NO_CONTENT, exchange.getStatusCode())
+				() -> assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode())
 		);
 	}
 	
