@@ -77,7 +77,6 @@ public class QuestionService {
 		questionRepository.deleteAllQuestionsRelatedToCouse(idCourse, professor.getIdProfessor());
 	}
 	
-	// TEST
 	public List<QuestionModel> listQuestionsByCourseNotAssociatedWithAnAssignment(Long courseId,
 			Long assignmentId){
 		ProfessorModel professor = extractProfessorFromToken();

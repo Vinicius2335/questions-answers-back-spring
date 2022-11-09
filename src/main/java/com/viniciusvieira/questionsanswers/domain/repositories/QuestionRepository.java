@@ -52,7 +52,6 @@ public interface QuestionRepository extends JpaRepository<QuestionModel, Long> {
 			@Param("professor_id") Long idProfessor
 	);
 	
-	// TEST
 	@Query(value = "SELECT * FROM TB_QUESTION q WHERE q.course_id = :course_id AND q.id_question NOT IN "
 			+ "(SELECT qa.question_id FROM TB_QUESTION_ASSIGNMENT qa WHERE qa.assignment_id = :assignment_id AND "
 			+ "qa.professor_id = :professor_id AND q.enabled = true) AND "

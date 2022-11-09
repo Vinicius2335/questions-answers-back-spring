@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionAssignmentModel;
 
 @Repository
@@ -44,7 +45,7 @@ public interface QuestionAssignmentRepository extends JpaRepository<QuestionAssi
 			@Param("professor_id") Long professorId);
 	
 	@Modifying
-	@Query(value = "UPDATE TB_QUESTION_ASSIGNMENT qa SET qa.enabled = false WHERE qa.course_id IN "
+	@Query(value = "UPDATE TB_QUESTION_ASSIGNMENT qa SET qa.enabled = false WHERE qa.assignment_id IN "
 			+ "(SELECT a.id_assignment FROM TB_ASSIGNMENT a WHERE a.course_id = :course_id) "
 			+ "AND qa.professor_id = :professor_id AND qa.enabled = true", nativeQuery = true)
 	void deleteAllQuestionAssignmentRelatedToCourse(
@@ -67,5 +68,5 @@ public interface QuestionAssignmentRepository extends JpaRepository<QuestionAssi
 			@Param("question_id") Long questionId,
 			@Param("professor_id") Long professorId
 	);
-
+	
 }

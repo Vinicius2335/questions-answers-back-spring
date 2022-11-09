@@ -91,6 +91,12 @@ class QuestionServiceTest {
 		
 		// deleteById
 		BDDMockito.doNothing().when(questionRepositoryMock).deleteById(anyLong(), anyLong());
+		
+		// findAllQuestionsByCourseNotAssociatedWithAnAssignment
+		BDDMockito.when(questionRepositoryMock
+				.findAllQuestionsByCourseNotAssociatedWithAnAssignment(anyLong(), anyLong(), anyLong()))
+				.thenReturn(List.of());
+		
 	}
 
 	@Test
@@ -193,5 +199,18 @@ class QuestionServiceTest {
 				.thenReturn(Optional.empty());
 		
 		assertThrows(QuestionNotFoundException.class, () -> questionService.delete(1L));
+	}
+	
+	@Test
+	@DisplayName("listQuestionsByCourseNotAssociatedWithAnAssignment return a empty questionList when successful")
+	void listQuestionsByCourseNotAssociatedWithAnAssignment_ReturnEmptyQuestionList_WhenSuccessful() {
+		List<QuestionModel> questionList = questionService
+				.listQuestionsByCourseNotAssociatedWithAnAssignment(1L, 1L);
+		
+		assertAll(
+				() -> assertNotNull(questionList),
+				() -> assertTrue(questionList.isEmpty())
+		);
+		
 	}
 }

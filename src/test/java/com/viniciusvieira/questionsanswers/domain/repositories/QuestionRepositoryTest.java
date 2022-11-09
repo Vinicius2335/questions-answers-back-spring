@@ -69,21 +69,6 @@ class QuestionRepositoryTest {
 		System.out.println("TESTE " + professorSaved);
 		applicationUserRepository.save(ApplicationUserCreator.mockUserProfessor());
 		courseSaved = courseRepository.save(CourseCreator.mockCourse());
-		
-		ChoiceModel choice2 = ChoiceModel.builder().idChoice(2L).title("Churrasco").correctAnswer(false)
-				.question(QuestionCreator.mockQuestion()).professor(ProfessorCreator.mockProfessor()).enabled(true)
-				.build();
-
-		ChoiceModel choice3 = ChoiceModel.builder().idChoice(3L).title("Lasanha").correctAnswer(false)
-				.question(QuestionCreator.mockQuestion()).professor(ProfessorCreator.mockProfessor()).enabled(true)
-				.build();
-		
-		questionRepository.save(QuestionCreator.mockQuestion());
-		choiceRepository.save(ChoiceCreator.mockChoice());
-		choiceRepository.save(choice2);
-		choiceRepository.save(choice3);
-		assignmentRepository.save(AssignmentCreator.mockAssignment());
-		questionAssignmentRepository.save(QuestionAssignmentCreator.mockQuestionAssignment());
 	}
 
 	@Test
@@ -175,17 +160,29 @@ class QuestionRepositoryTest {
 		assertTrue(questionFound.isEmpty());
 	}
 	
-	// TODO: Falta terminar
+	// Valida se a questao não está associada a algum assignment, por isso deve retornar uma lista vazia
 	@Test
-	@DisplayName("findAllQuestionsByCourseNotAssociatedWithAnAssignment return a questionList when successful")
+	@DisplayName("findAllQuestionsByCourseNotAssociatedWithAnAssignment return a empty questionList when successful")
 	void findAllQuestionsByCourseNotAssociatedWithAnAssignment_ReturnQuestionList_WhenSuccessful() {
+		ChoiceModel choice2 = ChoiceModel.builder().idChoice(2L).title("Churrasco").correctAnswer(false)
+				.question(QuestionCreator.mockQuestion()).professor(ProfessorCreator.mockProfessor()).enabled(true)
+				.build();
+
+		ChoiceModel choice3 = ChoiceModel.builder().idChoice(3L).title("Lasanha").correctAnswer(false)
+				.question(QuestionCreator.mockQuestion()).professor(ProfessorCreator.mockProfessor()).enabled(true)
+				.build();
+		
+		questionRepository.save(QuestionCreator.mockQuestion());
+		choiceRepository.save(ChoiceCreator.mockChoice());
+		choiceRepository.save(choice2);
+		choiceRepository.save(choice3);
+		assignmentRepository.save(AssignmentCreator.mockAssignment());
+		questionAssignmentRepository.save(QuestionAssignmentCreator.mockQuestionAssignment());
+		
 		List<QuestionModel> questionList = questionRepository.findAllQuestionsByCourseNotAssociatedWithAnAssignment(1l, 1l, 1l);
 		
-		System.out.println();
-		System.out.println(questionList);
-		System.out.println();
-		
 		assertNotNull(questionList);
+		assertTrue(questionList.isEmpty());
 	}
 
 }
