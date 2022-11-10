@@ -36,7 +36,6 @@ import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundExcept
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
-import com.viniciusvieira.questionsanswers.domain.services.QuestionService;
 import com.viniciusvieira.questionsanswers.util.ChoiceCreator;
 
 import lombok.extern.log4j.Log4j2;
@@ -47,8 +46,6 @@ import lombok.extern.log4j.Log4j2;
 @AutoConfigureMockMvc
 @DisplayName("Test for choice controller")
 class ChoiceControllerTest {
-	@MockBean
-	private QuestionService questionServiceMock;
 	@MockBean
 	private ChoiceService choiceServiceMock;
 	

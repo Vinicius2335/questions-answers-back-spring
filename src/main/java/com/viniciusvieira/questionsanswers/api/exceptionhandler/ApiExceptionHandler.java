@@ -90,10 +90,10 @@ public class ApiExceptionHandler {
 	
 	@ExceptionHandler(QuestionAssignmetAlreadyExistsException.class)
 	public ResponseEntity<ExceptionDetails> handlerQuestionAssignmentAlreadyExistsException(
-			QuestionAssignmentNotFoundException ex){
+			QuestionAssignmetAlreadyExistsException ex){
 		return new ResponseEntity<>(
 				ExceptionDetails.builder()
-				.title("Question Assignment Already Exists Exception, Check the Documentation")
+				.title("Question Assignment Already Exists, Check the Documentation")
 				.status(HttpStatus.NOT_MODIFIED.value())
 				.timestamp(OffsetDateTime.now()).build(), HttpStatus.NOT_MODIFIED
 		);
