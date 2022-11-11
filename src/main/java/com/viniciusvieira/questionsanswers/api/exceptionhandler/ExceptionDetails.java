@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,16 +19,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Schema(name = "Response")
 public class ExceptionDetails {
-	protected String title;
-    protected int status;
-    protected OffsetDateTime timestamp;
-    protected List<Field> fields;
+	
+	@Schema(example = "Exception Name, check documentation")
+	private String title;
+	
+	@Schema(example = "404")
+	private int status;
+	
+	@Schema(example = "2022-07-15T11:21:50.902245498Z")
+	private OffsetDateTime timestamp;
+	
+	@Schema(example = "List of fields that generated error")
+	private List<Field> fields;
     
     @Getter
     @AllArgsConstructor
+    @Schema(name = "FieldError")
     public static class Field {
-    	protected String name;
-    	protected String message;
+    	@Schema(example = "Name")
+    	private String name;
+    	@Schema(example = "Field Name cannot be null")
+    	private String message;
     }
 }

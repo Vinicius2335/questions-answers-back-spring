@@ -33,7 +33,8 @@ public class QuestionService {
 				.orElseThrow(() -> new QuestionNotFoundException("Question Not Found"));
 	}
 	
-	public List<QuestionModel> findByCourseAndTitle(Long idCourse, String title, Long idProfessor){
+	public List<QuestionModel> findByCourseAndTitle(Long idCourse, String title){
+		 Long idProfessor = extractProfessorFromToken().getIdProfessor();
 		return questionRepository.listQuestionByCourseAndTitle(idCourse, title, idProfessor);
 	}
 	

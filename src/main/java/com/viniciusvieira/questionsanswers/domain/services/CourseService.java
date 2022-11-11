@@ -31,12 +31,14 @@ public class CourseService {
 				.orElseThrow(() -> new CourseNotFoundException("Course Not Found"));
 	}
 	
-	public List<CourseModel> findByName(String name, Long idProfessor){
+	public List<CourseModel> findByName(String name){
+		Long idProfessor = extractProfessorFromToken().getIdProfessor();
 		return courseRepository.listCoursesByName(name, idProfessor);
 	}
 	
 	@Transactional
-	public CourseModel save(CourseDto courseDto, ProfessorModel professor) {
+	public CourseModel save(CourseDto courseDto) {
+		ProfessorModel professor = extractProfessorFromToken();
 		CourseModel course = CourseMapper.INSTANCE.toCorseModel(courseDto);
 		course.setProfessor(professor);
 		course.setEnabled(true);

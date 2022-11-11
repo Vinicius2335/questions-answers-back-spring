@@ -78,7 +78,7 @@ class QuestionControllerTest {
 				.thenReturn(ProfessorCreator.mockProfessor());
 		
 		// findByCourseAndTitle
-		BDDMockito.when(questionServiceMock.findByCourseAndTitle(anyLong(), anyString(), anyLong()))
+		BDDMockito.when(questionServiceMock.findByCourseAndTitle(anyLong(), anyString()))
 				.thenReturn(questionMockList);
 		
 		// save
@@ -147,7 +147,7 @@ class QuestionControllerTest {
 	@Test
 	@DisplayName("findByCourseAndTitle Return status code 404 when no question is found ")
 	void findByCourseAndTitle_Return404_WhenNoQuestionIsFound() {
-		BDDMockito.when(questionServiceMock.findByCourseAndTitle(anyLong(), anyString(), anyLong()))
+		BDDMockito.when(questionServiceMock.findByCourseAndTitle(anyLong(), anyString()))
 				.thenReturn(List.of());
 		
 		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/list/1/?title=",

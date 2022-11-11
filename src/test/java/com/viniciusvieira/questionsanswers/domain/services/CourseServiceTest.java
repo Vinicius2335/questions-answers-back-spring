@@ -30,12 +30,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
-import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
 import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
-import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -52,14 +50,12 @@ class CourseServiceTest {
 	private ApplicationUserRepository applicationUserRepositoryMock;
 	
 	private CourseModel courseToSave;
-	private ProfessorModel expectedProfessor;
 	private List<CourseModel> expectedListCourse;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		courseToSave = CourseCreator.mockCourse();
 		expectedListCourse = List.of(courseToSave);
-		expectedProfessor = ProfessorCreator.mockProfessor();
 		
 		// findOneCourse
 		BDDMockito.when(courseRepositoryMock.findOneCourse(anyLong(), anyLong()))
@@ -113,8 +109,7 @@ class CourseServiceTest {
 	@Test
 	@DisplayName("findByName return a list of course when successful")
 	void findByName_ReturnListCourse_WhenSuccessful() {
-		List<CourseModel> courseList = courseService.findByName(courseToSave.getName(), 
-				expectedProfessor.getIdProfessor());
+		List<CourseModel> courseList = courseService.findByName(courseToSave.getName());
 		
 		assertAll(
 				() -> assertNotNull(courseList),
@@ -129,8 +124,7 @@ class CourseServiceTest {
 		BDDMockito.when(courseRepositoryMock.listCoursesByName(anyString(), anyLong()))
 				.thenReturn(List.of());
 		
-		List<CourseModel> courseList = courseService.findByName(courseToSave.getName(), 
-				expectedProfessor.getIdProfessor());
+		List<CourseModel> courseList = courseService.findByName(courseToSave.getName());
 		
 		assertTrue(courseList.isEmpty());
 	}
@@ -138,7 +132,7 @@ class CourseServiceTest {
 	@Test
 	@DisplayName("save insert and return a course when successful")
 	void save_InsertAndReturnCourse_WhenSuccessful() {
-		CourseModel courseSaved = courseService.save(CourseCreator.mockCourseDto(), expectedProfessor);
+		CourseModel courseSaved = courseService.save(CourseCreator.mockCourseDto());
 		
 		log.info("TESTE {}", courseSaved);
 		
@@ -155,7 +149,7 @@ class CourseServiceTest {
 				.thenThrow(ConstraintViolationException.class);
 		
 		assertThrows(ConstraintViolationException.class, () -> courseService
-				.save(CourseCreator.mockInvalidCourseDto(),expectedProfessor));
+				.save(CourseCreator.mockInvalidCourseDto()));
 	}
 	
 	@Test

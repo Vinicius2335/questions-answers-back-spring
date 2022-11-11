@@ -29,13 +29,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
 import com.viniciusvieira.questionsanswers.domain.repositories.QuestionRepository;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
-import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 import com.viniciusvieira.questionsanswers.util.QuestionCreator;
 
 @ExtendWith(SpringExtension.class)
@@ -53,13 +51,11 @@ class QuestionServiceTest {
 	
 	private QuestionModel questionToSave;
 	private List<QuestionModel> expectedQuestionList;
-	private ProfessorModel expectedProfessor;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		questionToSave = QuestionCreator.mockQuestion();
 		expectedQuestionList = List.of(questionToSave);
-		expectedProfessor = ProfessorCreator.mockProfessor();
 		
 		// findOneQuestion
 		BDDMockito.when(questionRepositoryMock.findOneQuestion(anyLong(), anyLong()))
@@ -124,7 +120,7 @@ class QuestionServiceTest {
 	@DisplayName("findByCourseAndTitle Return a question list when successful")
 	void findByCourseAndTitle_ReturnQuestionList_WhenSuccessful() {
 		List<QuestionModel> questionListFound = questionService.findByCourseAndTitle(questionToSave.getIdQuestion(), 
-				questionToSave.getTitle(), expectedProfessor.getIdProfessor());
+				questionToSave.getTitle());
 		
 		assertAll(
 				() -> assertNotNull(questionListFound),
@@ -140,7 +136,7 @@ class QuestionServiceTest {
 				.thenReturn(List.of());
 		
 		List<QuestionModel> questionListFound = questionService.findByCourseAndTitle(questionToSave.getIdQuestion(), 
-				questionToSave.getTitle(), expectedProfessor.getIdProfessor());
+				questionToSave.getTitle());
 		
 		assertAll(
 				() -> assertNotNull(questionListFound),

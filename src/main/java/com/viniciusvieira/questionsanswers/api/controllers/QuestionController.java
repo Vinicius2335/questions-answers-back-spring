@@ -17,51 +17,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.viniciusvieira.questionsanswers.api.openapi.controller.QuestionControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.QuestionService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/professor/course/question")
 @RequiredArgsConstructor
-@Tag(name = "Question", description = "Operations related to courses question")
-public class QuestionController {
+public class QuestionController implements QuestionControllerOpenApi {
 	private final QuestionService questionService;
 	private final CascadeDeleteService cascadeDeleteService; 
 	
-	@Operation(summary = "Find question by his Id" , description = "Return a question based on it's id", 
-			responses = {
-					@ApiResponse(responseCode = "200", description = "When Successful"),
-					@ApiResponse(responseCode = "404", description = "When Question Not Found By ID")
-			})
-	@GetMapping("/{id}")
-	public ResponseEntity<QuestionModel> getQuestionById(@PathVariable Long id){
+
+	@Override
+	@GetMapping("/{idQuestion}")
+	public ResponseEntity<QuestionModel> getQuestionById(@PathVariable Long idQuestion){
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(questionService.findByIdOrThrowQuestionNotFoundException(id));
+				.body(questionService.findByIdOrThrowQuestionNotFoundException(idQuestion));
 	}
 	
 	
-	@Operation(summary = "Find questions by title", description = "Return a list of questions related to professor",
-			responses = {
-					@ApiResponse(responseCode = "200", description = "When Successful"),
-					@ApiResponse(responseCode = "404", description = "When Question List is Empty")	
-			})
+	@Override
 	@GetMapping("/list/{idCourse}/")
 	// /api/professor/course/question/1/?title=" "
 	public ResponseEntity<List<QuestionModel>> findByTitle(@PathVariable Long idCourse ,
-			@RequestParam String title){
-		ProfessorModel professor = questionService.extractProfessorFromToken();
+			@RequestParam(required = false, defaultValue = "") String title){
 		List<QuestionModel> listQuestion = questionService
-				.findByCourseAndTitle(idCourse, title, professor.getIdProfessor());
+				.findByCourseAndTitle(idCourse, title);
 		
 		if (listQuestion.isEmpty()) {
 			throw new QuestionNotFoundException("Question List is Empty");
@@ -72,35 +60,25 @@ public class QuestionController {
 	}
 	
 	
-	@Operation(summary = "Save Question", description = "Insert question in the database", responses = {
-			@ApiResponse(responseCode = "201", description = "When Successful"),
-			@ApiResponse(responseCode = "400", description = "When Have a Question field Empty")
-	})
+	@Override
 	@PostMapping
 	public ResponseEntity<QuestionModel> save(@RequestBody @Valid QuestionDto questionDto){
 		return ResponseEntity.status(HttpStatus.CREATED).body(questionService.save(questionDto));
 	}
 	
-	@Operation(summary = "Delete Question", description = "Remove question in the database and all related choices", responses = {
-			@ApiResponse(responseCode = "204", description = "When Successful"),
-			@ApiResponse(responseCode = "404", description = "When Question Not Found")
-	})
+	@Override
 	@Transactional
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> delete(@PathVariable Long id){
-		cascadeDeleteService.deleteQuestionAndAllRelatedEntities(id);
+	@DeleteMapping("/{idQuestion}")
+	public ResponseEntity<Object> delete(@PathVariable Long idQuestion){
+		cascadeDeleteService.deleteQuestionAndAllRelatedEntities(idQuestion);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Question deleted successfully");
 	}
 	
 	
-	@Operation(summary = "Update Question", description = "Update question in the database", responses = {
-			@ApiResponse(responseCode = "204", description = "When Successful"),
-			@ApiResponse(responseCode = "400", description = "When Question Title is Null or Empty"),
-			@ApiResponse(responseCode = "404", description = "When Question Not Found")
-	})
-	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody @Valid QuestionDto questionDto){
-		questionService.replace(id, questionDto);
+	@Override
+	@PutMapping("/{idQuestion}")
+	public ResponseEntity<Object> update(@PathVariable Long idQuestion, @RequestBody @Valid QuestionDto questionDto){
+		questionService.replace(idQuestion, questionDto);
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Question updated successfully");
 	}

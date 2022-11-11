@@ -17,28 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.viniciusvieira.questionsanswers.api.openapi.controller.ChoiceControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/professor/course/question/choice")
 @RequiredArgsConstructor
-@Tag(name = "Choice", description = "Operations related to question's choice")
-public class ChoiceController {
+public class ChoiceController implements ChoiceControllerOpenApi {
 	private final ChoiceService choiceService;
 	
-	@Operation(summary = "Find Choice by Id Question", description = "Return a list of choices related to the questions",
-			responses = {
-					@ApiResponse(responseCode = "200", description = "When List of Choice Found Successful"),
-					@ApiResponse(responseCode = "404", description = "When No Choice Was Found")
-			})
+	@Override
 	@GetMapping("/list/{idQuestion}")
 	public ResponseEntity<List<ChoiceModel>> getListChoices(@PathVariable Long idQuestion){
 		List<ChoiceModel> listChoiceByQuestion = choiceService.listChoiceByQuestion(idQuestion);
@@ -51,28 +44,20 @@ public class ChoiceController {
 	}
 	
 	
-	@Operation(summary = "Find choice by his Id" , description = "Return a achoice based on it's id", 
-			responses = {
-					@ApiResponse(responseCode = "200", description = "When Successful"),
-					@ApiResponse(responseCode = "404", description = "When Choice Not Found By ID")
-			})
-	@GetMapping("/{id}")
-	public ResponseEntity<ChoiceModel> getChoiceById(@PathVariable Long id){
+	@Override
+	@GetMapping("/{idChoice}")
+	public ResponseEntity<ChoiceModel> getChoiceById(@PathVariable Long idChoice){
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(choiceService.getChoiceByIdOrThrowChoiceNotFoundException(id));
+				.body(choiceService.getChoiceByIdOrThrowChoiceNotFoundException(idChoice));
 	}
 	
-	
-	@Operation(summary = "Find choices by question and title", description = "Return a list of choices related to professor",
-			responses = {
-					@ApiResponse(responseCode = "200", description = "When Successful"),
-					@ApiResponse(responseCode = "404", description = "When Choice List is Empty or Question Not Found")	
-			})
+
+	@Override
 	@GetMapping("/list/{idQuestion}/")
 	// /api/professor/course/question/choice/1/?title=" "
 	public ResponseEntity<List<ChoiceModel>> findByTitle(@PathVariable Long idQuestion ,
-			@RequestParam String title){
+			@RequestParam(required = false, defaultValue = "") String title){
 		List<ChoiceModel> listChoice = choiceService
 				.findByQuestionAndTitle(idQuestion, title);
 		
@@ -84,13 +69,8 @@ public class ChoiceController {
 				.body(listChoice);
 	}
 	
-	
-	@Operation(summary = "Created Choice", description = "if the choice's correctAnswer is true, all other"
-			+ " choice's correctAnswer related to this questions will be updated to false", responses = {
-					@ApiResponse(responseCode = "201", description = "When Successful"),
-					@ApiResponse(responseCode = "400", description = "When ChoiceDto have Invalid Fields"),
-					@ApiResponse(responseCode = "404", description = "When Question Not Found")
-			})
+
+	@Override
 	@PostMapping
 	public ResponseEntity<ChoiceModel> save(@RequestBody @Valid ChoiceDto choiceDto){
 		return ResponseEntity
@@ -99,12 +79,8 @@ public class ChoiceController {
 	}
 	
 	
-	@Operation(summary = "Update Choice", description = "if the choice's correctAnswer is true, all other"
-			+ " choice's correctAnswer related to this questions will be updated to false", responses = {
-					@ApiResponse(responseCode = "204", description = "When Successful"),
-					@ApiResponse(responseCode = "400", description = "When ChoiceDto have Invalid Fields"),
-					@ApiResponse(responseCode = "404", description = "When Choice or Question Not Found")
-	})
+
+	@Override
 	@Transactional
 	@PutMapping("/{idChoice}")
 	public ResponseEntity<Object> replace(@PathVariable Long idChoice, @RequestBody @Valid ChoiceDto choiceDto){
@@ -114,11 +90,8 @@ public class ChoiceController {
 				.body("Choice updated successfully");
 	}
 	
-	
-	@Operation(summary = "Delete Choice", description = "Remove choice in the database", responses = {
-			@ApiResponse(responseCode = "204", description = "When Successful"),
-			@ApiResponse(responseCode = "404", description = "When Choice or Question Not Found")
-	})
+
+	@Override
 	@DeleteMapping("/{idChoice}")
 	public ResponseEntity<Object> delete(@PathVariable Long idChoice){
 		choiceService.delete(idChoice);

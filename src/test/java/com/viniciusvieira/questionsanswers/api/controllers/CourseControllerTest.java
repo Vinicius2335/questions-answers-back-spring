@@ -36,7 +36,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
-import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.CourseService;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
@@ -77,8 +76,7 @@ class CourseControllerTest {
 				.thenReturn(course);
 		
 		// findByName
-		BDDMockito.when(courseServiceMock.findByName(ArgumentMatchers.anyString(),
-				ArgumentMatchers.anyLong()))
+		BDDMockito.when(courseServiceMock.findByName(ArgumentMatchers.anyString()))
 				.thenReturn(courseList);
 		
 		// extractProfessorFromToken
@@ -86,8 +84,8 @@ class CourseControllerTest {
 				.thenReturn(ProfessorCreator.mockProfessor());
 		
 		// save
-		BDDMockito.when(courseServiceMock.save(ArgumentMatchers.any(CourseDto.class),
-				ArgumentMatchers.any(ProfessorModel.class))).thenReturn(courseToSave);
+		BDDMockito.when(courseServiceMock.save(ArgumentMatchers.any(CourseDto.class)))
+				.thenReturn(courseToSave);
 		
 		// delete
 		//BDDMockito.doNothing().when(courseServiceMock).delete(ArgumentMatchers.anyLong());
@@ -186,8 +184,8 @@ class CourseControllerTest {
 	@Test
 	@DisplayName("findByName return status code 404 when course not found")
 	public void findByName_Return404_WhenCourseNotFound() {
-		BDDMockito.when(courseServiceMock.findByName(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
-		.thenReturn(List.of());
+		BDDMockito.when(courseServiceMock.findByName(ArgumentMatchers.anyString()))
+				.thenReturn(List.of());
 		
 		ResponseEntity<CourseNotFoundException> exchange = testRestTemplate
 				.exchange("/api/professor/course/list?name=xaxa", HttpMethod.GET,

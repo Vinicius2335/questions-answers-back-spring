@@ -17,30 +17,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.viniciusvieira.questionsanswers.api.openapi.controller.AssignmentControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.AssignmentDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.AssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.services.AssignmentService;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/professor/course/assignment")
 @RequiredArgsConstructor
-@Tag(name = "Assignment", description = "Operations related to course's assignment")
-public class AssignmentController {
+public class AssignmentController implements AssignmentControllerOpenApi{
 	private final AssignmentService assignmentService;
 	private final CascadeDeleteService cascadeDeleteService;
 	
-	@Operation(summary = "Find assignment by his Id" , description = "Return a assignment based on it's id", 
-			responses = {
-					@ApiResponse(responseCode = "200", description = "When Successful"),
-					@ApiResponse(responseCode = "404", description = "When Assignment Not Found By ID")
-			})
+
+	@Override
 	@GetMapping("/{idAssignment}")
 	public ResponseEntity<AssignmentModel> getAssignmentById(@PathVariable Long idAssignment){
 		return ResponseEntity
@@ -49,16 +43,11 @@ public class AssignmentController {
 	}
 	
 	
-	@Operation(summary = "Find assignment by title", description = "Return a list of assignments related to id coursen and professor",
-			responses = {
-					@ApiResponse(responseCode = "200", description = "When Successful"),
-					@ApiResponse(responseCode = "404", description = "When Course Not Found"),
-					@ApiResponse(responseCode = "404", description = "When Assignment List is Empty")	
-			})
+	@Override
 	@GetMapping("/list/{idCourse}/")
 	// /api/professor/course/assignement/1/?title=" "
 	public ResponseEntity<List<AssignmentModel>> findByCourseAndTitle(@PathVariable Long idCourse ,
-			@RequestParam String title){
+			@RequestParam(required = false, defaultValue = "") String title){
 		List<AssignmentModel> listAssignment = assignmentService
 				.findByCourseAndTitle(idCourse, title);
 		
@@ -71,20 +60,14 @@ public class AssignmentController {
 	}
 	
 	
-	@Operation(summary = "Save Assignment", description = "Insert assignment in the database", responses = {
-			@ApiResponse(responseCode = "201", description = "When Successful"),
-			@ApiResponse(responseCode = "404", description = "When Course Not Found"),
-			@ApiResponse(responseCode = "400", description = "When Have a Assignment field Empty or Null")
-	})
+	@Override
 	@PostMapping
 	public ResponseEntity<AssignmentModel> save(@RequestBody @Valid AssignmentDto assignmentDto){
 		return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.save(assignmentDto));
 	}
 	
-	@Operation(summary = "Delete Assignment", description = "Remove assignment in the database", responses = {
-			@ApiResponse(responseCode = "204", description = "When Successful"),
-			@ApiResponse(responseCode = "404", description = "When Assignment Not Found")
-	})
+	
+	@Override
 	@Transactional
 	@DeleteMapping("/{idAssignment}")
 	public ResponseEntity<Object> delete(@PathVariable Long idAssignment){
@@ -93,14 +76,10 @@ public class AssignmentController {
 	}
 	
 	
-	@Operation(summary = "Update Assignment", description = "Update assignment in the database", responses = {
-			@ApiResponse(responseCode = "204", description = "When Successful"),
-			@ApiResponse(responseCode = "400", description = "When Assignment Title is Null or Empty"),
-			@ApiResponse(responseCode = "404", description = "When Course Not Found"),
-			@ApiResponse(responseCode = "404", description = "When Assignment Not Found")
-	})
+	@Override
 	@PutMapping("/{idAssignment}")
-	public ResponseEntity<Object> update(@PathVariable Long idAssignment, @RequestBody @Valid AssignmentDto assignmentDto){
+	public ResponseEntity<Object> update(@PathVariable Long idAssignment,
+			@RequestBody @Valid AssignmentDto assignmentDto){
 		assignmentService.replace(idAssignment, assignmentDto);
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Assignment updated successfully");
