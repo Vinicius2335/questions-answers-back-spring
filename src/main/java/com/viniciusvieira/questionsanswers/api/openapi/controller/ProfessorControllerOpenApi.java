@@ -18,7 +18,7 @@ public interface ProfessorControllerOpenApi {
     		responses = {
     		@ApiResponse(responseCode = "200", description = "When Successful"),
     		@ApiResponse(responseCode = "404", description = "When Professor Not Found",
-    		content = @Content(schema = @Schema(ref = "Response")))
+    		content = @Content(schema = @Schema(ref = "ExceptionDetails")))
     })
 	ResponseEntity<ProfessorModel> getProfessorById(@Parameter(description = "id of a professor", example = "1",
 			required = true) Long idProfessor);

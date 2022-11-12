@@ -22,7 +22,7 @@ public interface AssignmentControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Assignment Not Found By ID",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 			})
 	ResponseEntity<AssignmentModel> getAssignmentById(@Parameter(description = "id of a assignment",
 			example = "1", required = true) Long idAssignment);
@@ -32,9 +32,9 @@ public interface AssignmentControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Course Not Found",
-							content = @Content(schema = @Schema(ref = "Response"))),
+							content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 					@ApiResponse(responseCode = "404", description = "When Assignment List is Empty",
-							content = @Content(schema = @Schema(ref = "Response")))	
+							content = @Content(schema = @Schema(ref = "ExceptionDetails")))	
 			})
 	ResponseEntity<List<AssignmentModel>> findByCourseAndTitle(@Parameter(description = "id of a course",
 			example = "1", required = true) Long idCourse ,
@@ -45,9 +45,9 @@ public interface AssignmentControllerOpenApi {
 	@Operation(summary = "Save Assignment", description = "Insert assignment in the database", responses = {
 			@ApiResponse(responseCode = "201", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Course Not Found",
-					content = @Content(schema = @Schema(ref = "Response"))),
+					content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 			@ApiResponse(responseCode = "400", description = "When Have a Assignment field Empty or Null",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<AssignmentModel> save(@RequestBody(description = "representation of a new course", required = true)
 			AssignmentDto assignmentDto);
@@ -56,7 +56,7 @@ public interface AssignmentControllerOpenApi {
 	@Operation(summary = "Delete Assignment", description = "Remove assignment in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Assignment Not Found",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> delete(@Parameter(description = "id of a assignment", example = "1", required = true)
 			Long idAssignment);
@@ -65,11 +65,11 @@ public interface AssignmentControllerOpenApi {
 	@Operation(summary = "Update Assignment", description = "Update assignment in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "400", description = "When Assignment Title is Null or Empty",
-					content = @Content(schema = @Schema(ref = "Response"))),
+					content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 			@ApiResponse(responseCode = "404", description = "When Course Not Found",
-					content = @Content(schema = @Schema(ref = "Response"))),
+					content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 			@ApiResponse(responseCode = "404", description = "When Assignment Not Found",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> update(@Parameter(description = "id of a assignment", example = "1", required = true)
 			Long idAssignment,

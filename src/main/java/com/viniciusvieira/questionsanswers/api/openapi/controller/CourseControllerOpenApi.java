@@ -24,7 +24,7 @@ public interface CourseControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Course Not Found By ID", 
-					content = @Content(schema = @Schema(ref = "Response")))	
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))	
 			})
 	ResponseEntity<CourseModel> getCourseById(@Parameter(description = "id of a course", example = "1",
 			required = true) Long id);
@@ -34,7 +34,7 @@ public interface CourseControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Course List is Empty",
-					content = @Content(schema = @Schema(ref = "Response")))	
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))	
 			})
 	ResponseEntity<List<CourseModel>> findByName(@Parameter(description = "name of a course", example = "Java",
 			required = false) String name);
@@ -44,7 +44,7 @@ public interface CourseControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "201", description = "When Successful"),
 					@ApiResponse(responseCode = "400", description = "When Have a Course field Empty",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<CourseModel> save(@RequestBody(description = "representation of a new course", required = true)
 			CourseDto courseDto);
@@ -55,7 +55,7 @@ public interface CourseControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "204", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Course Not Found",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> delete(@Parameter(description = "id of a course", example = "1",
 			required = true) Long id);
@@ -65,9 +65,9 @@ public interface CourseControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "204", description = "When Successful"),
 					@ApiResponse(responseCode = "400", description = "When Course Name is Null or Empty",
-					content = @Content(schema = @Schema(ref = "Response"))),
+					content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 					@ApiResponse(responseCode = "404", description = "When Course Not Found",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> update(@Parameter(description = "id of a course", example = "1",
 			required = true) Long id,

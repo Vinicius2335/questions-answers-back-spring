@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @NoArgsConstructor
-@JsonInclude(Include.NON_NULL)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Schema(name = "Response")
+@JsonInclude(Include.NON_NULL)
+@Schema(name = "ExceptionDetails")
 public class ExceptionDetails {
 	
 	@Schema(example = "Exception Name, check documentation")
@@ -40,6 +40,7 @@ public class ExceptionDetails {
     public static class Field {
     	@Schema(example = "Name")
     	private String name;
+    	
     	@Schema(example = "Field Name cannot be null")
     	private String message;
     }

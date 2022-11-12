@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.core.security.config;
+package com.viniciusvieira.questionsanswers.core.springdoc;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -30,6 +30,13 @@ import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.tags.Tag;
 
 
+/**
+ * 
+ * @author Vinicius Vieira
+ * Obs: Erro nas responses do Swagger, não consegui resolver.
+ *
+ */
+
 @Configuration
 @SecurityScheme(name = "bearerAuth",
 			type = SecuritySchemeType.HTTP,
@@ -38,11 +45,11 @@ import io.swagger.v3.oas.models.tags.Tag;
 					+ "For testing, use the credentials <strong>vinicius/devdojo</strong>",
 			bearerFormat = "JWT")
 public class OpenAPI3Config {
+	
 	private static final String badRequestResponse = "BadRequestResponse";
 	private static final String notFoundResponse = "NotFoundResponse";
 	private static final String notModifiedResponse = "NotModifiedResponse";
 	private static final String internalServerErrorResponse = "InternalServerErrorResponse";
-	
 	
 	@Bean
     public OpenAPI openAPI() {
@@ -90,7 +97,7 @@ public class OpenAPI3Config {
                                         		.$ref(internalServerErrorResponse));
                                         break;
                                     case POST:
-                                    	 responses.addApiResponse("304", new ApiResponse()
+                                    	responses.addApiResponse("304", new ApiResponse()
                                          		.$ref(notModifiedResponse));
                                         responses.addApiResponse("400", new ApiResponse()
                                         		.$ref(badRequestResponse));
@@ -108,7 +115,7 @@ public class OpenAPI3Config {
                                         		.$ref(internalServerErrorResponse));
                                         break;
                                     case DELETE:
-                                    	 responses.addApiResponse("404", new ApiResponse()
+                                    	responses.addApiResponse("404", new ApiResponse()
                                          		.$ref(notFoundResponse));
                                         responses.addApiResponse("500", new ApiResponse()
                                         		.$ref(internalServerErrorResponse));
@@ -142,7 +149,7 @@ public class OpenAPI3Config {
 
         Content content = new Content()
                 .addMediaType(APPLICATION_JSON_VALUE,
-                        new MediaType().schema(new Schema<ExceptionDetails>().$ref("Response")));
+                        new MediaType().schema(new Schema<ExceptionDetails>().$ref("ExceptionDetails")));
 
         apiResponseMap.put(badRequestResponse, new ApiResponse()
                 .description("Invalid Request")

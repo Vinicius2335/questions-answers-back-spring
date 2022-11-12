@@ -10,12 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
@@ -31,6 +32,7 @@ import com.viniciusvieira.questionsanswers.util.RoleCreator;
 
 @DataJpaTest
 @DisplayName("Test for question assignment repository")
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class QuestionAssignmentRepositoryTest {
 	@Autowired
 	private QuestionAssignmentRepository questionAssignmentRepository;
@@ -60,14 +62,10 @@ class QuestionAssignmentRepositoryTest {
 		insertValues();
 	}
 	
-	@AfterEach
-	void tearDown() throws Exception{
-		whipDb();
-	}
 
 	@Test
 	@DisplayName("save insert a questionAssingment when successful")
-	// obs: assginment possui um campo final com data oq dificulta para validar se os objetos sao iguais
+	// obs: assignment possui um campo final com data oq dificulta para validar se os objetos sao iguais
 	void save_InsertQuestionAssignment_WheSuccessful() {
 		QuestionAssignmentModel questionAssignmentSaved = questionAssignmentRepository
 				.save(expectedQuestionAssignment);
@@ -244,15 +242,4 @@ class QuestionAssignmentRepositoryTest {
 		assignmentRepository.save(AssignmentCreator.mockAssignment());
 	}
 	
-	public void whipDb() {
-		questionAssignmentRepository.deleteAll();
-		assignmentRepository.deleteAll();
-		choiceRepository.deleteAll();
-		questionRepository.deleteAll();
-		courseRepository.deleteAll();
-		applicationUserRepository.deleteAll();
-		professorRepository.deleteAll();
-		roleRepository.deleteAll();
-	}
-
 }

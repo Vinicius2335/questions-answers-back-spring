@@ -25,7 +25,7 @@ public interface QuestionAssignmentOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When A Question Found Successful"),
 					@ApiResponse(responseCode = "404", description = "When No Question Was Found",
-							content = @Content(schema = @Schema(ref = "Response")))
+							content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 			})
 	ResponseEntity<List<QuestionModel>> findQuestionById(@Parameter(description = "id of a course",
 			example = "1", required = true) Long courseId,
@@ -35,7 +35,7 @@ public interface QuestionAssignmentOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "204", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Assignment Not Found",
-							content = @Content(schema = @Schema(ref = "Response")))
+							content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 			})
 	ResponseEntity<List<QuestionAssignmentModel>> listByAssignment(@Parameter(description = "id of a assignment",
 			example = "1", required = true) Long idAssignment);
@@ -45,13 +45,13 @@ public interface QuestionAssignmentOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "201", description = "When Successful"),
 					@ApiResponse(responseCode = "304", description = "When Question Assignment Association Already Exists",
-							content = @Content(schema = @Schema(ref = "Response"))),
+							content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 					@ApiResponse(responseCode = "400", description = "When Have a QuestionAssignmentDto field Empty",
-							content = @Content(schema = @Schema(ref = "Response"))),
+							content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 					@ApiResponse(responseCode = "404", description = "When Question Not Found",
-							content = @Content(schema = @Schema(ref = "Response"))),
+							content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 					@ApiResponse(responseCode = "404", description = "When Assignment Not Found",
-							content = @Content(schema = @Schema(ref = "Response")))
+							content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 			})
 	ResponseEntity<QuestionAssignmentModel> save(@RequestBody(description = "representation of a new questionAssignment",
 			required = true) QuestionAssignmentDto questionAssignmentDto);
@@ -61,9 +61,9 @@ public interface QuestionAssignmentOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "204", description = "When Successful"),
 					@ApiResponse(responseCode = "400", description = "When QuestionAssignmentDto Have Invalid Field",
-							content = @Content(schema = @Schema(ref = "Response"))),
+							content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 					@ApiResponse(responseCode = "404", description = "When QuestionAssignment Not Found",
-							content = @Content(schema = @Schema(ref = "Response")))
+							content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 			})
 	ResponseEntity<Object> update(@Parameter(description = "id of a questionAssignment", example = "1",
 			required = true) Long idQuestionAssignment,
@@ -75,7 +75,7 @@ public interface QuestionAssignmentOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "204", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When QuestionAssignment Not Found",
-							content = @Content(schema = @Schema(ref = "Response")))
+							content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> delete(@Parameter(description = "id of a questionAssignment", example = "1",
 			required = true) Long idQuestionAssignment);

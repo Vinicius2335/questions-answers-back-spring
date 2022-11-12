@@ -22,7 +22,7 @@ public interface QuestionControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Question Not Found By ID",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 			})
 	ResponseEntity<QuestionModel> getQuestionById(@Parameter(description = "id of a question", example = "1",
 			required = true) Long idQuestion);
@@ -32,7 +32,7 @@ public interface QuestionControllerOpenApi {
 			responses = {
 					@ApiResponse(responseCode = "200", description = "When Successful"),
 					@ApiResponse(responseCode = "404", description = "When Question List is Empty",
-							content = @Content(schema = @Schema(ref = "Response")))	
+							content = @Content(schema = @Schema(ref = "ExceptionDetails")))	
 			})
 	ResponseEntity<List<QuestionModel>> findByTitle(@Parameter(description = "id of a course", example = "1",
 			required = true) Long idCourse,
@@ -43,7 +43,7 @@ public interface QuestionControllerOpenApi {
 	@Operation(summary = "Save Question", description = "Insert question in the database", responses = {
 			@ApiResponse(responseCode = "201", description = "When Successful"),
 			@ApiResponse(responseCode = "400", description = "When Have a Question field Empty",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<QuestionModel> save(@RequestBody(description = "representation of a new question",
 			required = true) QuestionDto questionDto);
@@ -52,7 +52,7 @@ public interface QuestionControllerOpenApi {
 	@Operation(summary = "Delete Question", description = "Remove question in the database and all related choices", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Question Not Found",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> delete(@Parameter(description = "id of a question", example = "1",
 			required = true) Long idQuestion);
@@ -61,9 +61,9 @@ public interface QuestionControllerOpenApi {
 	@Operation(summary = "Update Question", description = "Update question in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "400", description = "When Question Title is Null or Empty",
-					content = @Content(schema = @Schema(ref = "Response"))),
+					content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
 			@ApiResponse(responseCode = "404", description = "When Question Not Found",
-					content = @Content(schema = @Schema(ref = "Response")))
+					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> update(@Parameter(description = "id of a question", example = "1",
 			required = true) Long idQuestion,
