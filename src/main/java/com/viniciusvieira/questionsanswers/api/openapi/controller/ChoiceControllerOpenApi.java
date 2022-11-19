@@ -78,6 +78,8 @@ public interface ChoiceControllerOpenApi {
 	@Operation(summary = "Delete Choice", description = "Remove choice in the database", responses = {
 			@ApiResponse(responseCode = "204", description = "When Successful"),
 			@ApiResponse(responseCode = "404", description = "When Choice or Question Not Found",
+					content = @Content(schema = @Schema(ref = "ExceptionDetails"))),
+			@ApiResponse(responseCode = "409", description = "When Choice is Associated with a QuestionAssignment",
 					content = @Content(schema = @Schema(ref = "ExceptionDetails")))
 	})
 	ResponseEntity<Object> delete(@Parameter(description = "id of a choice", example = "1", required = true)

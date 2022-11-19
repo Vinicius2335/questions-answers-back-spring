@@ -24,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionAssignmentDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmetAlreadyExistsException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
@@ -103,6 +104,10 @@ class QuestionAssignmentServiceTest {
 		// delete
 		BDDMockito.doNothing().when(questionAssignmentRepositoryMock).deleteById(anyLong(), anyLong());
 		
+		// listQuestionAssignmentByQuestionId
+		BDDMockito.when(questionAssignmentRepositoryMock.listQuestionAssignmentByQuestionId(anyLong(), anyLong()))
+				.thenReturn(List.of());
+		
 		
 	}
 
@@ -133,7 +138,6 @@ class QuestionAssignmentServiceTest {
 				.findQuestionAssignmentOrThrowsQuestionAssignmentNotFound(1L));
 	}
 	
-	// TEST NO INSOMNIA
 	@Test
 	@DisplayName("findQuestionById return a questionList when successful")
 	void findQuestionById_ReturnQuestionList_WhenSuccessful() {
@@ -291,4 +295,20 @@ class QuestionAssignmentServiceTest {
 		assertDoesNotThrow(() -> questionAssignmentService.deleteAllQuestionAssignmentRelatedToQuestion(1L));
 	}
 	
+	@Test
+	@DisplayName("throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment return void when Don't Exists Any Conflict")
+	void throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment_ReturnVoid_WhenDontExistsAnyConflict() {
+		assertDoesNotThrow(() -> questionAssignmentService
+				.throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(1L));
+	}
+	
+	@Test
+	@DisplayName("throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment ThrowsConflictException when Choice associated a questionAssignment")
+	void throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment_ThrowsConflictException_WhenChoiceAssociatedQuestionAssignment() {
+		BDDMockito.when(questionAssignmentRepositoryMock.listQuestionAssignmentByQuestionId(anyLong(), anyLong()))
+			.thenReturn(expectedQuestionAssignmentList);
+		
+		assertThrows(ConflictException.class, () -> questionAssignmentService
+				.throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(1L));
+	}
 }

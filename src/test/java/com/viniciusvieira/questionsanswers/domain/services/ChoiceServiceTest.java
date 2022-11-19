@@ -28,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
@@ -52,6 +53,8 @@ class ChoiceServiceTest {
 	private QuestionService questionServiceMock;
 	@Mock
 	private CourseService courseServiceMock;
+	@Mock
+	private QuestionAssignmentService questionAssignmentServiceMock;
 	
 	private ChoiceModel choiceToSave;
 	private List<ChoiceModel> expectedChoiceList;
@@ -100,6 +103,10 @@ class ChoiceServiceTest {
 		
 		// deleteAllChoicesRelatedToCourse
 		BDDMockito.doNothing().when(choiceRepositoryMock).deleteAllChoicesRelatedToCourse(anyLong(), anyLong());
+		
+		// throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment
+		BDDMockito.doNothing().when(questionAssignmentServiceMock)
+				.throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(anyLong());
 		
 	}
 
@@ -260,6 +267,15 @@ class ChoiceServiceTest {
 		.thenThrow(QuestionNotFoundException.class);
 		
 		assertThrows(QuestionNotFoundException.class, () -> choiceService.delete(1L));
+	}
+	
+	@Test
+	@DisplayName("delete throw ConflictException when choice is associated with a questionAssignment")
+	void delete_ThrowConflictException_WhenChoiceIsAssociatedWithQuestionAssignment() {
+		BDDMockito.doThrow(ConflictException.class).when(questionAssignmentServiceMock)
+				.throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(anyLong());
+		
+		assertThrows(ConflictException.class, () -> choiceService.delete(1L));
 	}
 	
 	@Test

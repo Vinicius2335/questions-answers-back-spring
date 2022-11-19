@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.ProfessorNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
@@ -85,6 +86,17 @@ public class ApiExceptionHandler {
 				.title("Question Assignment Not Found Exception, Check the Documentation")
 				.status(HttpStatus.NOT_FOUND.value())
 				.timestamp(OffsetDateTime.now()).build(), HttpStatus.NOT_FOUND
+		);
+	}
+	
+	@ExceptionHandler(ConflictException.class)
+	public ResponseEntity<ExceptionDetails> handlerConflictException(
+			ConflictException ex){
+		return new ResponseEntity<>(
+				ExceptionDetails.builder()
+				.title("Conflict Exception, Check the Documentation")
+				.status(HttpStatus.CONFLICT.value())
+				.timestamp(OffsetDateTime.now()).build(), HttpStatus.CONFLICT
 		);
 	}
 	

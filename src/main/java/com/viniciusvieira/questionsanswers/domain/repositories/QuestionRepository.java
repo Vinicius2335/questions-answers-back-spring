@@ -54,7 +54,7 @@ public interface QuestionRepository extends JpaRepository<QuestionModel, Long> {
 	
 	@Query(value = "SELECT * FROM TB_QUESTION q WHERE q.course_id = :course_id AND q.id_question NOT IN "
 			+ "(SELECT qa.question_id FROM TB_QUESTION_ASSIGNMENT qa WHERE qa.assignment_id = :assignment_id AND "
-			+ "qa.professor_id = :professor_id AND q.enabled = true) AND "
+			+ "qa.professor_id = :professor_id AND qa.enabled = true) AND "
 			+ "q.professor_id = :professor_id AND q.enabled = true",
 			nativeQuery = true)
 	@Transactional

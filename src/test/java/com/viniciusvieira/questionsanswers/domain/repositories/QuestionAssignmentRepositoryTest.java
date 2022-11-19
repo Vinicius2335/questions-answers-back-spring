@@ -212,6 +212,36 @@ class QuestionAssignmentRepositoryTest {
 		);
 	}
 	
+	@Test
+	@DisplayName("listQuestionAssignmentByQuestionId return a questionAssignmentList when successful")
+	void listQuestionAssignmentByQuestionId_ReturnQuestionAssignmentList_WhenSuccessful() {
+		QuestionAssignmentModel questionAssingmentSaved = insertQuestionAssingment();
+		
+		List<QuestionAssignmentModel> listQuestionAssignmentByQuestionId = questionAssignmentRepository
+				.listQuestionAssignmentByQuestionId(questionAssingmentSaved.getQuestion().getIdQuestion(),
+						professorToSave.getIdProfessor());
+		
+		assertAll(
+				() -> assertNotNull(listQuestionAssignmentByQuestionId),
+				() -> assertEquals(1, listQuestionAssignmentByQuestionId.size()),
+				() -> assertFalse(listQuestionAssignmentByQuestionId.isEmpty()),
+				() -> assertTrue(listQuestionAssignmentByQuestionId.contains(questionAssingmentSaved))
+		);
+	}
+	
+	@Test
+	@DisplayName("listQuestionAssignmentByQuestionId return a empty questionAssignmentList when "
+			+ "questionAssignment not found by questionId")
+	void listQuestionAssignmentByQuestionId_ReturnEmptyQuestionAssignmentList_WhenQuestionAssignmentNotFoundByQuestionId() {
+		List<QuestionAssignmentModel> listQuestionAssignmentByQuestionId = questionAssignmentRepository
+				.listQuestionAssignmentByQuestionId(1L, professorToSave.getIdProfessor());
+		
+		assertAll(
+				() -> assertNotNull(listQuestionAssignmentByQuestionId),
+				() -> assertTrue(listQuestionAssignmentByQuestionId.isEmpty())
+		);
+	}
+	
 	public QuestionAssignmentModel insertQuestionAssingment() {
 		return questionAssignmentRepository.save(expectedQuestionAssignment);
 	}

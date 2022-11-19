@@ -25,6 +25,7 @@ public class ChoiceService {
 	private final ChoiceRepository choiceRepository;
 	private final QuestionService questionService;
 	private final CourseService courseService;
+	private final QuestionAssignmentService questionAssignmentService;
 	private final ApplicationUserRepository applicationUserRepository;
 	
 	public List<ChoiceModel> listChoiceByQuestion(Long idQuestion){
@@ -77,7 +78,14 @@ public class ChoiceService {
 	public void delete(Long idChoice) {
 		ChoiceModel choiceFound = getChoiceByIdOrThrowChoiceNotFoundException(idChoice);
 		questionService.findByIdOrThrowQuestionNotFoundException(choiceFound.getQuestion().getIdQuestion());
+		
+		throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(choiceFound.getQuestion().getIdQuestion());
+		
 		choiceRepository.deleteById(choiceFound.getIdChoice(), extractProfessorFromToken().getIdProfessor());
+	}
+	
+	private void throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(long questionId) {
+		questionAssignmentService.throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(questionId);
 	}
 	
 	private void updateChangingOtherChoicesCorrectAnswerToFalse(ChoiceModel choice) {

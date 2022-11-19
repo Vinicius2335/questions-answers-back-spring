@@ -26,14 +26,21 @@ public interface QuestionAssignmentRepository extends JpaRepository<QuestionAssi
 	List<QuestionAssignmentModel> listQuestionAssignmentByQuestionAndAssignment(
 			@Param("question_id") Long questionId,
 			@Param("assignment_id") Long assignmentId,
-			@Param("professor_id") Long professor_id
+			@Param("professor_id") Long professorId
 	);
 	
 	@Query(value = "SELECT * FROM TB_QUESTION_ASSIGNMENT qa WHERE qa.assignment_id = :assignment_id "
 			+ "AND qa.professor_id = :professor_id AND qa.enabled = true", nativeQuery = true)
 	List<QuestionAssignmentModel> listQuestionAssignmentByAssignmentId(
 			@Param("assignment_id") Long assignmentId,
-			@Param("professor_id") Long professor_id
+			@Param("professor_id") Long professorId
+	);
+	
+	@Query(value = "SELECT * FROM TB_QUESTION_ASSIGNMENT qa WHERE qa.question_id = :question_id "
+			+ "AND qa.professor_id = :professor_id AND qa.enabled = true", nativeQuery = true)
+	List<QuestionAssignmentModel> listQuestionAssignmentByQuestionId(
+			@Param("question_id") Long questionId,
+			@Param("professor_id") Long professorId
 	);
 	
 	@Modifying

@@ -33,6 +33,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
 import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
@@ -370,7 +371,23 @@ class ChoiceControllerTest {
 		assertAll(
 				() -> assertNotNull(exchange.getBody()),
 				() -> assertEquals(HttpStatus.NOT_FOUND, exchange.getStatusCode())
-				);
+		);
+	}
+	
+	@Test
+	@DisplayName("delete return status code 409 when choice is associated with a questionAssignment")
+	void delete_Return409_WhenChoiceIsAssociatedWithQuestionAssignment() {
+		BDDMockito.doThrow(ConflictException.class).when(choiceServiceMock).delete(anyLong());
+		
+		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.DELETE,
+				getValidAuthentication(), Object.class);
+		
+		log.info(exchange.getBody());
+		
+		assertAll(
+				() -> assertNotNull(exchange.getBody()),
+				() -> assertEquals(HttpStatus.CONFLICT, exchange.getStatusCode())
+		);
 	}
 	
 

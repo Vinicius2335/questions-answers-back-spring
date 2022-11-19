@@ -1,6 +1,7 @@
 package com.viniciusvieira.questionsanswers.domain.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.viniciusvieira.questionsanswers.api.mappers.QuestionAssignmentMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionAssignmentDto;
+import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmetAlreadyExistsException;
 import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
@@ -37,7 +39,8 @@ public class QuestionAssignmentService {
 	}
 	
 	public List<QuestionModel> findQuestionById(Long courseId, Long assignmentId) {
-		List<QuestionModel> questionsList = listValidQuestionsByCourseNotAssociatedWithAnAssignment(courseId, assignmentId);
+		List<QuestionModel> questionsList = listValidQuestionsByCourseNotAssociatedWithAnAssignment(courseId,
+				assignmentId);
 		
 		List<QuestionModel> validQuestions = questionsList.stream()
 				.filter(question -> hasMoreThanOneChoices(question) 
@@ -111,6 +114,23 @@ public class QuestionAssignmentService {
 		findQuestionAssignmentOrThrowsQuestionAssignmentNotFound(idQuestionAssignment);
 		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
 		questionAssignmentRepository.deleteById(idQuestionAssignment, professor.getIdProfessor());
+	}
+	
+	public void throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(
+			long questionId) {
+		Long idProfessor = extractProfessorService.extractProfessorFromToken().getIdProfessor();
+		List<QuestionAssignmentModel> questionAssignments = questionAssignmentRepository
+				.listQuestionAssignmentByQuestionId(questionId, idProfessor);
+		
+		if(questionAssignments.isEmpty()) {
+			return;
+		} else {
+			String assignments = questionAssignments.stream()
+					.map(qa -> qa.getAssignment().getTitle())
+					.collect(Collectors.joining(", "));
+			throw new ConflictException("This choice cannot be deleted because this questions is being used in"
+					+ " the folling assignment: " + assignments);
+		}
 	}
 	
 	public void deleteAllQuestionAssignmentRelatedToCourse(Long courseId) {
