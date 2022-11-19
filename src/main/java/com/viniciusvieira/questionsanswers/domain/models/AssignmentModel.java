@@ -54,5 +54,9 @@ public class AssignmentModel implements Serializable {
 	@Schema(description = "describes whether the assignment is enabled or not")
 	@Column(nullable = false, columnDefinition = "boolean default true")
 	private boolean enabled;
+	
+	@Schema(description = "access code that the professor will provide for the student to take the exam")
+	@Column(nullable = false, unique = true)
+	private Long accessCode;
 
 }

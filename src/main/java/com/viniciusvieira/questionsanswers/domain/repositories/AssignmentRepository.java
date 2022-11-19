@@ -44,4 +44,11 @@ public interface AssignmentRepository extends JpaRepository<AssignmentModel, Lon
 
 	@Query(value = "SELECT * FROM TB_ASSIGNMENT a WHERE a.enabled = false", nativeQuery = true)
 	List<AssignmentModel> testFindAllEnabledFalse();
+	
+	// TEST
+	@Query(value = "SELECT * FROM TB_ASSIGNMENT a WHERE a.course_id = :course_id AND"
+			+ "a.accessCode = :accessCode AND "
+			+ "a.professor_id = :professor_id AND a.enabled = false", nativeQuery = true)
+	AssignmentModel accessCodeExistsForCourse(@Param("accessCode") Long accessCode,
+			@Param("course_id") Long courseId);
 }

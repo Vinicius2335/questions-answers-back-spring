@@ -1,6 +1,7 @@
 package com.viniciusvieira.questionsanswers.domain.services;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,6 +41,7 @@ public class AssignmentService {
 				title, professor.getIdProfessor());
 	}
 	
+	//TEST
 	@Transactional
 	public AssignmentModel save(AssignmentDto assignmentDto) {
 		courseService.findByIdOrThrowCourseNotFoundException(assignmentDto.getCourse().getIdCourse());
@@ -48,8 +50,18 @@ public class AssignmentService {
 		
 		assignmentModel.setEnabled(true);
 		assignmentModel.setProfessor(professor);
+		assignmentModel.setAccessCode(generateAccessCode(assignmentModel.getCourse().getIdCourse()));
 		
 		return assignmentRepository.save(assignmentModel);
+	}
+	
+	private Long generateAccessCode(Long courseId) {
+		Long accessCode = ThreadLocalRandom.current().nextLong(1000, 10000);
+		while(assignmentRepository.accessCodeExistsForCourse(accessCode, courseId) != null) {
+			generateAccessCode(courseId);
+		}
+		
+		return accessCode;
 	}
 	
 	@Transactional
