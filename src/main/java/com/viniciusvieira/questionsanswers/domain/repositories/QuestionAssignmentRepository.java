@@ -43,6 +43,16 @@ public interface QuestionAssignmentRepository extends JpaRepository<QuestionAssi
 			@Param("professor_id") Long professorId
 	);
 	
+	// TEST
+	// não tem professor pq quem irá buscar é um aluno
+	@Query(value = "SELECT * FROM TB_QUESTION_ASSIGNMENT qa WHERE qa.assignment_id IN "
+			+ "(SELECT a.id_assignment FROM TB_ASSIGNMENT a WHERE a.access_code = :access_code) "
+			+ "AND qa.enabled = true", nativeQuery = true)
+	List<QuestionAssignmentModel> listQuestionsFromQuestionsAssignmentByAssignmentAccessCode(
+			@Param("access_code") String accessCode
+	);
+	
+	
 	@Modifying
 	@Query(value = "UPDATE TB_QUESTION_ASSIGNMENT qa SET qa.enabled = false "
 			+ "WHERE qa.id_question_assignment = :id_question_assignment "

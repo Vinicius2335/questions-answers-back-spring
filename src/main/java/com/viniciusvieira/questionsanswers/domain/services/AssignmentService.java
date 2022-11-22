@@ -1,8 +1,8 @@
 package com.viniciusvieira.questionsanswers.domain.services;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -55,9 +55,10 @@ public class AssignmentService {
 		return assignmentRepository.save(assignmentModel);
 	}
 	
-	private Long generateAccessCode(Long courseId) {
-		Long accessCode = ThreadLocalRandom.current().nextLong(1000, 10000);
-		while(assignmentRepository.accessCodeExistsForCourse(accessCode, courseId) != null) {
+	private String generateAccessCode(Long courseId) {
+		Long professorId = extractProfessorFromToken().getIdProfessor();
+		String accessCode = RandomStringUtils.randomAlphanumeric(6);
+		while(assignmentRepository.accessCodeExistsForCourse(accessCode, courseId, professorId).isPresent()) {
 			generateAccessCode(courseId);
 		}
 		

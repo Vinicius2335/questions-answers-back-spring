@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public abstract class AssignmentMapper {
 	public static final AssignmentMapper INSTANCE = Mappers.getMapper(AssignmentMapper.class);
 	
+	@Mapping(target = "accessCode", ignore = true)
 	@Mapping(target = "enabled", ignore = true)
 	@Mapping(target = "idAssignment", ignore = true)
 	@Mapping(target = "professor", ignore = true)

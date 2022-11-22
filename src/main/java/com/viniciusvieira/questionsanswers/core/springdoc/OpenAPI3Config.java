@@ -73,7 +73,8 @@ public class OpenAPI3Config {
                         new Tag().name("Choice").description("Operations related to question's choice"),
                         new Tag().name("Professor").description("Operations related to professors"),
                         new Tag().name("Question Assignment").description("Operations to associate questions to an assigment"),
-                        new Tag().name("Question").description("Operations related to courses question")
+                        new Tag().name("Question").description("Operations related to courses question"),
+                        new Tag().name("Exam").description("Operations related to exam")
                 )).components(new Components()
                         .schemas(gerarSchemas())
                         .responses(gerarResponses())

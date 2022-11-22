@@ -1,6 +1,11 @@
 package com.viniciusvieira.questionsanswers.domain.repositories;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +20,6 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.viniciusvieira.questionsanswers.domain.models.AssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
-import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
 import com.viniciusvieira.questionsanswers.util.AssignmentCreator;
 import com.viniciusvieira.questionsanswers.util.CourseCreator;
@@ -38,14 +42,14 @@ class AssignmentRepositoryTest {
 	@Autowired
 	private CourseRepository courseRepository;
 	
-	private ProfessorModel professorSaved;
+	private Long professorIdSaved;
 	private AssignmentModel expectedAssignment;
 	private CourseModel courseSaved;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		roleRepository.save(RoleCreator.mockRoleProfessor());
-		professorSaved = professorRepository.save(ProfessorCreator.mockProfessor());
+		professorIdSaved = professorRepository.save(ProfessorCreator.mockProfessor()).getIdProfessor();
 		applicationUserRepository.save(ApplicationUserCreator.mockUserProfessor());
 		courseSaved = courseRepository.save(CourseCreator.mockCourse());
 		
@@ -73,7 +77,7 @@ class AssignmentRepositoryTest {
 		AssignmentModel assignmentSaved = insertAssignment();
 		
 		Optional<AssignmentModel> assignmentFound = assignmentRepository.findOneAssignment(
-				assignmentSaved.getIdAssignment(), professorSaved.getIdProfessor());
+				assignmentSaved.getIdAssignment(), professorIdSaved);
 		
 		assertAll(
 				() -> assertNotNull(assignmentFound),
@@ -86,7 +90,7 @@ class AssignmentRepositoryTest {
 	@DisplayName("findOneAssignment return a empty optional assignment when assignment not found")
 	void findOneAssignment_ReturnEmptyOptionalAssignmentFoundById_WhenAssignmentNotFound() {
 		Optional<AssignmentModel> assignmentFound = assignmentRepository.findOneAssignment(
-				1L, professorSaved.getIdProfessor());
+				1L, professorIdSaved);
 		
 		assertAll(
 				() -> assertNotNull(assignmentFound),
@@ -99,7 +103,7 @@ class AssignmentRepositoryTest {
 	void listAssignmentByCourseAndTitle_ReturnAssignmentList_WhenSuccessful() {
 		AssignmentModel assignmentSaved = insertAssignment();
 		List<AssignmentModel> assignmentsFoundList = assignmentRepository.listAssignmentByCourseAndTitle
-				(assignmentSaved.getIdAssignment(),assignmentSaved.getTitle(), professorSaved.getIdProfessor());
+				(assignmentSaved.getIdAssignment(),assignmentSaved.getTitle(), professorIdSaved);
 		
 		assertAll(
 				() -> assertNotNull(assignmentsFoundList),
@@ -113,7 +117,7 @@ class AssignmentRepositoryTest {
 	@DisplayName("listAssignmentByCourseAndTitle return a assignment empty list when assignment not found")
 	void listAssignmentByCourseAndTitle_ReturnAssignmentEmptyList_WhenAssignmentNotFound() {
 		List<AssignmentModel> assignmentsFoundList = assignmentRepository.listAssignmentByCourseAndTitle
-				(1L, "teste", professorSaved.getIdProfessor());
+				(1L, "teste", professorIdSaved);
 		
 		assertAll(
 				() -> assertNotNull(assignmentsFoundList),
@@ -127,7 +131,7 @@ class AssignmentRepositoryTest {
 		AssignmentModel assignmentSaved = insertAssignment();
 		
 		assertDoesNotThrow(() -> assignmentRepository.deleteById(assignmentSaved.getIdAssignment(),
-				professorSaved.getIdProfessor()));
+				professorIdSaved));
 		
 		List<AssignmentModel> testFindAllEnabledFalse = assignmentRepository.testFindAllEnabledFalse();
 				
@@ -144,7 +148,7 @@ class AssignmentRepositoryTest {
 		insertAssignment();
 		
 		assertDoesNotThrow(() -> assignmentRepository.deleteAllAssignmentRelatedToCourse(courseSaved.getIdCourse(),
-				professorSaved.getIdProfessor()));
+				professorIdSaved));
 		
 		List<AssignmentModel> testFindAllEnabledFalse = assignmentRepository.testFindAllEnabledFalse();
 		
@@ -153,6 +157,29 @@ class AssignmentRepositoryTest {
 				() -> assertFalse(testFindAllEnabledFalse.isEmpty()),
 				() -> assertEquals(1, testFindAllEnabledFalse.size())
 		);
+	}
+	
+	@Test
+	@DisplayName("accessCodeExistsForCourse return Empty Optional when accessCode don't exists")
+	void accessCodeExistsForCourse_ReturnEmptyOptional_WhenAccessCodeDontExists(){
+		insertAssignment();
+		
+		Optional<AssignmentModel> accessCodeExistsForCourse = assignmentRepository
+				.accessCodeExistsForCourse("9999", 1L, professorIdSaved);
+		
+		assertTrue(accessCodeExistsForCourse.isEmpty());
+	}
+	
+	@Test
+	@DisplayName("accessCodeExistsForCourse return Optional Assignment when accessCode exists")
+	void accessCodeExistsForCourse_ReturnOptionalAssignment_WhenAccessCodeExists(){
+		AssignmentModel assignmentSaved = insertAssignment();
+		
+		Optional<AssignmentModel> accessCodeExistsForCourse = assignmentRepository
+				.accessCodeExistsForCourse(assignmentSaved.getAccessCode(),
+						assignmentSaved.getCourse().getIdCourse(), professorIdSaved);
+		
+		assertTrue(accessCodeExistsForCourse.isEmpty());
 	}
 
 }

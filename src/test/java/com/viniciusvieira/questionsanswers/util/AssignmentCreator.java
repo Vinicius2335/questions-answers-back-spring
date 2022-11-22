@@ -11,19 +11,11 @@ public class AssignmentCreator {
 				.title("teste assignment")
 				.course(CourseCreator.mockCourse())
 				.professor(ProfessorCreator.mockProfessor())
+				.accessCode("1234")
 				.enabled(true)
 				.build();
 	}
 	
-	public static AssignmentModel mockAssignmentToUpdate() {
-		return AssignmentModel.builder()
-				.idAssignment(1L)
-				.title("teste assignment update")
-				.course(CourseCreator.mockCourse())
-				.professor(ProfessorCreator.mockProfessor())
-				.enabled(true)
-				.build();
-	}
 	
 	public static AssignmentDto mockAssignmentDto() {
 		return AssignmentDto.builder()

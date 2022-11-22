@@ -52,6 +52,11 @@ public class ApplicationUserModel implements UserDetails, Serializable {
     @OneToOne
     @JoinColumn(name = "professor_id")
     private ProfessorModel professor;
+	
+	@Schema(description = "one-to-one relationship with student")
+    @OneToOne
+    @JoinColumn(name = "student_id")
+	private StudentModel student;
 
 	@Schema(description = "many-to-many relationship between user and role")
     // fetch = FetchType.EAGER Resolve o problema de lazy load

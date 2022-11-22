@@ -57,6 +57,6 @@ public class AssignmentModel implements Serializable {
 	
 	@Schema(description = "access code that the professor will provide for the student to take the exam")
 	@Column(nullable = false, unique = true)
-	private Long accessCode;
+	private String accessCode;
 
 }
