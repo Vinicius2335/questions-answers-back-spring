@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.viniciusvieira.questionsanswers.api.openapi.controller.CourseControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.CourseService;

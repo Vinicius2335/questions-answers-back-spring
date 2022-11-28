@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.viniciusvieira.questionsanswers.api.mappers.QuestionMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;

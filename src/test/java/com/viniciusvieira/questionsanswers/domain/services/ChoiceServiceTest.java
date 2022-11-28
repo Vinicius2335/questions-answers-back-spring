@@ -27,10 +27,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ConflictException;
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
 import com.viniciusvieira.questionsanswers.domain.repositories.ChoiceRepository;

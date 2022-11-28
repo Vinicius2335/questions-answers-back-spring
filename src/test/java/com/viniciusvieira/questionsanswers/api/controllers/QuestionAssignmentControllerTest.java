@@ -32,10 +32,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionAssignmentDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmetAlreadyExistsException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.AssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmetAlreadyExistsException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionAssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;

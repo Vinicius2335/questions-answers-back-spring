@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.viniciusvieira.questionsanswers.api.openapi.controller.AssignmentControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.AssignmentDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.AssignmentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.AssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.services.AssignmentService;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;

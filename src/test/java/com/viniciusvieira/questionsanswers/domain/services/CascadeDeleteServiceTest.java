@@ -13,10 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.AssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Test for cascade delete service")

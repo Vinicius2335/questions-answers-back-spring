@@ -32,9 +32,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ConflictException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
 import com.viniciusvieira.questionsanswers.util.ChoiceCreator;

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.viniciusvieira.questionsanswers.api.mappers.ChoiceMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;

@@ -30,8 +30,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.viniciusvieira.questionsanswers.api.representation.models.AssignmentDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.AssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.AssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.services.AssignmentService;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
@@ -56,7 +56,7 @@ class AssignmentControllerTest {
 	private String token;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		expectedAssignment = AssignmentCreator.mockAssignment();
 		expectedAssignmentList = List.of(expectedAssignment);
 		
@@ -86,7 +86,7 @@ class AssignmentControllerTest {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.AUTHORIZATION, this.token);
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		return new HttpEntity<Void>(headers);
+		return new HttpEntity<>(headers);
 	}
 
 	@Test
@@ -124,7 +124,7 @@ class AssignmentControllerTest {
 	@Test
 	@DisplayName("findByCourseAndTitle return a assignment when successful")
 	void findByCourseAndTitle_ReturnAssignment_WhenSuccessful() {
-		 ParameterizedTypeReference<List<AssignmentModel>> typeReference = new ParameterizedTypeReference<List<AssignmentModel>>() {
+		 ParameterizedTypeReference<List<AssignmentModel>> typeReference = new ParameterizedTypeReference<>() {
 		};
 		
 		ResponseEntity<List<AssignmentModel>> exchange = testRestTemplate.exchange(url + "/list/1/?title=",
@@ -176,6 +176,9 @@ class AssignmentControllerTest {
 		
 		ResponseEntity<AssignmentModel> exchange = testRestTemplate.exchange(url, HttpMethod.POST, httpEntity,
 				AssignmentModel.class);
+		
+		System.out.println();
+		System.out.println(exchange.getBody());
 		
 		assertAll(
 				() -> assertNotNull(exchange.getBody()),
@@ -280,9 +283,6 @@ class AssignmentControllerTest {
 		
 		ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.PUT, httpEntity,
 				Object.class);
-		
-		System.out.println();
-		System.out.println(exchange.getBody());
 		
 		assertAll(
 				() -> assertNotNull(exchange.getBody()),

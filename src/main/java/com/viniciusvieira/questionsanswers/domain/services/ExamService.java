@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionAssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;

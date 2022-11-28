@@ -50,7 +50,7 @@ class ChoiceRepositoryTest {
 	private ChoiceModel choiceToSave;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		roleRepository.save(RoleCreator.mockRoleProfessor());
 		professorSaved = professorRepository.save(ProfessorCreator.mockProfessor());
 		applicationUserRepository.save(ApplicationUserCreator.mockUserProfessor());

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.viniciusvieira.questionsanswers.api.mappers.AssignmentMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.AssignmentDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.AssignmentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;
 import com.viniciusvieira.questionsanswers.domain.models.AssignmentModel;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;

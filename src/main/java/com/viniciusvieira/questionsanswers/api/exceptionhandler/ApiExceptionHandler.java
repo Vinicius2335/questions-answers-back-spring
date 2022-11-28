@@ -11,14 +11,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.viniciusvieira.questionsanswers.domain.excepiton.AssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ProfessorNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmetAlreadyExistsException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.AssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ConflictException;
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ProfessorNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmetAlreadyExistsException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {

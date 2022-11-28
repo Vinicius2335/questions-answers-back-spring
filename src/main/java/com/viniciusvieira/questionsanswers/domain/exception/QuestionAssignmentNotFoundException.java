@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.domain.excepiton;
+package com.viniciusvieira.questionsanswers.domain.exception;
 
 
 public class QuestionAssignmentNotFoundException extends RuntimeException{

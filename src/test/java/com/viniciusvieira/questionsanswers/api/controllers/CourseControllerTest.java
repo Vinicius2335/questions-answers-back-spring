@@ -34,7 +34,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.CourseService;
@@ -101,18 +101,18 @@ class CourseControllerTest {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.AUTHORIZATION, this.token);
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		return new HttpEntity<Void>(headers);
+		return new HttpEntity<>(headers);
 	}
 	
 	public HttpEntity<Void> getInvalidAuthentication(){
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "11111");
-		return new HttpEntity<Void>(headers);
+		return new HttpEntity<>(headers);
 	}
 	
 	@Test
 	@DisplayName("getCourseById return status code 403 when token is wrong")
-	public void getCourseById_Return403_WhenTokenIsWrongShould() {
+	 void getCourseById_Return403_WhenTokenIsWrongShould() {
 		ResponseEntity<String> exchange = testRestTemplate.exchange("/api/professor/course/1",
 				HttpMethod.GET, getInvalidAuthentication(), String.class);
 		
@@ -121,7 +121,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("getCourseById return course when successful")
-	public void getCourseById_ReturnCourse_WhenSuccessful() throws Exception {
+	 void getCourseById_ReturnCourse_WhenSuccessful() throws Exception {
 		mockMvc.perform(get("/api/professor/course/1")
 				.header(HttpHeaders.AUTHORIZATION, this.token)).andExpectAll(
 						status().isOk(),
@@ -134,7 +134,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("getCourseById return course when successful (usando rest template)")
-	public void getCourseById_ReturnCourse_WhenSuccessful2() throws Exception {
+	 void getCourseById_ReturnCourse_WhenSuccessful2() {
 		ResponseEntity<CourseModel> exchange = testRestTemplate.exchange("/api/professor/course/1",
 		HttpMethod.GET, getValidAuthentication(), CourseModel.class);
 	
@@ -147,7 +147,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("getCourseById return status code 404 when course not found")
-	public void getCourseById_Return404_WhenCourseNotFound() {
+	 void getCourseById_Return404_WhenCourseNotFound() {
 		BDDMockito.when(courseServiceMock.findByIdOrThrowCourseNotFoundException(ArgumentMatchers.anyLong()))
 			.thenThrow(CourseNotFoundException.class);
 		
@@ -164,9 +164,9 @@ class CourseControllerTest {
 	// as vezes dá problema na conversão para o JSON quando só temos um valor
 	@Test
 	@DisplayName("findByName return list all course when successful")
-	public void findByName_ReturnCourseList_WhenSuccessful() {
+	 void findByName_ReturnCourseList_WhenSuccessful() {
 		ParameterizedTypeReference<List<CourseModel>> typeReference =
-				new ParameterizedTypeReference<List<CourseModel>>() {
+				new ParameterizedTypeReference<>() {
 		};
 		
 		ResponseEntity<List<CourseModel>> exchange = testRestTemplate
@@ -183,7 +183,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("findByName return status code 404 when course not found")
-	public void findByName_Return404_WhenCourseNotFound() {
+	 void findByName_Return404_WhenCourseNotFound() {
 		BDDMockito.when(courseServiceMock.findByName(ArgumentMatchers.anyString()))
 				.thenReturn(List.of());
 		
@@ -199,7 +199,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("save insert course when successful")
-	public void save_InsertCourse_WhenSuccessful() {
+	 void save_InsertCourse_WhenSuccessful() {
 		HttpEntity<CourseModel> httpEntity = new HttpEntity<>(courseToSave, getValidAuthentication()
 				.getHeaders());
 		
@@ -215,7 +215,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("save returne 400 when course name is empty")
-	public void save_Return400_WhenCourseNameIsEmpty() {
+	 void save_Return400_WhenCourseNameIsEmpty() {
 		CourseDto courseDto = CourseCreator.mockInvalidCourseDto();
 		HttpEntity<CourseDto> httpEntity = new HttpEntity<>(courseDto, getValidAuthentication().getHeaders());
 		
@@ -230,7 +230,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("delete remove course when successful")
-	public void delete_RemoveCourse_WhenSuccessful() {
+	 void delete_RemoveCourse_WhenSuccessful() {
 		ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/professor/course/1",
 				HttpMethod.DELETE, getValidAuthentication(), Void.class);
 		
@@ -242,9 +242,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("delete return status code 404 when course not found")
-	public void delete_Return404_WhenCourseNotFound() {
-//		BDDMockito.doThrow(CourseNotFoundException.class)
-//				.when(courseServiceMock).delete(ArgumentMatchers.anyLong());
+	 void delete_Return404_WhenCourseNotFound() {
 		
 		BDDMockito.doThrow(CourseNotFoundException.class)
 				.when(cascadeDeleteServiceMock).deleteCourseAndAllRelatedEntities(anyLong());
@@ -263,7 +261,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("replace updated course when successful")
-	public void replace_UpdateCourse_WhenSuccessful() {
+	 void replace_UpdateCourse_WhenSuccessful() {
 		CourseDto courseDto = CourseCreator.mockCourseDto();
 		HttpEntity<CourseDto> httpEntity = new HttpEntity<>(courseDto, getValidAuthentication().getHeaders());
 		
@@ -278,7 +276,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("replace return status code 404 when course not found")
-	public void replace_Return404_WhenCourseNotFound() {
+	 void replace_Return404_WhenCourseNotFound() {
 		BDDMockito.doThrow(CourseNotFoundException.class).when(courseServiceMock)
 				.replace(ArgumentMatchers.anyLong(), ArgumentMatchers.any(CourseDto.class));
 		
@@ -296,7 +294,7 @@ class CourseControllerTest {
 	
 	@Test
 	@DisplayName("replace return status code 400 when course name is null or empty")
-	public void replace_Return400_WhenCourseNameIsNullOrEmpty() {
+	 void replace_Return400_WhenCourseNameIsNullOrEmpty() {
 		CourseDto courseDto = CourseCreator.mockInvalidCourseDto();
 		HttpEntity<CourseDto> httpEntity = new HttpEntity<>(courseDto, getValidAuthentication().getHeaders());
 		

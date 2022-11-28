@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.viniciusvieira.questionsanswers.api.openapi.controller.ChoiceControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ChoiceNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.services.ChoiceService;
 

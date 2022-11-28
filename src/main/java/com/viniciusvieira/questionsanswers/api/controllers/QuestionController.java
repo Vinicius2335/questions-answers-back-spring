@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.viniciusvieira.questionsanswers.api.openapi.controller.QuestionControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
 import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
 import com.viniciusvieira.questionsanswers.domain.services.QuestionService;

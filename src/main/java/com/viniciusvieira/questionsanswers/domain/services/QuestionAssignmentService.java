@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.viniciusvieira.questionsanswers.api.mappers.QuestionAssignmentMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionAssignmentDto;
-import com.viniciusvieira.questionsanswers.domain.excepiton.ConflictException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionAssignmetAlreadyExistsException;
-import com.viniciusvieira.questionsanswers.domain.excepiton.QuestionNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.ConflictException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmetAlreadyExistsException;
+import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionAssignmentModel;
