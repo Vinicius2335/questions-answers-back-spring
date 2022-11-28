@@ -23,7 +23,6 @@ public interface ChoiceRepository extends JpaRepository<ChoiceModel, Long> {
 	List<ChoiceModel> listChoiceByQuestionId(@Param("question_id") Long idQuestion,
 			@Param("professor_id") Long idProfessor);
 	
-	// TEST
 	@Query(value = "SELECT * FROM TB_CHOICE c WHERE c.question_id in :questions_id AND "
 			+ "c.enabled = true", nativeQuery = true)
 	List<ChoiceModel> listChoiceByQuestionsIdForStudent(@Param("questions_id") List<Long> idQuestions);

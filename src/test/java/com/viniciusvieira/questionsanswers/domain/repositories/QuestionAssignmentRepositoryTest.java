@@ -56,12 +56,11 @@ class QuestionAssignmentRepositoryTest {
 	private ProfessorModel professorToSave;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		expectedQuestionAssignment = QuestionAssignmentCreator.mockQuestionAssignment();
 		
 		insertValues();
 	}
-	
 
 	@Test
 	@DisplayName("save insert a questionAssingment when successful")
@@ -135,6 +134,21 @@ class QuestionAssignmentRepositoryTest {
 		assertAll(
 				() -> assertNotNull(questionAssignmentList),
 				() -> assertTrue(questionAssignmentList.isEmpty())
+		);
+	}
+
+	@Test
+	@DisplayName("listQuestionsFromQuestionsAssignmentByAssignmentAccessCode return questionList when successful")
+	void listQuestionsFromQuestionsAssignmentByAssignmentAccessCode_ReturnQuestionList_WhenSuccessful(){
+		insertQuestionAssingment();
+
+		String accessCode = AssignmentCreator.mockAssignment().getAccessCode();
+		List<QuestionAssignmentModel> questionsFoundByAssignmentAccessCode = questionAssignmentRepository
+				.listQuestionsFromQuestionsAssignmentByAssignmentAccessCode(accessCode);
+
+		assertAll(
+				() -> assertNotNull(questionsFoundByAssignmentAccessCode),
+				() -> assertFalse(questionsFoundByAssignmentAccessCode.isEmpty())
 		);
 	}
 	
@@ -247,8 +261,6 @@ class QuestionAssignmentRepositoryTest {
 	}
 	
 	public void insertValues() {
-//		QuestionModel questionSave;
-//		ChoiceModel choice1;
 		roleRepository.save(RoleCreator.mockRoleProfessor());
 		professorToSave = professorRepository.save(ProfessorCreator.mockProfessor());
 		applicationUserRepository.save(ApplicationUserCreator.mockUserProfessor());

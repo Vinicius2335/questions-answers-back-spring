@@ -1,15 +1,9 @@
 package com.viniciusvieira.questionsanswers.domain.repositories;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Optional;
-
+import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
+import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
+import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
+import com.viniciusvieira.questionsanswers.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,15 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
-import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
-import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
-import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
-import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
-import com.viniciusvieira.questionsanswers.util.ChoiceCreator;
-import com.viniciusvieira.questionsanswers.util.CourseCreator;
-import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
-import com.viniciusvieira.questionsanswers.util.QuestionCreator;
-import com.viniciusvieira.questionsanswers.util.RoleCreator;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @DisplayName("Test for choice repository")
@@ -96,6 +85,20 @@ class ChoiceRepositoryTest {
 		assertAll(
 				() -> assertNotNull(choiceList),
 				() -> assertTrue(choiceList.isEmpty())
+		);
+	}
+
+	@Test
+	@DisplayName("listChoiceByQuestionsIdForStudent return a choiceList when successfull and student access")
+	void listChoiceByQuestionsIdForStudent_ReturnChoiceList_WhenSuccessfulAndStudentAccess(){
+		ChoiceModel choiceSaved = choiceRepository.save(choiceToSave);
+
+		List<Long> idQuestions = List.of(questionSaved.getIdQuestion());
+		List<ChoiceModel> choicesFound = choiceRepository.listChoiceByQuestionsIdForStudent(idQuestions);
+
+		assertAll(
+				() -> assertNotNull(choicesFound),
+				() -> assertFalse(choicesFound.isEmpty())
 		);
 	}
 	
