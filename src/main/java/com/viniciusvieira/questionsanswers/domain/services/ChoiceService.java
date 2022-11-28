@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.viniciusvieira.questionsanswers.api.mappers.ChoiceMapper;
+import com.viniciusvieira.questionsanswers.api.mappers.v1.ChoiceMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
 import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;

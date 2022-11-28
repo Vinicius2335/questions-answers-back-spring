@@ -38,7 +38,7 @@ public interface AssignmentControllerOpenApi {
 			})
 	ResponseEntity<List<AssignmentModel>> findByCourseAndTitle(@Parameter(description = "id of a course",
 			example = "1", required = true) Long idCourse ,
-			@Parameter(description = "title of a assignment", example = "Java Exam" , required = false)
+			@Parameter(description = "title of a assignment", example = "Java Exam")
 			String title);
 	
 	

@@ -25,9 +25,9 @@ import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Test for extract professor service")
-class ExtractProfessorServiceTest {
+class ExtractEntityFromTokenServiceTest {
 	@InjectMocks
-	private ExtractProfessorService extractProfessorService;
+	private ExtractEntityFromTokenService extractEntityFromTokenService;
 	
 	@Mock
 	private CourseRepository courseRepositoryMock;
@@ -57,7 +57,7 @@ class ExtractProfessorServiceTest {
 	@Test
 	@DisplayName("extractProfessorFromToken returna a professor when successful")
 	void extractProfessorFromToken_ReturnProfessor_WhenSuccessful() {
-		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		ProfessorModel professor = extractEntityFromTokenService.extractProfessorFromToken();
 		
 		assertNotNull(professor);
 		assertEquals(expectedProfessor, professor);

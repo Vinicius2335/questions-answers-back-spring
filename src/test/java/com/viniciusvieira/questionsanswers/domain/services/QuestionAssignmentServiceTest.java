@@ -51,7 +51,7 @@ class QuestionAssignmentServiceTest {
 	@Mock
 	private AssignmentService assignmentServiceMock;
 	@Mock
-	private ExtractProfessorService extractProfessorServiceMock;
+	private ExtractEntityFromTokenService extractEntityFromTokenServiceMock;
 	
 	private QuestionAssignmentModel expectedQuestionAssignment;
 	private List<QuestionAssignmentModel> expectedQuestionAssignmentList;
@@ -68,7 +68,7 @@ class QuestionAssignmentServiceTest {
 		assignmentMock = AssignmentCreator.mockAssignment();
 		
 		// extractProfessorService extractProfessorFromToken
-		BDDMockito.when(extractProfessorServiceMock.extractProfessorFromToken())
+		BDDMockito.when(extractEntityFromTokenServiceMock.extractProfessorFromToken())
 				.thenReturn(professorMock);
 		
 		// findOneQuestionAssignment

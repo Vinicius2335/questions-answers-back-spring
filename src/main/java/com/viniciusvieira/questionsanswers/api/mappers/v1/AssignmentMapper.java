@@ -1,4 +1,4 @@
-package com.viniciusvieira.questionsanswers.api.mappers;
+package com.viniciusvieira.questionsanswers.api.mappers.v1;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.viniciusvieira.questionsanswers.api.mappers.QuestionAssignmentMapper;
+import com.viniciusvieira.questionsanswers.api.mappers.v1.QuestionAssignmentMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionAssignmentDto;
 import com.viniciusvieira.questionsanswers.domain.exception.ConflictException;
 import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmentNotFoundException;
@@ -28,10 +28,10 @@ public class QuestionAssignmentService {
 	private final QuestionAssignmentRepository questionAssignmentRepository;
 	private final QuestionService questionService;
 	private final AssignmentService assignmentService;
-	private final ExtractProfessorService extractProfessorService;
+	private final ExtractEntityFromTokenService extractEntityFromTokenService;
 	
 	public QuestionAssignmentModel findQuestionAssignmentOrThrowsQuestionAssignmentNotFound(Long idQuestionAssignment) {
-		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		ProfessorModel professor = extractEntityFromTokenService.extractProfessorFromToken();
 		
 		return questionAssignmentRepository.findOneQuestionAssignment(idQuestionAssignment, 
 				professor.getIdProfessor())
@@ -68,7 +68,7 @@ public class QuestionAssignmentService {
 	
 	public List<QuestionAssignmentModel> listByAssignment(Long assignmentId){
 		assignmentService.findAssignmentOrThrowsAssignmentNotFoundException(assignmentId);
-		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		ProfessorModel professor = extractEntityFromTokenService.extractProfessorFromToken();
 		return questionAssignmentRepository.listQuestionAssignmentByAssignmentId(assignmentId,
 				professor.getIdProfessor());
 	}
@@ -80,7 +80,7 @@ public class QuestionAssignmentService {
 		
 		QuestionAssignmentModel questionAssignmentToSave = QuestionAssignmentMapper.INSTANCE.toQuestionAssignmentModel(questionAssignmentDto);
 		questionAssignmentToSave.setEnabled(true);
-		questionAssignmentToSave.setProfessor(extractProfessorService.extractProfessorFromToken());
+		questionAssignmentToSave.setProfessor(extractEntityFromTokenService.extractProfessorFromToken());
 		
 		if (isQuestionAlreadyAssociatedWithAssignment(questionAssignmentToSave)) {
 			throw new QuestionAssignmetAlreadyExistsException("Question Assignment Association Already Exists");
@@ -112,13 +112,13 @@ public class QuestionAssignmentService {
 	@Transactional
 	public void delete(Long idQuestionAssignment) {
 		findQuestionAssignmentOrThrowsQuestionAssignmentNotFound(idQuestionAssignment);
-		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		ProfessorModel professor = extractEntityFromTokenService.extractProfessorFromToken();
 		questionAssignmentRepository.deleteById(idQuestionAssignment, professor.getIdProfessor());
 	}
 	
 	public void throwsConflictExceptionIfQuestionIsBeingUseInAnyAssignment(
 			long questionId) {
-		Long idProfessor = extractProfessorService.extractProfessorFromToken().getIdProfessor();
+		Long idProfessor = extractEntityFromTokenService.extractProfessorFromToken().getIdProfessor();
 		List<QuestionAssignmentModel> questionAssignments = questionAssignmentRepository
 				.listQuestionAssignmentByQuestionId(questionId, idProfessor);
 		
@@ -134,19 +134,19 @@ public class QuestionAssignmentService {
 	}
 	
 	public void deleteAllQuestionAssignmentRelatedToCourse(Long courseId) {
-		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		ProfessorModel professor = extractEntityFromTokenService.extractProfessorFromToken();
 		questionAssignmentRepository.deleteAllQuestionAssignmentRelatedToCourse(courseId,
 				professor.getIdProfessor());
 	}
 	
 	public void deleteAllQuestionAssignmentRelatedToAssignment(Long assignmentId) {
-		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		ProfessorModel professor = extractEntityFromTokenService.extractProfessorFromToken();
 		questionAssignmentRepository.deleteAllQuestionAssignmentRelatedToAssignment(assignmentId,
 				professor.getIdProfessor());
 	}
 	
 	public void deleteAllQuestionAssignmentRelatedToQuestion(Long questionId) {
-		ProfessorModel professor = extractProfessorService.extractProfessorFromToken();
+		ProfessorModel professor = extractEntityFromTokenService.extractProfessorFromToken();
 		questionAssignmentRepository.deleteAllQuestionAssignmentRelatedToQuestion(questionId,
 				professor.getIdProfessor());
 	}

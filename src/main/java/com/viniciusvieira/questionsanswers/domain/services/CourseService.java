@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.viniciusvieira.questionsanswers.api.mappers.CourseMapper;
+import com.viniciusvieira.questionsanswers.api.mappers.v1.CourseMapper;
 import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
 import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;

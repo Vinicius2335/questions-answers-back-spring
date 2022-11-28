@@ -15,8 +15,8 @@
 	<description>Project for creating exams with questions and answers</description>
 	<properties>
 		<java.version>17</java.version>
-		<springdoc-openapi-ui.version>1.6.10</springdoc-openapi-ui.version>
-		<org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
+		<springdoc-openapi-ui.version>1.6.13</springdoc-openapi-ui.version>
+		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -113,6 +113,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
