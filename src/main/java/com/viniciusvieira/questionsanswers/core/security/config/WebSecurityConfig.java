@@ -58,6 +58,7 @@ public class WebSecurityConfig {
 		.permitAll()
 		.antMatchers("/*/professor/**").hasRole("PROFESSOR")
 		.antMatchers("/*/student/**").hasRole("STUDENT")
+		.antMatchers("/*/admin/**").hasRole("ADMIN")
 		.anyRequest()
 		.authenticated();
 		

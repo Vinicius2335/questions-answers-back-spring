@@ -46,10 +46,10 @@ import io.swagger.v3.oas.models.tags.Tag;
 			bearerFormat = "JWT")
 public class OpenAPI3Config {
 	
-	private static final String badRequestResponse = "BadRequestResponse";
-	private static final String notFoundResponse = "NotFoundResponse";
-	private static final String notModifiedResponse = "NotModifiedResponse";
-	private static final String internalServerErrorResponse = "InternalServerErrorResponse";
+	private static final String BAD_REQUEST_RESPONSE = "BadRequestResponse";
+	private static final String NOT_FOUND_RESPONSE = "NotFoundResponse";
+	private static final String NOT_MODIFIED_RESPONSE = "NotModifiedResponse";
+	private static final String INTERNAL_SERVER_ERROR_RESPONSE = "InternalServerErrorResponse";
 	
 	@Bean
     public OpenAPI openAPI() {
@@ -74,7 +74,8 @@ public class OpenAPI3Config {
                         new Tag().name("Professor").description("Operations related to professors"),
                         new Tag().name("Question Assignment").description("Operations to associate questions to an assigment"),
                         new Tag().name("Question").description("Operations related to courses question"),
-                        new Tag().name("Exam").description("Operations related to exam")
+                        new Tag().name("Exam").description("Operations related to exam"),
+                        new Tag().name("Student").description("Operations related to student")
                 )).components(new Components()
                         .schemas(gerarSchemas())
                         .responses(gerarResponses())
@@ -93,37 +94,41 @@ public class OpenAPI3Config {
                                 switch (httpMethod) {
                                     case GET:
                                     	responses.addApiResponse("404", new ApiResponse()
-                                        		.$ref(notFoundResponse));
+                                        		.$ref(NOT_FOUND_RESPONSE));
                                         responses.addApiResponse("500", new ApiResponse()
-                                        		.$ref(internalServerErrorResponse));
+                                        		.$ref(INTERNAL_SERVER_ERROR_RESPONSE));
                                         break;
+
                                     case POST:
                                     	responses.addApiResponse("304", new ApiResponse()
-                                         		.$ref(notModifiedResponse));
+                                         		.$ref(NOT_MODIFIED_RESPONSE));
                                         responses.addApiResponse("400", new ApiResponse()
-                                        		.$ref(badRequestResponse));
+                                        		.$ref(BAD_REQUEST_RESPONSE));
                                         responses.addApiResponse("404", new ApiResponse()
-                                        		.$ref(notFoundResponse));
+                                        		.$ref(NOT_FOUND_RESPONSE));
                                         responses.addApiResponse("500", new ApiResponse()
-                                        		.$ref(internalServerErrorResponse));
+                                        		.$ref(INTERNAL_SERVER_ERROR_RESPONSE));
                                         break;
+
                                     case PUT:
                                         responses.addApiResponse("400", new ApiResponse()
-                                        		.$ref(badRequestResponse));
+                                        		.$ref(BAD_REQUEST_RESPONSE));
                                         responses.addApiResponse("404", new ApiResponse()
-                                        		.$ref(notFoundResponse));
+                                        		.$ref(NOT_FOUND_RESPONSE));
                                         responses.addApiResponse("500", new ApiResponse()
-                                        		.$ref(internalServerErrorResponse));
+                                        		.$ref(INTERNAL_SERVER_ERROR_RESPONSE));
                                         break;
+
                                     case DELETE:
                                     	responses.addApiResponse("404", new ApiResponse()
-                                         		.$ref(notFoundResponse));
+                                         		.$ref(NOT_FOUND_RESPONSE));
                                         responses.addApiResponse("500", new ApiResponse()
-                                        		.$ref(internalServerErrorResponse));
+                                        		.$ref(INTERNAL_SERVER_ERROR_RESPONSE));
                                         break;
+
                                     default:
                                         responses.addApiResponse("500", new ApiResponse()
-                                        		.$ref(internalServerErrorResponse));
+                                        		.$ref(INTERNAL_SERVER_ERROR_RESPONSE));
                                         break;
                                 }
                             })
@@ -152,19 +157,19 @@ public class OpenAPI3Config {
                 .addMediaType(APPLICATION_JSON_VALUE,
                         new MediaType().schema(new Schema<ExceptionDetails>().$ref("ExceptionDetails")));
 
-        apiResponseMap.put(badRequestResponse, new ApiResponse()
+        apiResponseMap.put(BAD_REQUEST_RESPONSE, new ApiResponse()
                 .description("Invalid Request")
                 .content(content));
         
-        apiResponseMap.put(notFoundResponse, new ApiResponse()
+        apiResponseMap.put(NOT_FOUND_RESPONSE, new ApiResponse()
                 .description("Resource not found")
                 .content(content));
         
-        apiResponseMap.put(notModifiedResponse, new ApiResponse()
+        apiResponseMap.put(NOT_MODIFIED_RESPONSE, new ApiResponse()
         		.description("Resource cannot be modified")
         		.content(content));
 
-        apiResponseMap.put(internalServerErrorResponse, new ApiResponse()
+        apiResponseMap.put(INTERNAL_SERVER_ERROR_RESPONSE, new ApiResponse()
                 .description("Internal server error")
                 .content(content));
 

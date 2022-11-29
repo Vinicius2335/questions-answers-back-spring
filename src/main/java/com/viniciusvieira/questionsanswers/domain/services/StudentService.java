@@ -1,6 +1,9 @@
 package com.viniciusvieira.questionsanswers.domain.services;
 
-import com.viniciusvieira.questionsanswers.domain.models.AdminModel;
+import com.viniciusvieira.questionsanswers.api.mappers.v2.StudentMapper;
+import com.viniciusvieira.questionsanswers.api.representation.models.StudentDto;
+import com.viniciusvieira.questionsanswers.api.representation.requests.StudentRequestBody;
+import com.viniciusvieira.questionsanswers.domain.exception.StudentNotFoundException;
 import com.viniciusvieira.questionsanswers.domain.models.StudentModel;
 import com.viniciusvieira.questionsanswers.domain.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,41 +16,46 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final ExtractEntityFromTokenService extractEntityFromTokenService;
-/**
-    public StudentModel findByIdOrThrowStudentNotFoundException(Long idStudent) {
-        Long idAdmin = extractEntityFromTokenService.extractAdminFromToken().getIdAdmin();
+    private final StudentMapper studentMapper;
 
-        return studentRepository.findOneStudent(idStudent, idAdmin)
+    public StudentDto findByIdOrThrowStudentNotFoundException(Long idStudent) {
+        StudentModel studentFound = studentRepository.findById(idStudent)
                 .orElseThrow(() -> new StudentNotFoundException("Student Not Found"));
+
+        return studentMapper.toStudentDto(studentFound);
     }
 
-    public List<StudentModel> findByName(String name){
-        Long idAdmin = extractEntityFromTokenService.extractAdminFromToken().getIdAdmin();
-        return studentRepository.listStudentsByName(name, idAdmin);
-    }
-
-    @Transactional
-    public StudentModel save(StudentDto studentDto) {
-        AdminModel admin = extractEntityFromTokenService.extractAdminFromToken();
-        // dto name/email do student
+    public List<StudentDto> findByName(String name){
+        List<StudentModel> students = studentRepository.findByNameContaining(name);
+        return studentMapper.toListOfStudentDto(students);
     }
 
     @Transactional
-    public void replace(Long idStudent, StudentDto studentDto) {
-        //CourseModel course = CourseMapper.INSTANCE.toCorseModel(courseDto);
-        StudentModel studentFound = findByIdOrThrowStudentNotFoundException(idStudent);
+    public StudentDto save(StudentRequestBody studentRequestBody) {
+        StudentModel student = studentMapper.toStudentDomain(studentRequestBody);
+        student.setEnabled(true);
 
-        // dto name/email do student
-        studentRepository.save(studentFound);
+        StudentModel studentSaved = studentRepository.save(student);
+        return studentMapper.toStudentDto(studentSaved);
+    }
+
+    @Transactional
+    public StudentDto replace(Long idStudent, StudentRequestBody studentRequestBody) {
+        StudentModel student = studentMapper.toStudentDomain(studentRequestBody);
+        StudentDto studentFound = findByIdOrThrowStudentNotFoundException(idStudent);
+
+        studentFound.setName(student.getName());
+        studentFound.setEmail(student.getEmail());
+        StudentModel studentReplaced = studentRepository.save(studentMapper.toStudentDomain(studentFound));
+
+        return studentMapper.toStudentDto(studentReplaced);
     }
 
     @Transactional
     public void delete(Long idStudent) {
-        StudentModel studentFound = findByIdOrThrowStudentNotFoundException(idStudent);
-        Long idAdmin = extractEntityFromTokenService.extractAdminFromToken().getIdAdmin();
+        StudentDto studentFound = findByIdOrThrowStudentNotFoundException(idStudent);
 
-        studentRepository.deleteById(studentFound.getIdStudent(), idAdmin);
+        studentRepository.deleteById(studentFound.getIdStudent());
     }
-    **/
+
 }

@@ -1,5 +1,6 @@
 package com.viniciusvieira.questionsanswers.domain.models;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "TB_USER")
 public class ApplicationUserModel implements UserDetails, Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Schema(description = "The id of the user")
@@ -40,11 +42,11 @@ public class ApplicationUserModel implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
 
-	@Schema(description = "The username of the user, needed to access the features", required = true)
+	@Schema(description = "The username of the user, needed to access the features")
     @Column(nullable = false, unique = true, length = 128)
     private String username;
 
-	@Schema(description = "The password of the user, need to access the features", required = true)
+	@Schema(description = "The password of the user, need to access the features")
     @Column(nullable = false, length = 128)
     private String password;
     

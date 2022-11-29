@@ -4,21 +4,13 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.viniciusvieira.questionsanswers.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import com.viniciusvieira.questionsanswers.domain.exception.AssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.exception.ChoiceNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.exception.ConflictException;
-import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.exception.ProfessorNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmentNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.exception.QuestionAssignmetAlreadyExistsException;
-import com.viniciusvieira.questionsanswers.domain.exception.QuestionNotFoundException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
@@ -108,6 +100,17 @@ public class ApiExceptionHandler {
 				.title("Question Assignment Already Exists, Check the Documentation")
 				.status(HttpStatus.NOT_MODIFIED.value())
 				.timestamp(OffsetDateTime.now()).build(), HttpStatus.NOT_MODIFIED
+		);
+	}
+
+	@ExceptionHandler(StudentNotFoundException.class)
+	public ResponseEntity<ExceptionDetails> handlerStudentNotFoundException(
+			StudentNotFoundException ex){
+		return new ResponseEntity<>(
+				ExceptionDetails.builder()
+				.title("Student Not Found, Check the Documentation")
+				.status(HttpStatus.NOT_FOUND.value())
+				.timestamp(OffsetDateTime.now()).build(), HttpStatus.NOT_FOUND
 		);
 	}
 	
