@@ -1,5 +1,6 @@
 package com.viniciusvieira.questionsanswers.domain.models;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -23,7 +24,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "TB_PROFESSOR")
 public class ProfessorModel implements Serializable {
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 	
 	@Schema(description = "The id of the professor")
 	@Id

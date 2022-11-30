@@ -45,3 +45,5 @@ public class InsertUserService {
         return applicationUserRepository.save(applicationUser);
     }
 }
+
+//TEST

@@ -15,8 +15,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "Student")
-public interface StudentControllerOpenApi {
+@Tag(name = "AdminStudent")
+public interface AdminStudentControllerOpenApi {
 
     @Operation(summary = "Save Student", description = "Insert student in the database", responses = {
             @ApiResponse(responseCode = "201", description = "When Successful"),

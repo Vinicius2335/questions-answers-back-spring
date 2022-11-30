@@ -1,6 +1,6 @@
 package com.viniciusvieira.questionsanswers.api.controllers;
 
-import com.viniciusvieira.questionsanswers.api.openapi.controller.StudentControllerOpenApi;
+import com.viniciusvieira.questionsanswers.api.openapi.controller.AdminStudentControllerOpenApi;
 import com.viniciusvieira.questionsanswers.api.representation.models.ApplicationUserDto;
 import com.viniciusvieira.questionsanswers.api.representation.models.StudentDto;
 import com.viniciusvieira.questionsanswers.api.representation.requests.ApplicationUserRequestBody;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/student")
 @RequiredArgsConstructor
-public class StudentController implements StudentControllerOpenApi {
+public class AdminStudentController implements AdminStudentControllerOpenApi {
     private final StudentService studentService;
 
     @Override
@@ -55,3 +55,5 @@ public class StudentController implements StudentControllerOpenApi {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Student deleted successfully");
     }
 }
+
+//TEST

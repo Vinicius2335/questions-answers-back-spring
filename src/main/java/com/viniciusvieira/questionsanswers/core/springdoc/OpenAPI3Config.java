@@ -30,13 +30,6 @@ import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.tags.Tag;
 
 
-/**
- * 
- * @author Vinicius Vieira
- * Obs: Erro nas responses do Swagger, não consegui resolver.
- *
- */
-
 @Configuration
 @SecurityScheme(name = "bearerAuth",
 			type = SecuritySchemeType.HTTP,
@@ -75,7 +68,8 @@ public class OpenAPI3Config {
                         new Tag().name("Question Assignment").description("Operations to associate questions to an assigment"),
                         new Tag().name("Question").description("Operations related to courses question"),
                         new Tag().name("Exam").description("Operations related to exam"),
-                        new Tag().name("Student").description("Operations related to student")
+                        new Tag().name("AdminStudent").description("Operations related to admin for student"),
+                        new Tag().name("AdminProfessor").description("Operations related to admin for professor")
                 )).components(new Components()
                         .schemas(gerarSchemas())
                         .responses(gerarResponses())
