@@ -8,7 +8,8 @@ public class PasswordEconderUtil {
 		System.out.println("Senha devdojo: " + new BCryptPasswordEncoder().encode("devdojo"));
 		System.out.println("Senha senha123: " + new BCryptPasswordEncoder().encode("senha123"));
 		System.out.println("Senha estudante: " + new BCryptPasswordEncoder().encode("estudante"));
-		
+		System.out.println("Senha admin: " + new BCryptPasswordEncoder().encode("admin"));
+
 		//String body = "{\"username\":\"vinicius\",\"password\":\"devdojo\"}";
 		//System.out.println(body);
 		

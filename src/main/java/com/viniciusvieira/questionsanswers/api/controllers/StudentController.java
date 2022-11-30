@@ -1,7 +1,9 @@
 package com.viniciusvieira.questionsanswers.api.controllers;
 
 import com.viniciusvieira.questionsanswers.api.openapi.controller.StudentControllerOpenApi;
+import com.viniciusvieira.questionsanswers.api.representation.models.ApplicationUserDto;
 import com.viniciusvieira.questionsanswers.api.representation.models.StudentDto;
+import com.viniciusvieira.questionsanswers.api.representation.requests.ApplicationUserRequestBody;
 import com.viniciusvieira.questionsanswers.api.representation.requests.StudentRequestBody;
 import com.viniciusvieira.questionsanswers.domain.services.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,17 @@ public class StudentController implements StudentControllerOpenApi {
     @Override
     @PostMapping
     public ResponseEntity<StudentDto> save(@Valid @RequestBody StudentRequestBody studentRequestBody) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.save(studentRequestBody));
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.saveStudent(studentRequestBody));
     }
+
+    @Override
+    @PostMapping("/{idStudent}")
+    public ResponseEntity<ApplicationUserDto> saveStudentApplicationUser(@PathVariable Long idStudent
+            , @Valid @RequestBody ApplicationUserRequestBody applicationUserRequestBody) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.saveApplicationUserStudent(idStudent,
+                applicationUserRequestBody));
+    }
+
 
     @Override
     @GetMapping("/students")

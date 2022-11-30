@@ -1,6 +1,8 @@
 package com.viniciusvieira.questionsanswers.api.openapi.controller;
 
+import com.viniciusvieira.questionsanswers.api.representation.models.ApplicationUserDto;
 import com.viniciusvieira.questionsanswers.api.representation.models.StudentDto;
+import com.viniciusvieira.questionsanswers.api.representation.requests.ApplicationUserRequestBody;
 import com.viniciusvieira.questionsanswers.api.representation.requests.StudentRequestBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,8 +24,22 @@ public interface StudentControllerOpenApi {
                     @Content(schema = @Schema(ref = "ExceptionDetails"))
             })
     })
-     ResponseEntity<StudentDto> save (@RequestBody(description = "representation of a new student",
+    ResponseEntity<StudentDto> save(@RequestBody(description = "representation of a new student",
             required = true) StudentRequestBody studentRequestBody);
+
+    @Operation(summary = "Save Student ApplicationUser", description = "Insert student applicationUser in the database",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "When Successful"),
+                    @ApiResponse(responseCode = "400", description = "When Have a ApplicationUser Fields Empty", content = {
+                            @Content(schema = @Schema(ref = "ExceptionDetails"))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "When Student Not Found", content = {
+                            @Content(schema = @Schema(ref = "ExceptionDetails"))
+                    })
+            })
+    ResponseEntity<ApplicationUserDto> saveStudentApplicationUser(@Parameter(description = "id of a student", example = "1",
+            required = true) Long idStudent, @RequestBody(description = "representation of a new applicationUser",
+            required = true) ApplicationUserRequestBody applicationUserRequestBody);
 
 
     @Operation(summary = "Find student by name", description = "Return a list of students", responses = {
@@ -32,8 +48,8 @@ public interface StudentControllerOpenApi {
                     @Content(schema = @Schema(ref = "ExceptionDetails"))
             })
     })
-    ResponseEntity<List<StudentDto>> findByName (@Parameter(description = "name of a student", example = "Estudante")
-                                                 String name);
+    ResponseEntity<List<StudentDto>> findByName(@Parameter(description = "name of a student", example = "Estudante")
+                                                String name);
 
 
     @Operation(summary = "Update Student", description = "Replace student in database", responses = {
@@ -45,7 +61,7 @@ public interface StudentControllerOpenApi {
                     @Content(schema = @Schema(ref = "ExceptionDetails"))
             })
     })
-    ResponseEntity<StudentDto> replace (
+    ResponseEntity<StudentDto> replace(
             @Parameter(description = "id of a student", example = "1", required = true) Long idStudent,
             @RequestBody(description = "Representation of a student with updated data", required = true) StudentRequestBody studentRequestBody
     );
@@ -56,7 +72,7 @@ public interface StudentControllerOpenApi {
                     @Content(schema = @Schema(ref = "ExceptionDetails"))
             })
     })
-    ResponseEntity<Object> delete (@Parameter(description = "id of a student", example = "1", required = true)
-                                       Long idStudent);
+    ResponseEntity<Object> delete(@Parameter(description = "id of a student", example = "1", required = true)
+                                  Long idStudent);
 
 }
