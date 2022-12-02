@@ -34,7 +34,7 @@ public class ExamController implements ExamControllerOpenApi {
 	@GetMapping("/choices/{accessCode}")
 	public ResponseEntity<List<ChoiceModel>> findAllChoicesByAccessCode(@PathVariable String accessCode) {
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(examService.findAllChoicessByAccessCode(accessCode));
+				.body(examService.findAllChoicesByAccessCode(accessCode));
 	}
 	
 }

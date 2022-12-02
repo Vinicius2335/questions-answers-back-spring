@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.util.ParameterTypes;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -52,7 +51,7 @@ class ExamControllerTest {
         BDDMockito.when(examServiceMock.findAllQuestionsByAccessCode(any()))
                 .thenReturn(List.of(QuestionCreator.mockQuestion()));
 
-        BDDMockito.when(examServiceMock.findAllChoicessByAccessCode(any()))
+        BDDMockito.when(examServiceMock.findAllChoicesByAccessCode(any()))
                 .thenReturn(List.of(ChoiceCreator.mockChoice()));
     }
 
@@ -115,7 +114,7 @@ class ExamControllerTest {
     @Test
     @DisplayName("findAllChoicesByAccessCode return 404 when choice not found")
     void findAllChoicesByAccessCode_Return404_WhenChoiceNotFound() {
-        BDDMockito.when(examServiceMock.findAllChoicessByAccessCode(any()))
+        BDDMockito.when(examServiceMock.findAllChoicesByAccessCode(any()))
                 .thenThrow(ChoiceNotFoundException.class);
 
         ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/choices/99", HttpMethod.GET,

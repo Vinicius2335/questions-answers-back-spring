@@ -1,20 +1,12 @@
 package com.viniciusvieira.questionsanswers.domain.services;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.ConstraintViolationException;
-
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
+import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
+import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
+import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
+import com.viniciusvieira.questionsanswers.util.CourseCreator;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,14 +20,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
-import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRepository;
-import com.viniciusvieira.questionsanswers.domain.repositories.CourseRepository;
-import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
-import com.viniciusvieira.questionsanswers.util.CourseCreator;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.Optional;
 
-import lombok.extern.log4j.Log4j2;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 
 @Log4j2
 @ExtendWith(SpringExtension.class)
@@ -148,8 +138,8 @@ class CourseServiceTest {
 		BDDMockito.when(courseRepositoryMock.save(any(CourseModel.class)))
 				.thenThrow(ConstraintViolationException.class);
 		
-		assertThrows(ConstraintViolationException.class, () -> courseService
-				.save(CourseCreator.mockInvalidCourseDto()));
+		assertThrows(ConstraintViolationException.class,
+				() -> courseService.save(CourseCreator.mockInvalidCourseDto()));
 	}
 	
 	@Test

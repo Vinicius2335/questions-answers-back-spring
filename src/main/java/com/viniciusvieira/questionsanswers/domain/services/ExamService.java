@@ -14,7 +14,6 @@ import com.viniciusvieira.questionsanswers.domain.repositories.QuestionAssignmen
 
 import lombok.RequiredArgsConstructor;
 
-// TEST
 @Service
 @RequiredArgsConstructor
 public class ExamService {
@@ -35,7 +34,7 @@ public class ExamService {
 		return questions;
 	}
 	
-	public List<ChoiceModel> findAllChoicessByAccessCode(String accessCode){
+	public List<ChoiceModel> findAllChoicesByAccessCode(String accessCode){
 		List<QuestionAssignmentModel> questionAssignments = questionAssignmentRepository
 				.listQuestionsFromQuestionsAssignmentByAssignmentAccessCode(accessCode);
 		

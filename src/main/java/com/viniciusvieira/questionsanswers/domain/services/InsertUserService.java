@@ -10,6 +10,7 @@ import com.viniciusvieira.questionsanswers.domain.repositories.ApplicationUserRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,9 +20,12 @@ import java.util.List;
 public class InsertUserService {
     private final ApplicationUserRepository applicationUserRepository;
 
-    public static final RoleModel ROLE_STUDENT = RoleModel.builder().idRole(2L).roleName(RoleNames.ROLE_STUDENT).build();
-    public static final RoleModel ROLE_PROFESSOR = RoleModel.builder().idRole(1L).roleName(RoleNames.ROLE_PROFESSOR).build();
+    public static final RoleModel ROLE_STUDENT = RoleModel.builder()
+            .idRole(2L).roleName(RoleNames.ROLE_STUDENT).build();
+    public static final RoleModel ROLE_PROFESSOR = RoleModel.builder()
+            .idRole(1L).roleName(RoleNames.ROLE_PROFESSOR).build();
 
+    @Transactional
     public ApplicationUserModel insertStudent(StudentModel student, ApplicationUserRequestBody applicationUserRequestBody){
         ApplicationUserModel applicationUser = ApplicationUserModel.builder()
                 .username(applicationUserRequestBody.getUsername())
@@ -33,6 +37,7 @@ public class InsertUserService {
         return applicationUserRepository.save(applicationUser);
     }
 
+    @Transactional
     public ApplicationUserModel insertProfessor(ProfessorModel professor,
                                                 ApplicationUserRequestBody applicationUserRequestBody){
         ApplicationUserModel applicationUser = ApplicationUserModel.builder()
@@ -45,5 +50,3 @@ public class InsertUserService {
         return applicationUserRepository.save(applicationUser);
     }
 }
-
-//TEST
