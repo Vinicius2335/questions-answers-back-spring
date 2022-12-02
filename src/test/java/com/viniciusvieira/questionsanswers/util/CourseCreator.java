@@ -3,7 +3,7 @@ package com.viniciusvieira.questionsanswers.util;
 import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
 import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
 
-public class CourseCreator {
+public abstract class CourseCreator {
 	
 	public static CourseModel mockCourse() {
 		return CourseModel.builder()

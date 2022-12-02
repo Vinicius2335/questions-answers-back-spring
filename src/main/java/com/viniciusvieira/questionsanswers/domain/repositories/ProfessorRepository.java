@@ -11,4 +11,3 @@ public interface ProfessorRepository extends JpaRepository<ProfessorModel, Long>
 	ProfessorModel findByEmail(String email);
 	List<ProfessorModel> findByNameContaining(String name);
 }
-//TEST

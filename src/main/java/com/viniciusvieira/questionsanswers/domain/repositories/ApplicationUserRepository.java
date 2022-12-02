@@ -15,5 +15,3 @@ public interface ApplicationUserRepository extends JpaRepository<ApplicationUser
     ApplicationUserModel findByProfessor(ProfessorModel professorModel);
 
 }
-
-//TEST

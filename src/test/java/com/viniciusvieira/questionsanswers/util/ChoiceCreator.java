@@ -3,7 +3,7 @@ package com.viniciusvieira.questionsanswers.util;
 import com.viniciusvieira.questionsanswers.api.representation.models.ChoiceDto;
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 
-public class ChoiceCreator {
+public abstract class ChoiceCreator {
 	public static ChoiceModel mockChoice() {
 		return ChoiceModel.builder()
 				.idChoice(1L)

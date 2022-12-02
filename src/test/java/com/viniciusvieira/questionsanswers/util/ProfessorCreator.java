@@ -2,7 +2,7 @@ package com.viniciusvieira.questionsanswers.util;
 
 import com.viniciusvieira.questionsanswers.domain.models.ProfessorModel;
 
-public class ProfessorCreator {
+public abstract class ProfessorCreator {
 	
 	public static ProfessorModel mockProfessor() {
 		return ProfessorModel.builder()

@@ -6,7 +6,7 @@ import com.viniciusvieira.questionsanswers.api.representation.models.QuestionDto
 import com.viniciusvieira.questionsanswers.domain.models.ChoiceModel;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionModel;
 
-public class QuestionCreator {
+public abstract class QuestionCreator {
 	public static QuestionModel mockQuestion() {
 		return QuestionModel.builder()
 				.idQuestion(1L)

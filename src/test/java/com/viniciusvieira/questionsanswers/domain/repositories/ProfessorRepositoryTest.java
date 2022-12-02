@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,6 +68,27 @@ class ProfessorRepositoryTest {
     }
 
     @Test
+    @DisplayName("findByNameContaining return a professorList when successufl")
+    void findByNameContaining_ReturnProfessorList_WhenSuccessful(){
+        ProfessorModel professorSaved = insertProfessor();
+        List<ProfessorModel> professors = professorRepository.findByNameContaining(professorSaved.getName());
+
+        assertAll(
+                () -> assertNotNull(professors),
+                () -> assertEquals(1, professors.size()),
+                () -> assertTrue(professors.contains(professorSaved))
+        );
+    }
+
+    @Test
+    @DisplayName("findByNameContaining return a Empty professorList when professor not found")
+    void findByNameContaining_ReturnEmptyProfessorList_WhenProfessorNotFound(){
+        List<ProfessorModel> professors = professorRepository.findByNameContaining("");
+
+       assertTrue(professors.isEmpty());
+    }
+
+    @Test
     @DisplayName("findById return a Optional professor when successful")
     void findById_ReturnOptionalProfessor_WhenSuccessful(){
         ProfessorModel professorSaved = insertProfessor();
@@ -88,5 +110,16 @@ class ProfessorRepositoryTest {
                 () -> assertNotNull(professorFound),
                 () -> assertTrue(professorFound.isEmpty())
         );
+    }
+
+    @Test
+    @DisplayName("deleteById remove professor when successful")
+    void deleteById_RemoveProfessor_WhenSuccessful(){
+        ProfessorModel professor = insertProfessor();
+
+        professorRepository.deleteById(professor.getIdProfessor());
+        List<ProfessorModel> professorsFound = professorRepository.findByNameContaining(professor.getName());
+
+        assertTrue(professorsFound.isEmpty());
     }
 }

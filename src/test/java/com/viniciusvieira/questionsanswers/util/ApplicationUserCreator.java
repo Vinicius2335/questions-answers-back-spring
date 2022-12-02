@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.viniciusvieira.questionsanswers.domain.models.ApplicationUserModel;
 
-public class ApplicationUserCreator {
+public abstract class ApplicationUserCreator {
 	public static ApplicationUserModel mockUserProfessor() {
 		return ApplicationUserModel.builder()
 				.idUser(1L)

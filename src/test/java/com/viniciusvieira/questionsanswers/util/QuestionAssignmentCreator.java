@@ -3,7 +3,7 @@ package com.viniciusvieira.questionsanswers.util;
 import com.viniciusvieira.questionsanswers.api.representation.models.QuestionAssignmentDto;
 import com.viniciusvieira.questionsanswers.domain.models.QuestionAssignmentModel;
 
-public class QuestionAssignmentCreator {
+public abstract class QuestionAssignmentCreator {
 	
 	public static QuestionAssignmentModel mockQuestionAssignment() {
 		return QuestionAssignmentModel.builder()
