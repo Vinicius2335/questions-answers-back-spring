@@ -23,6 +23,7 @@ public class StudentService {
     private final StudentMapper studentMapper;
     private final ApplicationUserMapper applicationUserMapper;
     private final InsertUserService insertUserService;
+    private final DeleteUserService deleteUserService;
 
     private StudentModel findByIdOrThrowStudentNotFoundException(Long idStudent) {
         return studentRepository.findById(idStudent)
@@ -70,6 +71,7 @@ public class StudentService {
     public void delete(Long idStudent) {
         StudentModel studentFound = findByIdOrThrowStudentNotFoundException(idStudent);
 
+        deleteUserService.deleteStudent(studentFound);
         studentRepository.deleteById(studentFound.getIdStudent());
     }
 

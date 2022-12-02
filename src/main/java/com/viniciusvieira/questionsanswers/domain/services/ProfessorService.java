@@ -23,6 +23,7 @@ public class ProfessorService {
 	private final ProfessorMapper professorMapper;
 	private final ApplicationUserMapper applicationUserMapper;
 	private final InsertUserService insertUserService;
+	private final DeleteUserService deleteUserService;
 	
 	public ProfessorModel findByIdOrThrowProfessorNotFoundException(Long id) {
 		return professorRepository.findById(id)
@@ -69,6 +70,7 @@ public class ProfessorService {
 	public void delete(Long idProfessor) {
 		ProfessorModel professorFound = findByIdOrThrowProfessorNotFoundException(idProfessor);
 
+		deleteUserService.deleteProfessor(professorFound);
 		professorRepository.deleteById(professorFound.getIdProfessor());
 	}
 }
