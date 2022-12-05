@@ -36,6 +36,13 @@ public abstract class ApplicationUserCreator {
 				.build();
 	}
 
+	public static ApplicationUserRequestBody mockInvalidApplicationUserRequestBody(){
+		return ApplicationUserRequestBody.builder()
+				.username(null)
+				.password(null)
+				.build();
+	}
+
 	public static ApplicationUserDto mockApplicationUserDto(){
 		return ApplicationUserDto.builder()
 				.idApplicationUser(2L)

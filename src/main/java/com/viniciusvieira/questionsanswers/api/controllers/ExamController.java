@@ -16,7 +16,6 @@ import com.viniciusvieira.questionsanswers.domain.services.ExamService;
 
 import lombok.RequiredArgsConstructor;
 
-// TEST
 @RestController
 @RequestMapping("api/student/exam")
 @RequiredArgsConstructor

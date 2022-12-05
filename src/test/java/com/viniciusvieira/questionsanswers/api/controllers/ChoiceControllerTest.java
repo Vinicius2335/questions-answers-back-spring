@@ -212,7 +212,8 @@ class ChoiceControllerTest {
 	@Test
 	@DisplayName("save insert choice when successful")
 	void save_InsertChoice_WhenSuccessful() {
-		HttpEntity<ChoiceDto> httpEntity = new HttpEntity<>(ChoiceCreator.mockChoiceDto(), getValidAuthentication().getHeaders());
+		HttpEntity<ChoiceDto> httpEntity = new HttpEntity<>(ChoiceCreator.mockChoiceDto(), getValidAuthentication()
+				.getHeaders());
 		
 		ResponseEntity<ChoiceModel> exchange = testRestTemplate.exchange(url, HttpMethod.POST,
 				httpEntity, ChoiceModel.class);

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,14 +22,14 @@ public class AdminProfessorController implements AdminProfessorControllerOpenApi
 
     @Override
     @PostMapping
-    public ResponseEntity<ProfessorDto> save(@RequestBody ProfessorRequestBody professorRequestBody) {
+    public ResponseEntity<ProfessorDto> save(@Valid @RequestBody ProfessorRequestBody professorRequestBody) {
         return ResponseEntity.status(HttpStatus.CREATED).body(professorService.saveProfessor(professorRequestBody));
     }
 
     @Override
     @PostMapping("/{idProfessor}")
     public ResponseEntity<ApplicationUserDto> saveProfessorApplicationUser(@PathVariable Long idProfessor
-            , @RequestBody ApplicationUserRequestBody applicationUserRequestBody) {
+            ,@Valid @RequestBody ApplicationUserRequestBody applicationUserRequestBody) {
         return ResponseEntity.status(HttpStatus.CREATED).body(professorService.saveApplicationUserProfessor(idProfessor,
                 applicationUserRequestBody));
     }
@@ -41,7 +42,7 @@ public class AdminProfessorController implements AdminProfessorControllerOpenApi
 
     @Override
     @PutMapping("/{idProfessor}")
-    public ResponseEntity<ProfessorDto> replace(@PathVariable Long idProfessor, @RequestBody ProfessorRequestBody
+    public ResponseEntity<ProfessorDto> replace(@PathVariable Long idProfessor, @Valid @RequestBody ProfessorRequestBody
             professorRequestBody) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(professorService.replace(idProfessor, professorRequestBody));
     }

@@ -30,8 +30,14 @@ public class ProfessorService {
 				.orElseThrow(() -> new ProfessorNotFoundException("Professor Not Found"));
 	}
 
+	//TEST
 	public List<ProfessorDto> findByName(String name){
 		List<ProfessorModel> professors = professorRepository.findByNameContaining(name);
+
+		if (professors.isEmpty()){
+			throw new ProfessorNotFoundException("Professor List is empty");
+		}
+
 		return professorMapper.toProfessorDtoList(professors);
 	}
 
@@ -74,5 +80,3 @@ public class ProfessorService {
 		professorRepository.deleteById(professorFound.getIdProfessor());
 	}
 }
-
-//TEST

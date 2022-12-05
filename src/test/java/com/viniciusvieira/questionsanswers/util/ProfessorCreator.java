@@ -26,4 +26,11 @@ public abstract class ProfessorCreator {
 				.email("willian@email.com")
 				.build();
 	}
+
+	public static ProfessorRequestBody mockInvalidRequestBody(){
+		return ProfessorRequestBody.builder()
+				.name(null)
+				.email(null)
+				.build();
+	}
 }
