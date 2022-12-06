@@ -67,7 +67,7 @@ class QuestionAssignmentServiceTest {
 		questionMock = QuestionCreator.mockQuestion2Choices();
 		assignmentMock = AssignmentCreator.mockAssignment();
 		
-		// extractProfessorService extractProfessorFromToken
+		// ExtractEntityFromTokenService - extractProfessorFromToken
 		BDDMockito.when(extractEntityFromTokenServiceMock.extractProfessorFromToken())
 				.thenReturn(professorMock);
 		

@@ -131,17 +131,13 @@ class ProfessorServiceTest {
     }
 
     @Test
-    @DisplayName("findByName return a empty professorList when professor not found by name")
-    void findByName_ReturnEmptyProfessorList_WhenProfessorNotFoundByName() {
+    @DisplayName("findByName Throws ProfessorNotFoundException when professor not found by name")
+    void findByName_ThrowsProfessorNotFoundException_WhenProfessorNotFoundByName() {
         BDDMockito.when(professorRepositoryMock.findByNameContaining(anyString())).thenReturn(List.of());
         BDDMockito.when(professorMapperMock.toProfessorDtoList(anyList())).thenReturn(List.of());
 
-        List<ProfessorDto> professorsFound = professorService.findByName(expectedProfessor.getName());
-
-        assertAll(
-                () -> assertNotNull(professorsFound),
-                () -> assertTrue(professorsFound.isEmpty())
-        );
+        assertThrows(ProfessorNotFoundException.class, () -> professorService
+                .findByName(expectedProfessor.getName()));
     }
 
     @Test

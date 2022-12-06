@@ -94,7 +94,8 @@ public class ChoiceService {
 					choice.getProfessor().getIdProfessor());
 		}
 	}
-	
+
+	// método mantido apenas como referencia
 	public ProfessorModel extractProfessorFromToken() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = (String)authentication.getPrincipal();

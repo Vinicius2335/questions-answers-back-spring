@@ -55,5 +55,3 @@ public class AdminStudentController implements AdminStudentControllerOpenApi {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Student deleted successfully");
     }
 }
-
-//TEST

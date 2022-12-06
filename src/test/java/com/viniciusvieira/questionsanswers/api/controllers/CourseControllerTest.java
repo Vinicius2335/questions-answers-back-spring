@@ -1,16 +1,11 @@
 package com.viniciusvieira.questionsanswers.api.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
+import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
+import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
+import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
+import com.viniciusvieira.questionsanswers.domain.services.CourseService;
+import com.viniciusvieira.questionsanswers.util.CourseCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,22 +19,16 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.viniciusvieira.questionsanswers.api.representation.models.CourseDto;
-import com.viniciusvieira.questionsanswers.domain.exception.CourseNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.models.CourseModel;
-import com.viniciusvieira.questionsanswers.domain.services.CascadeDeleteService;
-import com.viniciusvieira.questionsanswers.domain.services.CourseService;
-import com.viniciusvieira.questionsanswers.util.CourseCreator;
-import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -78,10 +67,6 @@ class CourseControllerTest {
 		// findByName
 		BDDMockito.when(courseServiceMock.findByName(ArgumentMatchers.anyString()))
 				.thenReturn(courseList);
-		
-		// extractProfessorFromToken
-		BDDMockito.when(courseServiceMock.extractProfessorFromToken())
-				.thenReturn(ProfessorCreator.mockProfessor());
 		
 		// save
 		BDDMockito.when(courseServiceMock.save(ArgumentMatchers.any(CourseDto.class)))

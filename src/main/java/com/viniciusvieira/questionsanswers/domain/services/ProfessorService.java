@@ -30,7 +30,6 @@ public class ProfessorService {
 				.orElseThrow(() -> new ProfessorNotFoundException("Professor Not Found"));
 	}
 
-	//TEST
 	public List<ProfessorDto> findByName(String name){
 		List<ProfessorModel> professors = professorRepository.findByNameContaining(name);
 
