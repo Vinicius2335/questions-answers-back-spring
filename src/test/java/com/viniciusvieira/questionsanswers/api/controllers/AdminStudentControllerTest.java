@@ -1,13 +1,13 @@
 package com.viniciusvieira.questionsanswers.api.controllers;
 
 import com.viniciusvieira.questionsanswers.api.representation.models.ApplicationUserDto;
-import com.viniciusvieira.questionsanswers.api.representation.models.ProfessorDto;
+import com.viniciusvieira.questionsanswers.api.representation.models.StudentDto;
 import com.viniciusvieira.questionsanswers.api.representation.requests.ApplicationUserRequestBody;
-import com.viniciusvieira.questionsanswers.api.representation.requests.ProfessorRequestBody;
-import com.viniciusvieira.questionsanswers.domain.exception.ProfessorNotFoundException;
-import com.viniciusvieira.questionsanswers.domain.services.ProfessorService;
+import com.viniciusvieira.questionsanswers.api.representation.requests.StudentRequestBody;
+import com.viniciusvieira.questionsanswers.domain.exception.StudentNotFoundException;
+import com.viniciusvieira.questionsanswers.domain.services.StudentService;
 import com.viniciusvieira.questionsanswers.util.ApplicationUserCreator;
-import com.viniciusvieira.questionsanswers.util.ProfessorCreator;
+import com.viniciusvieira.questionsanswers.util.StudentCreator;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,49 +32,49 @@ import static org.mockito.ArgumentMatchers.*;
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DisplayName("Test admin professor controller")
-class AdminProfessorControllerTest {
+@DisplayName("Test for admin student controller")
+class AdminStudentControllerTest {
+    @MockBean
+    private StudentService studentServiceMock;
+
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    @MockBean
-    private ProfessorService professorServiceMock;
-
-    private final String url = "/api/admin/professor";
+    private final String url = "/api/admin/student";
     private String token;
-    private ProfessorRequestBody expectedProfessorRequestBody;
-    private ProfessorDto expectedProfessorDto;
+    private StudentRequestBody expectedStudentRequestBody;
+    private StudentDto expectedStudentDto;
     private ApplicationUserRequestBody expectedApplicationUserRequestBody;
     private ApplicationUserDto expectedApplicationUserDto;
-    private List<ProfessorDto> expectedProfessorsDto;
+    private List<StudentDto> expectedStudentsDto;
 
     @BeforeEach
     void setUp() {
         String body = "{\"username\":\"admin\",\"password\":\"admin\"}";
         token = "Bearer " + testRestTemplate.postForEntity("/api/login", body, String.class).getBody();
 
-        expectedProfessorRequestBody = ProfessorCreator.mockProfessorRequestBody();
-        expectedProfessorDto = ProfessorCreator.mockProfessorDto();
-        expectedApplicationUserRequestBody = ApplicationUserCreator.mockApplicationUserRequestBody();
+        expectedStudentRequestBody = StudentCreator.mockStudentRequestBody();
+        expectedStudentDto = StudentCreator.mockStudentDto();
+        expectedStudentsDto = List.of(expectedStudentDto);
         expectedApplicationUserDto = ApplicationUserCreator.mockApplicationUserDto();
-        expectedProfessorsDto = List.of(expectedProfessorDto);
+        expectedApplicationUserRequestBody = ApplicationUserCreator.mockApplicationUserRequestBody();
 
-        //saveProfessor
-        BDDMockito.when(professorServiceMock.saveProfessor(any(ProfessorRequestBody.class)))
-                .thenReturn(expectedProfessorDto);
-        //saveApplicationUserProfessor
-        BDDMockito.when(professorServiceMock.saveApplicationUserProfessor(anyLong(),
-                any(ApplicationUserRequestBody.class))).thenReturn(expectedApplicationUserDto);
+        //saveStudent
+        BDDMockito.when(studentServiceMock.saveStudent(any(StudentRequestBody.class)))
+                .thenReturn(expectedStudentDto);
+        //saveApplicationUserStudent
+        BDDMockito.when(studentServiceMock.saveApplicationUserStudent(anyLong(), any(ApplicationUserRequestBody.class)))
+                .thenReturn(expectedApplicationUserDto);
         //findByName
-        BDDMockito.when(professorServiceMock.findByName(anyString())).thenReturn(expectedProfessorsDto);
+        BDDMockito.when(studentServiceMock.findByName(anyString())).thenReturn(expectedStudentsDto);
         // replace
-        BDDMockito.when(professorServiceMock.replace(anyLong(), any(ProfessorRequestBody.class)))
-                .thenReturn(expectedProfessorDto);
+        BDDMockito.when(studentServiceMock.replace(anyLong(), any(StudentRequestBody.class)))
+                .thenReturn(expectedStudentDto);
         //delete
-        BDDMockito.doNothing().when(professorServiceMock).delete(anyLong());
+        BDDMockito.doNothing().when(studentServiceMock).delete(anyLong());
     }
 
-    public HttpEntity<Void> getValidAuthentication(){
+    public HttpEntity<Void> getValidAuthentication() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, this.token);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -82,26 +82,26 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("save insert professor when successful")
-    void save_InsertProfessor_WhenSuccessful() {
-        HttpEntity<ProfessorRequestBody> httpEntity = new HttpEntity<>(expectedProfessorRequestBody,
+    @DisplayName("save insert student when successful")
+    void save_InsertStudent_WhenSuccessful() {
+        HttpEntity<StudentRequestBody> httpEntity = new HttpEntity<>(expectedStudentRequestBody,
                 getValidAuthentication().getHeaders());
 
-        ResponseEntity<ProfessorDto> exchange = testRestTemplate.exchange(url, HttpMethod.POST,
-                httpEntity, ProfessorDto.class);
+        ResponseEntity<StudentDto> exchange = testRestTemplate.exchange(url, HttpMethod.POST,
+                httpEntity, StudentDto.class);
 
         assertAll(
                 () -> assertNotNull(exchange.getBody()),
                 () -> assertEquals(HttpStatus.CREATED, exchange.getStatusCode()),
-                () -> assertEquals(expectedProfessorDto, exchange.getBody())
+                () -> assertEquals(expectedStudentDto, exchange.getBody())
         );
     }
 
     @Test
-    @DisplayName("save return status code 400 when professor have invalid fields")
-    void save_Return400_WhenProfessorHaveInvalidFields() {
-        ProfessorRequestBody invalidProfessorRequestBody = ProfessorCreator.mockInvalidRequestBody();
-        HttpEntity<ProfessorRequestBody> httpEntity = new HttpEntity<>(invalidProfessorRequestBody,
+    @DisplayName("save return status code 400 when student have invalid fields")
+    void save_Return400_WhenStudentHaveInvalidFields() {
+        StudentRequestBody invalidStudentRequestBody = StudentCreator.mockInvalidStudentRequestBody();
+        HttpEntity<StudentRequestBody> httpEntity = new HttpEntity<>(invalidStudentRequestBody,
                 getValidAuthentication().getHeaders());
 
         ResponseEntity<Object> exchange = testRestTemplate.exchange(url, HttpMethod.POST,
@@ -116,8 +116,8 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("saveProfessorApplicationUser insert application user professor when successful")
-    void saveProfessorApplicationUser_InsertApplicationUserProfessor_WhenSuccessful() {
+    @DisplayName("saveStudentApplicationUser insert application user student when successful")
+    void saveStudentApplicationUser_InsertApplicationUserStudent_WhenSuccessful() {
         HttpEntity<ApplicationUserRequestBody> httpEntity = new HttpEntity<>(expectedApplicationUserRequestBody,
                 getValidAuthentication().getHeaders());
 
@@ -132,8 +132,8 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("saveProfessorApplicationUser return status code 400 when application user have invalid fields")
-    void saveProfessorApplicationUser_Return400_WhenApplicationUserHaveInvalidFields() {
+    @DisplayName("saveStudentApplicationUser return status code 400 when application user have invalid fields")
+    void saveStudentApplicationUser_Return400_WhenApplicationUserHaveInvalidFields() {
         ApplicationUserRequestBody invalidApplicationUserRequestBody = ApplicationUserCreator.mockInvalidApplicationUserRequestBody();
         HttpEntity<ApplicationUserRequestBody> httpEntity = new HttpEntity<>(invalidApplicationUserRequestBody,
                 getValidAuthentication().getHeaders());
@@ -150,10 +150,10 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("saveProfessorApplicationUser return status code 404 when professor not found by id")
-    void saveProfessorApplicationUser_Return404_WhenProfessorNotFoundById() {
-        BDDMockito.when(professorServiceMock.saveApplicationUserProfessor(anyLong(),
-                any(ApplicationUserRequestBody.class))).thenThrow(ProfessorNotFoundException.class);
+    @DisplayName("saveStudentApplicationUser return status code 404 when student not found by id")
+    void saveStudentApplicationUser_Return404_WhenStudentNotFoundById() {
+        BDDMockito.when(studentServiceMock.saveApplicationUserStudent(anyLong(), any(ApplicationUserRequestBody.class)))
+                .thenThrow(StudentNotFoundException.class);
         HttpEntity<ApplicationUserRequestBody> httpEntity = new HttpEntity<>(expectedApplicationUserRequestBody,
                 getValidAuthentication().getHeaders());
 
@@ -169,24 +169,25 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("findByName return professor list when successful")
-    void findByName_ReturnProfessorList_WhenSuccessful() {
-        ParameterizedTypeReference<List<ProfessorDto>> typeReference = new ParameterizedTypeReference<>(){};
-        ResponseEntity<List<ProfessorDto>> exchange = testRestTemplate.exchange(url + "/professors", HttpMethod.GET,
+    @DisplayName("findByName return student list when successful")
+    void findByName_ReturnStudentList_WhenSuccessful() {
+        ParameterizedTypeReference<List<StudentDto>> typeReference = new ParameterizedTypeReference<>() {
+        };
+        ResponseEntity<List<StudentDto>> exchange = testRestTemplate.exchange(url + "/students", HttpMethod.GET,
                 getValidAuthentication(), typeReference);
 
         assertAll(
                 () -> assertNotNull(exchange.getBody()),
                 () -> assertEquals(HttpStatus.OK, exchange.getStatusCode()),
-                () -> assertEquals(expectedProfessorsDto, exchange.getBody())
+                () -> assertEquals(expectedStudentsDto, exchange.getBody())
         );
     }
 
     @Test
-    @DisplayName("findByName return status code 404 when professor not found by id")
-    void findByName_Return404_WhenProfessorNotFoundById() {
-        BDDMockito.when(professorServiceMock.findByName(anyString())).thenThrow(ProfessorNotFoundException.class);
-        ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/professors", HttpMethod.GET,
+    @DisplayName("findByName return status code 404 when student not found by id")
+    void findByName_Return404_WhenStudentNotFoundById() {
+        BDDMockito.when(studentServiceMock.findByName(anyString())).thenThrow(StudentNotFoundException.class);
+        ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/students", HttpMethod.GET,
                 getValidAuthentication(), Object.class);
 
         log.info(exchange.getBody());
@@ -198,12 +199,12 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("replece update professor when successful")
+    @DisplayName("replece update student when successful")
     void replace_UpdateProfessor_WhenSuccessful() {
-        HttpEntity<ProfessorRequestBody> httpEntity = new HttpEntity<>(expectedProfessorRequestBody,
+        HttpEntity<StudentRequestBody> httpEntity = new HttpEntity<>(expectedStudentRequestBody,
                 getValidAuthentication().getHeaders());
-        ResponseEntity<ProfessorDto> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.PUT,
-                httpEntity, ProfessorDto.class);
+        ResponseEntity<StudentDto> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.PUT,
+                httpEntity, StudentDto.class);
 
         assertAll(
                 () -> assertNotNull(exchange),
@@ -212,10 +213,10 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("replece return status code 400 when professor have invalid fields")
-    void replace_Return400_WhenProfessorHaveInvalidFields() {
-        ProfessorRequestBody invalidProfessorRequestBody = ProfessorCreator.mockInvalidRequestBody();
-        HttpEntity<ProfessorRequestBody> httpEntity = new HttpEntity<>(invalidProfessorRequestBody,
+    @DisplayName("replece return status code 400 when student have invalid fields")
+    void replace_Return400_WhenStudentHaveInvalidFields() {
+        StudentRequestBody invalidStudentRequestBody = StudentCreator.mockInvalidStudentRequestBody();
+        HttpEntity<StudentRequestBody> httpEntity = new HttpEntity<>(invalidStudentRequestBody,
                 getValidAuthentication().getHeaders());
         ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.PUT,
                 httpEntity, Object.class);
@@ -229,11 +230,11 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("replece return status code 404 when professor not found by id")
-    void replace_Return404_WhenProfessorNotFoundById() {
-        BDDMockito.when(professorServiceMock.replace(anyLong(), any(ProfessorRequestBody.class)))
-                .thenThrow(ProfessorNotFoundException.class);
-        HttpEntity<ProfessorRequestBody> httpEntity = new HttpEntity<>(expectedProfessorRequestBody,
+    @DisplayName("replece return status code 404 when student not found by id")
+    void replace_Return404_WhenStudentNotFoundById() {
+        BDDMockito.when(studentServiceMock.replace(anyLong(), any(StudentRequestBody.class)))
+                .thenThrow(StudentNotFoundException.class);
+        HttpEntity<StudentRequestBody> httpEntity = new HttpEntity<>(expectedStudentRequestBody,
                 getValidAuthentication().getHeaders());
         ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.PUT,
                 httpEntity, Object.class);
@@ -247,8 +248,8 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("delete remove Professor when successful")
-    void delete_RemoveProfessor_WhenSuccessful() {
+    @DisplayName("delete remove student when successful")
+    void delete_RemoveStudent_WhenSuccessful() {
         ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.DELETE,
                 getValidAuthentication(), Object.class);
 
@@ -259,9 +260,9 @@ class AdminProfessorControllerTest {
     }
 
     @Test
-    @DisplayName("delete return status code 404 when professor not found by id")
-    void delete_Return404_WhenProfessorNotFoundById() {
-        BDDMockito.doThrow(ProfessorNotFoundException.class).when(professorServiceMock).delete(anyLong());
+    @DisplayName("delete return status code 404 when student not found by id")
+    void delete_Return404_WhenStudentNotFoundById() {
+        BDDMockito.doThrow(StudentNotFoundException.class).when(studentServiceMock).delete(anyLong());
         ResponseEntity<Object> exchange = testRestTemplate.exchange(url + "/1", HttpMethod.DELETE,
                 getValidAuthentication(), Object.class);
 

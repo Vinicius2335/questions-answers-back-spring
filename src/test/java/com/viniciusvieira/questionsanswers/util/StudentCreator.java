@@ -28,4 +28,11 @@ public abstract class StudentCreator {
                 .email("student@email.com")
                 .build();
     }
+
+    public static StudentRequestBody mockInvalidStudentRequestBody(){
+        return StudentRequestBody.builder()
+                .name(null)
+                .email(null)
+                .build();
+    }
 }
