@@ -54,4 +54,3 @@ public class AdminProfessorController implements AdminProfessorControllerOpenApi
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Professor deleted successfully");
     }
 }
-//TEST
